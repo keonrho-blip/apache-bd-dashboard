@@ -221,6 +221,10 @@ tr:hover td { background: rgba(255,255,255,0.02); }
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         Research notes
       </div>
+      <div class="nav-item" onclick="nav('news', this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 0-2 2zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8M15 18h-5M10 6h8v4h-8z"/></svg>
+        Live news
+      </div>
     </div>
     <div class="sidebar-footer" id="footer-date"></div>
   </aside>
@@ -364,6 +368,23 @@ tr:hover td { background: rgba(255,255,255,0.02); }
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- NEWS -->
+    <div id="section-news" class="section">
+      <div class="page-header">
+        <div class="page-date">Intel</div>
+        <div class="page-title">Live news</div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1.25rem;align-items:center">
+        <button class="btn btn-accent btn-sm" onclick="fetchNews('datacenter OR semiconductor Texas construction')">Datacenter & Semi TX</button>
+        <button class="btn btn-sm" onclick="fetchNews('Samsung semiconductor Taylor Texas')">Samsung Taylor</button>
+        <button class="btn btn-sm" onclick="fetchNews('data center construction GC Texas')">GC Activity TX</button>
+        <button class="btn btn-sm" onclick="fetchNews('hyperscale data center construction 2026')">Hyperscale 2026</button>
+        <button class="btn btn-sm" onclick="fetchNews('Apache Industrial services')">Apache Industrial</button>
+        <span id="news-status" style="font-size:11px;color:var(--text3);margin-left:auto;font-family:'DM Mono',monospace"></span>
+      </div>
+      <div id="news-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem"></div>
     </div>
 
   </main>
@@ -627,6 +648,40 @@ function saveModal() {
   closeModal();
 }
 
+const NEWS_KEY = '474acc1790f4416da5ed13e40abec051';
+let lastQuery = 'datacenter OR semiconductor Texas construction';
+
+async function fetchNews(query) {
+  lastQuery = query;
+  const grid = document.getElementById('news-grid');
+  const status = document.getElementById('news-status');
+  grid.innerHTML = '<div style="color:var(--text3);font-size:13px;padding:1rem">Loading...</div>';
+  status.textContent = 'Fetching...';
+  try {
+    const url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(query)}&sortBy=publishedAt&language=en&pageSize=12&apiKey=${NEWS_KEY}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    if (data.status !== 'ok') throw new Error(data.message || 'API error');
+    const articles = data.articles.filter(a => a.title && a.title !== '[Removed]');
+    status.textContent = `${articles.length} results · ${new Date().toLocaleTimeString()}`;
+    if (!articles.length) { grid.innerHTML = '<div style="color:var(--text3);font-size:13px;padding:1rem">No results found.</div>'; return; }
+    grid.innerHTML = articles.map(a => {
+      const d = new Date(a.publishedAt);
+      const ago = Math.floor((Date.now() - d) / 3600000);
+      const timeStr = ago < 24 ? ago + 'h ago' : Math.floor(ago/24) + 'd ago';
+      return `<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.1rem;display:flex;flex-direction:column;gap:8px">
+        <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--text3);display:flex;justify-content:space-between"><span>${a.source.name||'Unknown'}</span><span>${timeStr}</span></div>
+        <div style="font-size:13px;font-weight:500;color:var(--text);line-height:1.5">${a.title}</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.6;flex:1">${a.description ? a.description.slice(0,120)+'...' : ''}</div>
+        <a href="${a.url}" target="_blank" style="font-size:11px;color:var(--accent);text-decoration:none;margin-top:auto">Read article →</a>
+      </div>`;
+    }).join('');
+  } catch(e) {
+    grid.innerHTML = `<div style="color:var(--red);font-size:13px;padding:1rem">Error: ${e.message}</div>`;
+    status.textContent = 'Failed';
+  }
+}
+
 function nav(section, el) {
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
@@ -636,6 +691,7 @@ function nav(section, el) {
   else if(section==='bids') renderBids();
   else if(section==='accounts') renderAccounts();
   else if(section==='research') renderResearch();
+  else if(section==='news') fetchNews(lastQuery);
   else renderMorning();
 }
 
