@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Apache BD — Morning Dashboard</title>
+<title>Apache BD — TX Datacenter &amp; Semiconductor</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -189,8 +189,7 @@ tr:hover td { background: rgba(255,255,255,0.02); }
 <div class="shell">
   <aside class="sidebar">
     <div class="logo">
-      <div class="logo-mark">Apache Industrial</div>
-      <div class="logo-name">BD Dashboard</div>
+      <div class="logo-mark">Apache I      <div class="logo-name">BD · TX DC &amp; Semi</div> Dashboard</div>
     </div>
     <div class="nav-section">
       <div class="nav-label">Morning</div>
@@ -272,6 +271,53 @@ tr:hover td { background: rgba(255,255,255,0.02); }
             </div>
             <div class="card-body" id="followup-list"></div>
           </div>
+          <div class="card">
+            <div class="card-head">
+              <div class="card-title">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+                Texas Market Radar
+              </div>
+            </div>
+            <div class="card-body">
+              <div style="display:flex;flex-direction:column;gap:0.5rem;">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;padding:0.5rem 0;border-bottom:1px solid var(--border);">
+                  <div>
+                    <div style="font-size:12px;font-weight:600;color:var(--text);">Samsung Taylor Ph.2</div>
+                    <div style="font-size:11px;color:var(--text2);margin-top:2px;">Taylor, TX · Semi Fab · ~$17B · GC: Hensel Phelps (likely)</div>
+                  </div>
+                  <span style="font-size:10px;background:var(--amber-bg);color:var(--amber);padding:2px 6px;border-radius:4px;white-space:nowrap;">Estimating</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;padding:0.5rem 0;border-bottom:1px solid var(--border);">
+                  <div>
+                    <div style="font-size:12px;font-weight:600;color:var(--text);">Meta Temple Datacenter</div>
+                    <div style="font-size:11px;color:var(--text2);margin-top:2px;">Temple, TX · Hyperscale DC · ~$800M · GC: JE Dunn / Turner</div>
+                  </div>
+                  <span style="font-size:10px;background:var(--amber-bg);color:var(--amber);padding:2px 6px;border-radius:4px;white-space:nowrap;">Estimating</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;padding:0.5rem 0;border-bottom:1px solid var(--border);">
+                  <div>
+                    <div style="font-size:12px;font-weight:600;color:var(--text);">TI Sherman (Ayrshire Ph.2)</div>
+                    <div style="font-size:11px;color:var(--text2);margin-top:2px;">Sherman, TX · Semi Fab · ~$30B campus · GC: Gray Construction</div>
+                  </div>
+                  <span style="font-size:10px;background:var(--blue-bg);color:var(--blue);padding:2px 6px;border-radius:4px;white-space:nowrap;">Active</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;padding:0.5rem 0;border-bottom:1px solid var(--border);">
+                  <div>
+                    <div style="font-size:12px;font-weight:600;color:var(--text);">Project Frontier (Abilene)</div>
+                    <div style="font-size:11px;color:var(--text2);margin-top:2px;">Abilene, TX · Hyperscale DC · $11M bid · GC: Kiewit</div>
+                  </div>
+                  <span style="font-size:10px;background:var(--green-bg);color:var(--green);padding:2px 6px;border-radius:4px;white-space:nowrap;">Bid Submitted</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;padding:0.5rem 0;">
+                  <div>
+                    <div style="font-size:12px;font-weight:600;color:var(--text);">Google DFW Expansion</div>
+                    <div style="font-size:11px;color:var(--text2);margin-top:2px;">Dallas-Fort Worth, TX · Hyperscale DC · Multi-phase · GC: TBD</div>
+                  </div>
+                  <span style="font-size:10px;background:var(--surface);color:var(--text3);padding:2px 6px;border-radius:4px;white-space:nowrap;">Watching</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -280,7 +326,7 @@ tr:hover td { background: rgba(255,255,255,0.02); }
     <div id="section-prospects" class="section">
       <div class="page-header">
         <div class="page-date">Tracker</div>
-        <div class="page-title">Prospects</div>
+        <div class="page-title">Prospects <span style="font-size:13px;color:var(--accent);font-weight:400;">· TX Datacenter &amp; Semi</span></div>
       </div>
       <div class="metrics" id="p-metrics"></div>
       <div class="card">
@@ -302,7 +348,7 @@ tr:hover td { background: rgba(255,255,255,0.02); }
     <div id="section-bids" class="section">
       <div class="page-header">
         <div class="page-date">Tracker</div>
-        <div class="page-title">Bids & proposals</div>
+        <div class="page-title">Bids &amp; Proposals <span style="font-size:13px;color:var(--accent);font-weight:400;">· TX Focus</span></div>
       </div>
       <div class="metrics" id="b-metrics"></div>
       <div class="card">
@@ -382,6 +428,7 @@ tr:hover td { background: rgba(255,255,255,0.02); }
         <button class="btn btn-sm" onclick="loadFeed('cdive')">Construction Dive</button>
         <button class="btn btn-sm" onclick="loadFeed('semi')">Semiconductor</button>
         <button class="btn btn-sm" onclick="loadFeed('register')">The Register DC</button>
+        <button class="btn btn-sm" onclick="loadFeed('txbiz')">TX Biz Journal</button>
         <span id="news-status" style="font-size:11px;color:var(--text3);margin-left:auto;font-family:monospace"></span>
       </div>
       <div id="news-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem"></div>
@@ -420,6 +467,9 @@ const D = {
     { id:3, text:'Send Hensel Phelps South Central outreach email', tag:'Prospects', done:false },
     { id:4, text:'Send DPR Construction outreach email', tag:'Prospects', done:false },
     { id:5, text:'Confirm Apollo.io contacts for JE Dunn follow-up', tag:'Prospects', done:false },
+    { id:6, text:'Research Gray Construction TX contacts for TI Sherman bid', tag:'TX Projects', done:false },
+    { id:7, text:'Send Austin Commercial cold outreach — datacenter coatings', tag:'Prospects', done:false },
+    { id:8, text:'Check Meta Temple, TX permit status — identify GC award', tag:'TX Projects', done:false },
   ],
   prospects: [
     { id:1, company:'JE Dunn', contact:'TBD', industry:'Datacenter', status:'Meeting booked', lastTouch:'2026-05-22', notes:'Intro call done. Sent follow-up + Apache overview.' },
@@ -427,12 +477,20 @@ const D = {
     { id:3, company:'DPR Construction', contact:'TBD', industry:'Datacenter', status:'Not contacted', lastTouch:'', notes:'Large datacenter footprint in TX.' },
     { id:4, company:'Turner Construction', contact:'TBD', industry:'Datacenter', status:'Meeting booked', lastTouch:'2026-05-15', notes:'Intro meeting secured.' },
     { id:5, company:'Kiewit', contact:'On-site PM', industry:'Datacenter', status:'Responded', lastTouch:'2026-05-10', notes:'$11M bid submitted. AllForm work active.' },
+    { id:6, company:'Austin Commercial', contact:'TBD', industry:'Datacenter', status:'Not contacted', lastTouch:'', notes:'AUS-based subsidiary of Austin Industries. Active GC on hyperscale DC in TX. Target for insulation/coatings sub.' },
+    { id:7, company:'Skanska USA', contact:'TBD', industry:'Datacenter', status:'Not contacted', lastTouch:'', notes:'Large DC construction footprint in TX/Southwest. Pursue South Central office in Dallas.' },
+    { id:8, company:'Linbeck Group', contact:'TBD', industry:'Semiconductor', status:'Not contacted', lastTouch:'', notes:'Houston-based GC. Known sub on Samsung Austin R&D campus. Good semi fab entry point.' },
+    { id:9, company:'Whiting-Turner', contact:'TBD', industry:'Datacenter', status:'Not contacted', lastTouch:'', notes:'ENR Top 10 CM. Active in TX hyperscale market (Meta, Google). Dallas/Houston offices.' },
+    { id:10, company:'Gray Construction', contact:'TBD', industry:'Semiconductor', status:'Outreach sent', lastTouch:'2026-05-20', notes:'Specializes in industrial/semi fab. Building TI Ayrshire Phase 2 in Sherman, TX. Key target.' },
   ],
   bids: [
     { id:1, project:'Samsung SUE Painting', client:'SECAI', scope:'Coatings', value:'$599K', due:'2025-09-01', status:'Awarded', notes:'First direct Samsung contract.' },
     { id:2, project:'Samsung Mechanical', client:'SECAI', scope:'Insulation', value:'$1.4M', due:'2026-04-30', status:'Awarded', notes:'CCD active. Work completing April 30.' },
     { id:3, project:'Project Frontier Bldg 1', client:'Kiewit', scope:'Coatings & Insulation', value:'$11M', due:'2026-05-01', status:'Submitted', notes:'AllForm scope active. Awaiting full award.' },
     { id:4, project:'JPS Utility Plant', client:'Dynaten', scope:'Mech. Insulation', value:'TBD', due:'2026-04-29', status:'Estimating', notes:'Overdue. Estimating in progress.' },
+    { id:5, project:'Samsung Taylor Ph.2 – Fire Protection', client:'Hensel Phelps', scope:'Coatings & Firestopping', value:'TBD', due:'2026-08-01', status:'Estimating', notes:'Target bid for HP Ph.2 scope. Samsung Taylor campus expansion.' },
+    { id:6, project:'Meta Temple DC – Mechanical Insulation', client:'Gray Construction', scope:'Mech. Insulation', value:'TBD', due:'2026-07-15', status:'Estimating', notes:'Meta datacenter in Temple, TX. Pursuing Gray Construction as GC.' },
+    { id:7, project:'TI Sherman Fab (Ayrshire Ph.2)', client:'Gray Construction', scope:'Industrial Coatings', value:'TBD', due:'2026-09-01', status:'Estimating', notes:'Texas Instruments semiconductor fab expansion in Sherman, TX. ~$30B campus.' },
   ],
   accounts: [
     { id:1, name:'Samsung Semiconductor (SECAI)', type:'Direct Contract', contact:'Hyeonjun Na', value:'$1.99M+', status:'Active', health:'Good', notes:'Weekly on-site visits. Warranty bond in progress. 4th floor OAC scope pending new CCD.' },
@@ -443,6 +501,12 @@ const D = {
     { id:1, tag:'Market', type:'Market news', text:'Google Alerts set up for: datacenter Texas, Samsung Taylor TX, semiconductor fab Texas, hyperscale Texas. Alerts hitting inbox daily.', date:'2026-05-22' },
     { id:2, tag:'JE Dunn', type:'Company intel', text:'JE Dunn ranked #7 nationally in datacenter construction (ENR). South Central division active in Austin. Meta Temple (Temple, TX) is an active $800M+ project GC\'d by JE Dunn. Intro call completed May 22.', date:'2026-05-22' },
     { id:3, tag:'Hensel Phelps', type:'Company intel', text:'Hensel Phelps has managed Samsung projects since 1997 Austin campus. Likely GC for Samsung Taylor Phase 2. South Central division based in Austin.', date:'2026-05-20' },
+    { id:4, tag:'Gray Construction', type:'Company intel', text:'Gray Construction specializes in industrial/semiconductor/DC builds. Building TI Sherman (Ayrshire) Phase 2 fab. HQ in Lexington KY but heavy TX presence. Key target for coating/insulation subs.', date:'2026-05-27' },
+    { id:5, tag:'TX Market', type:'Market news', text:'Texas leads US in planned datacenter capacity additions 2025-2027. Key markets: Austin Metro, Dallas-Fort Worth, Abilene (Project Frontier), San Antonio. Over 8GW of announced hyperscale projects.', date:'2026-05-27' },
+    { id:6, tag:'Samsung Taylor', type:'Project lead', text:'Samsung Taylor TX campus: Phase 1 ($17B) nearing completion. Phase 2 ($17B+) expected to break ground 2026. Hensel Phelps and Skanska leading contenders for GC. Apache already on Phase 1 via SECAI direct.', date:'2026-05-27' },
+    { id:7, tag:'Meta Temple', type:'Project lead', text:'Meta datacenter in Temple TX (near Killeen) — $800M+ facility. JE Dunn or Turner likely CM. 400MW+ AI-ready. Under construction 2026. Need to ID insulation/coatings sub window.', date:'2026-05-27' },
+    { id:8, tag:'Austin Commercial', type:'Company intel', text:'Austin Commercial (subsidiary of Austin Industries) is top-3 TX industrial GC. Key DC and semiconductor fab experience. South Central HQ in Dallas. Contact target: VP of Pre-Construction.', date:'2026-05-27' },
+    { id:9, tag:'DPR Construction', type:'Company intel', text:'DPR active on 12+ datacenter projects in TX. Austin office leads advanced tech/life science. Key contact: Business Development Manager TX. Pursue for coatings/fireproofing scope on hyperscale projects.', date:'2026-05-27' },
   ],
   nextId: 200
 };
@@ -593,7 +657,7 @@ function openModal(type) {
     document.getElementById('modal-title').textContent = 'Add task';
     fields.innerHTML = `
       <div class="form-row"><label>Task</label><input id="f-text" placeholder="What needs to be done?"></div>
-      <div class="form-row"><label>Tag</label><select id="f-tag"><option>Samsung</option><option>Prospects</option><option>Bids</option><option>Accounts</option><option>Internal</option><option>Other</option></select></div>`;
+      <div class="form-row"><label>Tag</label><select id="f-tag"><option>Samsung</option><option>Prospects</option><option>Bids</option><option>Accounts</option><option>Internal</option><option>TX Projects</option><option>Other</option></select></div>`;
   } else if (type === 'prospect') {
     document.getElementById('modal-title').textContent = 'Add prospect';
     fields.innerHTML = `
@@ -653,7 +717,9 @@ const RSS_FEEDS = {
   enr:      { label: 'ENR Construction',    url: 'https://www.enr.com/rss/news' },
   cdive:    { label: 'Construction Dive',   url: 'https://www.constructiondive.com/feeds/news/' },
   semi:     { label: 'EE Times',            url: 'https://www.eetimes.com/feed/' },
-  register: { label: 'The Register DC',     url: 'https://www.theregister.com/data_centre/headlines.atom' }
+  register: { label: 'The Register DC',     url: 'https://www.theregister.com/data_centre/headlines.atom' },
+  txbiz:    { label: 'TX Biz Journal',       url: 'https://www.bizjournals.com/austin/news/technology/feed.rss' },
+  cdive_tx: { label: 'Const. Dive TX',       url: 'https://www.constructiondive.com/feeds/news/' }
 };
 const PROXIES = [
   url => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url),
