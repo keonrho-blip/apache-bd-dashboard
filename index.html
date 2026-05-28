@@ -455,36 +455,27 @@ tr:hover td { background: var(--surface2); }
     </div>
   </div>
 </div>
+
 <script>
 // ============================================================
 // DATA STORE
 // ============================================================
-// ============================================================
-// DATA STORE — reads/writes to localStorage key 'apache-bd-v3'
-// ============================================================
 (function migrateStorage() {
-  // Migrate old separate keys to unified key if needed
-  const old = ['bd_prospects','bd_bids','bd_accounts','bd_research','bd_todos'];
-  if(old.some(k => localStorage.getItem(k))) {
-    const merged = {
-      prospects: JSON.parse(localStorage.getItem('bd_prospects') || 'null'),
-      bids: JSON.parse(localStorage.getItem('bd_bids') || 'null'),
-      accounts: JSON.parse(localStorage.getItem('bd_accounts') || 'null'),
-      research: JSON.parse(localStorage.getItem('bd_research') || 'null'),
-      todos: JSON.parse(localStorage.getItem('bd_todos') || 'null')
-    };
-    const existing = JSON.parse(localStorage.getItem('apache-bd-v3') || '{}');
-    if(merged.prospects) existing.prospects = merged.prospects;
-    if(merged.bids) existing.bids = merged.bids;
-    if(merged.accounts) existing.accounts = merged.accounts;
-    if(merged.research) existing.research = merged.research;
-    if(merged.todos) existing.todos = merged.todos;
+  var old = ['bd_prospects','bd_bids','bd_accounts','bd_research','bd_todos'];
+  var hasOld = old.some(function(k) { return localStorage.getItem(k); });
+  if(hasOld) {
+    var existing = JSON.parse(localStorage.getItem('apache-bd-v3') || '{}');
+    old.forEach(function(k) {
+      var key = k.replace('bd_','');
+      var val = localStorage.getItem(k);
+      if(val) { try { existing[key] = JSON.parse(val); } catch(e) {} }
+      localStorage.removeItem(k);
+    });
     localStorage.setItem('apache-bd-v3', JSON.stringify(existing));
-    old.forEach(k => localStorage.removeItem(k));
   }
 })();
 
-const _stored = JSON.parse(localStorage.getItem('apache-bd-v3') || '{}');
+var _stored = JSON.parse(localStorage.getItem('apache-bd-v3') || '{}');
 
 const D = {
   prospects: _stored.prospects || [
@@ -541,18 +532,20 @@ const D = {
 };
 
 function saveData() {
-  localStorage.setItem('bd_prospects', JSON.stringify(D.prospects));
-  localStorage.setItem('bd_bids', JSON.stringify(D.bids));
-  localStorage.setItem('bd_accounts', JSON.stringify(D.accounts));
-  localStorage.setItem('bd_research', JSON.stringify(D.research));
-  localStorage.setItem('bd_todos', JSON.stringify(D.todos));
+  var stored = JSON.parse(localStorage.getItem('apache-bd-v3') || '{}');
+  stored.prospects = D.prospects;
+  stored.bids = D.bids;
+  stored.accounts = D.accounts;
+  stored.research = D.research;
+  stored.todos = D.todos;
+  localStorage.setItem('apache-bd-v3', JSON.stringify(stored));
 }
 // ============================================================
 // NAVIGATION
 // ============================================================
 function showPage(id, el) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
   document.getElementById('page-' + id).classList.add('active');
   if(el) el.classList.add('active');
   if(id === 'morning') renderMorning();
@@ -565,25 +558,28 @@ function showPage(id, el) {
 
 // ============================================================
 // MORNING BRIEF
-function saveData() {
-  const stored = JSON.parse(localStorage.getItem('apache-bd-v3') || '{}');
-  stored.prospects = D.prospects;
-  stored.bids = D.bids;
-  stored.accounts = D.accounts;
-  stored.research = D.research;
-  stored.todos = D.todos;
-  localStorage.setItem('apache-bd-v3', JSON.stringify(stored));
-}b => ['Estimating','Active','Bid Submitted'].includes(b.status)).length;
-  const awarded = D.bids.filter(b => b.status === 'Awarded').length;
+// ============================================================
+function renderMorning() {
+  renderStatStrip();
+  renderDailyActions();
+  renderTodos();
+  renderPipelineSnap();
+  renderFollowUpList();
+  renderRadar();
+  loadFeed('dc', document.querySelector('.feed-tab.active'));
+}
+
+function renderStatStrip() {
+  const activeBids = D.bids.filter(function(b) { return ['Estimating','Active','Bid Submitted'].includes(b.status); }).length;
+  const awarded = D.bids.filter(function(b) { return b.status === 'Awarded'; }).length;
   const prospects = D.prospects.length;
-  const meetings = D.prospects.filter(p => p.status === 'Meeting Scheduled').length;
+  const meetings = D.prospects.filter(function(p) { return p.status === 'Meeting Scheduled'; }).length;
   const s = document.getElementById('stat-strip');
-  s.innerHTML = `
-    <div class="stat-card blue"><div class="stat-label">Active Bids</div><div class="stat-value blue">${activeBids}</div><div class="stat-sub">in pipeline</div></div>
-    <div class="stat-card amber"><div class="stat-label">Awarded YTD</div><div class="stat-value amber">${awarded}</div><div class="stat-sub">projects won</div></div>
-    <div class="stat-card green"><div class="stat-label">Prospects</div><div class="stat-value green">${prospects}</div><div class="stat-sub">tracked contacts</div></div>
-    <div class="stat-card teal"><div class="stat-label">Meetings</div><div class="stat-value teal">${meetings}</div><div class="stat-sub">scheduled</div></div>
-  `;
+  if(!s) return;
+  s.innerHTML = '<div class="stat-card blue"><div class="stat-label">Active Bids</div><div class="stat-value blue">' + activeBids + '</div><div class="stat-sub">in pipeline</div></div>' +
+    '<div class="stat-card amber"><div class="stat-label">Awarded YTD</div><div class="stat-value amber">' + awarded + '</div><div class="stat-sub">projects won</div></div>' +
+    '<div class="stat-card green"><div class="stat-label">Prospects</div><div class="stat-value green">' + prospects + '</div><div class="stat-sub">tracked contacts</div></div>' +
+    '<div class="stat-card teal"><div class="stat-label">Meetings</div><div class="stat-value teal">' + meetings + '</div><div class="stat-sub">scheduled</div></div>';
 }
 
 function daysSince(dateStr) {
@@ -605,10 +601,9 @@ function followUpCountdown(p) {
 
 function renderDailyActions() {
   const el = document.getElementById('daily-actions');
+  if(!el) return;
   const items = [];
-
-  // Overdue contacts
-  D.prospects.forEach(p => {
+  D.prospects.forEach(function(p) {
     if(!p.lastTouch) {
       items.push({color:'amber', title:'No contact yet: ' + p.company, detail:'Status: ' + p.status, action:'Draft email', onClick:'openEmailModal(' + p.id + ')'});
     } else {
@@ -619,48 +614,34 @@ function renderDailyActions() {
       }
     }
   });
-
-  // Bids due soon (within 30 days)
   const now = new Date();
-  D.bids.forEach(b => {
+  D.bids.forEach(function(b) {
     if(!b.due) return;
     const daysToGo = Math.floor((new Date(b.due) - now) / 86400000);
     if(daysToGo >= 0 && daysToGo <= 30 && ['Estimating','Active'].includes(b.status)) {
-      items.push({color:'blue', title:'Bid due in ' + daysToGo + 'd: ' + b.project.substring(0,35), detail:'Value: ' + b.value + ' | GC: ' + b.gc, action:'View bid', onClick:'showPage(\'bids\',document.querySelectorAll(\'.nav-item\')[2])'});
+      items.push({color:'blue', title:'Bid due in ' + daysToGo + 'd: ' + b.project.substring(0,35), detail:'Value: ' + b.value + ' | GC: ' + b.gc, action:'View bid', onClick:"showPage('bids',document.querySelectorAll('.nav-item')[2])"});
     }
   });
-
   if(items.length === 0) {
     el.innerHTML = '<div style="color:var(--text3);font-size:13px;padding:.5rem 0;">\u2713 All caught up \u2014 no urgent actions today.</div>';
     return;
   }
-
-  el.innerHTML = items.map(i => `
-    <div class="action-item">
-      <div class="action-dot ${i.color}"></div>
-      <div class="action-text">
-        <div class="action-title">${i.title}</div>
-        <div class="action-detail">${i.detail}</div>
-      </div>
-      <button class="action-btn" onclick="${i.onClick}">${i.action}</button>
-    </div>
-  `).join('');
+  el.innerHTML = items.map(function(i) {
+    return '<div class="action-item"><div class="action-dot ' + i.color + '"></div><div class="action-text"><div class="action-title">' + i.title + '</div><div class="action-detail">' + i.detail + '</div></div><button class="action-btn" onclick="' + i.onClick + '">' + i.action + '</button></div>';
+  }).join('');
 }
 
 function renderTodos() {
   const el = document.getElementById('todo-list');
+  if(!el) return;
   const tagClasses = {BD:'tag-bd', Intel:'tag-intel', Outreach:'tag-outreach', Proj:'tag-proj'};
-  el.innerHTML = D.todos.map(t => `
-    <div class="todo-item" id="todo-${t.id}">
-      <input type="checkbox" class="todo-cb" ${t.done?'checked':''} onchange="toggleTodo(${t.id},this.checked)">
-      <span class="todo-text ${t.done?'':''}"${t.done?' style="text-decoration:line-through;color:var(--text3)"':''}>${t.text}</span>
-      <span class="todo-tag ${tagClasses[t.tag]||'tag-intel'}">${t.tag}</span>
-    </div>
-  `).join('');
+  el.innerHTML = D.todos.map(function(t) {
+    return '<div class="todo-item"><input type="checkbox" class="todo-cb" ' + (t.done?'checked':'') + ' onchange="toggleTodo(' + t.id + ',this.checked)"><span class="todo-text"' + (t.done?' style="text-decoration:line-through;color:var(--text3)"':'') + '>' + t.text + '</span><span class="todo-tag ' + (tagClasses[t.tag]||'tag-intel') + '">' + t.tag + '</span></div>';
+  }).join('');
 }
 
 function toggleTodo(id, checked) {
-  const t = D.todos.find(x => x.id === id);
+  const t = D.todos.find(function(x) { return x.id === id; });
   if(t) { t.done = checked; saveData(); }
 }
 
@@ -676,56 +657,43 @@ function addTodo() {
 
 function renderPipelineSnap() {
   const el = document.getElementById('pipeline-snap');
-  const statusMap = {
-    'Estimating':'badge-estimating', 'Active':'badge-active',
-    'Bid Submitted':'badge-bid-submitted', 'Awarded':'badge-awarded', 'Watching':'badge-watching'
-  };
-  el.innerHTML = D.bids.slice(0,6).map(b => `
-    <div class="pipeline-item">
-      <div><div class="pi-name">${b.project.substring(0,32)}${b.project.length>32?'&hellip;':''}</div>
-      <div class="pi-sub">${b.owner} &middot; ${b.value}</div></div>
-      <span class="pi-badge ${statusMap[b.status]||'badge-watching'}">${b.status}</span>
-    </div>
-  `).join('');
+  if(!el) return;
+  const statusMap = {'Estimating':'badge-estimating','Active':'badge-active','Bid Submitted':'badge-bid-submitted','Awarded':'badge-awarded','Watching':'badge-watching'};
+  el.innerHTML = D.bids.slice(0,6).map(function(b) {
+    const name = b.project.substring(0,32) + (b.project.length>32?'&hellip;':'');
+    return '<div class="pipeline-item"><div><div class="pi-name">' + name + '</div><div class="pi-sub">' + b.owner + ' &middot; ' + b.value + '</div></div><span class="pi-badge ' + (statusMap[b.status]||'badge-watching') + '">' + b.status + '</span></div>';
+  }).join('');
 }
 
 function renderFollowUpList() {
   const el = document.getElementById('follow-up-list');
-  const needsFollowUp = D.prospects.filter(p => {
+  if(!el) return;
+  const needsFollowUp = D.prospects.filter(function(p) {
     if(!p.lastTouch) return true;
     const ds = daysSince(p.lastTouch);
     return ds >= (p.followUpDays || 14) - 3;
   }).slice(0, 6);
-
   if(!needsFollowUp.length) {
     el.innerHTML = '<div style="color:var(--text3);font-size:13px;">All contacts up to date!</div>';
     return;
   }
-  el.innerHTML = needsFollowUp.map(p => {
+  el.innerHTML = needsFollowUp.map(function(p) {
     const fu = followUpCountdown(p);
-    return `<div class="follow-item">
-      <div><div class="fi-name">${p.company}</div><div class="fi-detail">${p.contact} &middot; ${p.status}</div></div>
-      <div class="fi-right">
-        <span class="${fu.cls}">${fu.label}</span>
-        <button class="draft-btn" onclick="openEmailModal(${p.id})">&#9993; Draft</button>
-      </div>
-    </div>`;
+    return '<div class="follow-item"><div><div class="fi-name">' + p.company + '</div><div class="fi-detail">' + p.contact + ' &middot; ' + p.status + '</div></div><div class="fi-right"><span class="' + fu.cls + '">' + fu.label + '</span><button class="draft-btn" onclick="openEmailModal(' + p.id + ')">&#9993; Draft</button></div></div>';
   }).join('');
 }
 
 function renderRadar() {
   const el = document.getElementById('tx-radar');
-  el.innerHTML = D.bids.map(b => {
-    const statusMap = {'Estimating':'badge-estimating','Active':'badge-active','Bid Submitted':'badge-bid-submitted','Awarded':'badge-awarded','Watching':'badge-watching'};
-    return `<div class="radar-item">
-      <div><div class="ri-name">${b.project.substring(0,28)}${b.project.length>28?'&hellip;':''}</div>
-      <div class="ri-sub">${b.owner} &middot; ${b.value} &middot; GC: ${b.gc}</div></div>
-      <span class="pi-badge ${statusMap[b.status]||'badge-watching'}">${b.status}</span>
-    </div>`;
+  if(!el) return;
+  const statusMap = {'Estimating':'badge-estimating','Active':'badge-active','Bid Submitted':'badge-bid-submitted','Awarded':'badge-awarded','Watching':'badge-watching'};
+  el.innerHTML = D.bids.map(function(b) {
+    const name = b.project.substring(0,28) + (b.project.length>28?'&hellip;':'');
+    return '<div class="radar-item"><div><div class="ri-name">' + name + '</div><div class="ri-sub">' + b.owner + ' &middot; ' + b.value + ' &middot; GC: ' + b.gc + '</div></div><span class="pi-badge ' + (statusMap[b.status]||'badge-watching') + '">' + b.status + '</span></div>';
   }).join('');
 }
 // ============================================================
-// NEWS FEED (Morning Brief mini version)
+// NEWS FEED
 // ============================================================
 const FEEDS = {
   dc: {
@@ -769,43 +737,38 @@ const FEEDS = {
   }
 };
 
-let currentFeedTab = 'dc';
+var currentFeedTab = 'dc';
 
 function loadFeed(key, tabEl) {
   currentFeedTab = key;
-  document.querySelectorAll('.feed-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.feed-tab').forEach(function(t) { t.classList.remove('active'); });
   if(tabEl) tabEl.classList.add('active');
-  const feed = FEEDS[key];
-  const container = document.getElementById('feed-container');
+  var feed = FEEDS[key];
+  var container = document.getElementById('feed-container');
   if(!feed || !container) return;
-  const items = feed.items.slice(0,5);
-  container.innerHTML = items.map((item, idx) => {
-    const dataKey = key + '_' + idx;
+  var items = feed.items.slice(0,5);
+  container.innerHTML = items.map(function(item, idx) {
+    var dataKey = key + '_' + idx;
     return '<div class="news-item">' +
       '<div class="news-icon" style="background:' + feed.color + '">' + feed.abbr + '</div>' +
       '<div class="news-body">' +
         '<div class="news-headline"><a href="' + item.url + '" target="_blank">' + item.title + '</a></div>' +
         '<div class="news-summary">' + item.summary.substring(0,120) + '&hellip;</div>' +
-        '<div class="news-meta">' +
-          '<span class="news-source">' + item.source + '</span>' +
-          '<span class="news-time">' + item.time + '</span>' +
-          (item.tx ? '<span class="news-tx-badge">TX</span>' : '') +
-          (item.tx ? '<button class="news-add-btn" data-key="' + dataKey + '" onclick="addNewsLeadById(this)">+ Add as lead</button>' : '') +
-        '</div>' +
-      '</div>' +
-    '</div>';
+        '<div class="news-meta"><span class="news-source">' + item.source + '</span><span class="news-time">' + item.time + '</span>' +
+        (item.tx ? '<span class="news-tx-badge">TX</span><button class="news-add-btn" data-key="' + dataKey + '" onclick="addNewsLeadById(this)">+ Add as lead</button>' : '') +
+        '</div></div></div>';
   }).join('');
 }
 
 function addNewsLeadById(btn) {
-  const key = btn.getAttribute('data-key');
-  const parts = key.split('_');
-  const feedKey = parts[0];
-  const idx = parseInt(parts[1]);
-  const feed = FEEDS[feedKey];
+  var key = btn.getAttribute('data-key');
+  var parts = key.split('_');
+  var feedKey = parts[0];
+  var idx = parseInt(parts[1]);
+  var feed = FEEDS[feedKey];
   if(!feed || !feed.items[idx]) return;
-  const item = feed.items[idx];
-  const newNote = {id: Date.now(), tag: feed.name.substring(0,12), type:'News lead', text: item.title + ': ' + item.summary, date: new Date().toISOString().substring(0,10)};
+  var item = feed.items[idx];
+  var newNote = {id: Date.now(), tag: feed.name.substring(0,12), type:'News lead', text: item.title + ': ' + item.summary, date: new Date().toISOString().substring(0,10)};
   D.research.push(newNote);
   saveData();
   btn.textContent = 'Added!';
@@ -814,40 +777,33 @@ function addNewsLeadById(btn) {
 }
 
 function loadFullFeed(key, tabEl) {
-  document.querySelectorAll('#page-news .feed-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('#page-news .feed-tab').forEach(function(t) { t.classList.remove('active'); });
   if(tabEl) tabEl.classList.add('active');
-  const feed = FEEDS[key];
-  const container = document.getElementById('news-full-container');
+  var feed = FEEDS[key];
+  var container = document.getElementById('news-full-container');
   if(!feed || !container) return;
-  container.innerHTML = feed.items.map((item, idx) => {
-    const dataKey = key + '_' + idx;
+  container.innerHTML = feed.items.map(function(item, idx) {
+    var dataKey = key + '_' + idx;
     return '<div class="news-page-item">' +
       '<div class="news-icon" style="background:' + feed.color + ';width:40px;height:40px;font-size:12px;">' + feed.abbr + '</div>' +
-      '<div class="npi-body">' +
-        '<div class="npi-head">' +
-          '<div class="npi-title"><a href="' + item.url + '" target="_blank">' + item.title + '</a></div>' +
-          (item.tx ? '<button class="news-add-btn" data-key="' + dataKey + '" onclick="addNewsLeadById(this)">+ Add as lead</button>' : '') +
-        '</div>' +
-        '<div class="npi-summary">' + item.summary + '</div>' +
-        '<div class="npi-meta">' +
-          '<span class="news-source">' + item.source + '</span>' +
-          '<span class="news-time">' + item.time + '</span>' +
-          (item.tx ? '<span class="news-tx-badge">TX Relevant</span>' : '') +
-        '</div>' +
-      '</div>' +
-    '</div>';
+      '<div class="npi-body"><div class="npi-head"><div class="npi-title"><a href="' + item.url + '" target="_blank">' + item.title + '</a></div>' +
+      (item.tx ? '<button class="news-add-btn" data-key="' + dataKey + '" onclick="addNewsLeadById(this)">+ Add as lead</button>' : '') +
+      '</div><div class="npi-summary">' + item.summary + '</div>' +
+      '<div class="npi-meta"><span class="news-source">' + item.source + '</span><span class="news-time">' + item.time + '</span>' +
+      (item.tx ? '<span class="news-tx-badge">TX Relevant</span>' : '') +
+      '</div></div></div>';
   }).join('');
 }
 // ============================================================
 // EMAIL MODAL
 // ============================================================
-let _currentProspectId = null;
-let _currentTemplate = 'cold';
+var _currentProspectId = null;
+var _currentTemplate = 'cold';
 
 function openEmailModal(prospectId) {
   _currentProspectId = prospectId;
   _currentTemplate = 'cold';
-  const p = D.prospects.find(x => x.id === prospectId);
+  var p = D.prospects.find(function(x) { return x.id === prospectId; });
   if(!p) return;
   document.getElementById('modal-title').textContent = 'Draft Email: ' + p.company;
   document.getElementById('modal-to').textContent = p.contact + ' <' + p.email + '>';
@@ -862,70 +818,43 @@ function openEmailModal(prospectId) {
 
 function switchTemplate(type) {
   _currentTemplate = type;
-  const p = D.prospects.find(x => x.id === _currentProspectId);
+  var p = D.prospects.find(function(x) { return x.id === _currentProspectId; });
   if(!p) return;
   document.getElementById('cold-btn').classList.toggle('active', type === 'cold');
   document.getElementById('follow-btn').classList.toggle('active', type === 'follow');
-  
+  var firstName = p.contact.split(' ')[0];
   if(type === 'cold') {
     document.getElementById('modal-subject').textContent = 'Subject: Apache Industrial - Electrical & Power Systems for ' + p.company + ' Projects';
-    document.getElementById('modal-body-text').textContent = [
-      'Hi ' + p.contact.split(' ')[0] + ',',
-      '',
-      'I hope this finds you well. My name is Keon Rho with Apache Industrial - we are a specialized electrical and power systems contractor with deep experience in hyperscale datacenter and semiconductor fab construction across Texas.',
-      '',
-      'We have recently completed work on major TX datacenter and fab projects, and are actively bidding on Samsung Taylor, Meta Temple, and TI Sherman alongside several GC partners.',
-      '',
-      'I would love to find 15 minutes to introduce Apache and explore how we might support ' + p.company + ' on upcoming TX projects. Would you have time this week or next?',
-      '',
-      'Best regards,',
-      'Keon Rho',
-      'Business Development | Apache Industrial',
-      'keon.rho@apache-industrial.com'
-    ].join('
-');
+    document.getElementById('modal-body-text').textContent = 'Hi ' + firstName + ',\n\nI hope this finds you well. My name is Keon Rho with Apache Industrial - we are a specialized electrical and power systems contractor with deep experience in hyperscale datacenter and semiconductor fab construction across Texas.\n\nWe have recently completed work on major TX datacenter and fab projects, and are actively bidding on Samsung Taylor, Meta Temple, and TI Sherman alongside several GC partners.\n\nI would love to find 15 minutes to introduce Apache and explore how we might support ' + p.company + ' on upcoming TX projects. Would you have time this week or next?\n\nBest regards,\nKeon Rho\nBusiness Development | Apache Industrial\nkeon.rho@apache-industrial.com';
   } else {
-    const ds = p.lastTouch ? daysSince(p.lastTouch) : null;
-    const daysText = ds ? ds + ' days ago' : 'recently';
+    var ds = p.lastTouch ? daysSince(p.lastTouch) : null;
+    var daysText = ds ? ds + ' days ago' : 'recently';
     document.getElementById('modal-subject').textContent = 'Subject: Following up - Apache Industrial & ' + p.company;
-    document.getElementById('modal-body-text').textContent = [
-      'Hi ' + p.contact.split(' ')[0] + ',',
-      '',
-      'I wanted to follow up on my previous note from ' + daysText + '. I know things get busy, so I wanted to resurface Apache Industrial as a potential partner for your upcoming TX electrical and power work.',
-      '',
-      'We have strong capacity in MV switchgear, UPS integration, generator tie-in, and critical power distribution - the exact scope that comes up on hyperscale DC and semiconductor fab projects.',
-      '',
-      'Would a quick 15-minute call this week work? Happy to send over our capability statement and references first.',
-      '',
-      'Thanks for your time,',
-      'Keon Rho',
-      'Business Development | Apache Industrial',
-      'keon.rho@apache-industrial.com'
-    ].join('
-');
+    document.getElementById('modal-body-text').textContent = 'Hi ' + firstName + ',\n\nI wanted to follow up on my previous note from ' + daysText + '. I know things get busy, so I wanted to resurface Apache Industrial as a potential partner for your upcoming TX electrical and power work.\n\nWe have strong capacity in MV switchgear, UPS integration, generator tie-in, and critical power distribution - the exact scope that comes up on hyperscale DC and semiconductor fab projects.\n\nWould a quick 15-minute call this week work? Happy to send over our capability statement and references first.\n\nThanks for your time,\nKeon Rho\nBusiness Development | Apache Industrial\nkeon.rho@apache-industrial.com';
   }
 }
 
 function copyEmail() {
-  const subject = document.getElementById('modal-subject').textContent;
-  const body = document.getElementById('modal-body-text').textContent;
-  navigator.clipboard.writeText(subject + '\n\n' + body).then(() => {
-    const btn = event.target;
+  var subject = document.getElementById('modal-subject').textContent;
+  var body = document.getElementById('modal-body-text').textContent;
+  navigator.clipboard.writeText(subject + '\n\n' + body).then(function() {
+    var btn = event.target;
     btn.textContent = 'Copied!';
-    setTimeout(() => { btn.textContent = 'Copy to Clipboard'; }, 2000);
+    setTimeout(function() { btn.textContent = 'Copy to Clipboard'; }, 2000);
   });
 }
 
 function markSent() {
-  const p = D.prospects.find(x => x.id === _currentProspectId);
+  var p = D.prospects.find(function(x) { return x.id === _currentProspectId; });
   if(!p) return;
   p.lastTouch = new Date().toISOString().substring(0,10);
   p.status = 'Outreach Sent';
   saveData();
-  const sentDiv = document.getElementById('sent-status');
+  var sentDiv = document.getElementById('sent-status');
   sentDiv.innerHTML = '<span class="sent-badge">\u2713 Sent ' + new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) + '</span>';
   sentDiv.style.display = 'block';
   document.getElementById('mark-sent-btn').style.display = 'none';
+  closeModal();
   renderMorning();
 }
 
@@ -938,33 +867,29 @@ function closeModal() {
 // PROSPECTS TABLE
 // ============================================================
 function renderProspects() {
-  const tbody = document.getElementById('prospects-tbody');
-  const statusClasses = {
-    'Outreach Sent':'s-outreach','Meeting Scheduled':'s-meeting','Proposal Sent':'s-proposal',
-    'Qualified':'s-qualified','New':'s-new','Outreach sent':'s-sent'
-  };
-  tbody.innerHTML = D.prospects.map(p => {
-    const fu = followUpCountdown(p);
-    const lastTouchStr = p.lastTouch ? new Date(p.lastTouch + 'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'}) : 'Never';
-    return '<tr>' +
-      '<td><div class="td-name">' + p.company + '</div><div class="td-sub">' + p.type + '</div></td>' +
+  var tbody = document.getElementById('prospects-tbody');
+  if(!tbody) return;
+  var statusClasses = {'Outreach Sent':'s-outreach','Meeting Scheduled':'s-meeting','Proposal Sent':'s-proposal','Qualified':'s-qualified','New':'s-new'};
+  tbody.innerHTML = D.prospects.map(function(p) {
+    var fu = followUpCountdown(p);
+    var lastTouchStr = p.lastTouch ? new Date(p.lastTouch + 'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'}) : 'Never';
+    return '<tr><td><div class="td-name">' + p.company + '</div><div class="td-sub">' + p.type + '</div></td>' +
       '<td>' + p.type + '</td>' +
       '<td><div>' + p.contact + '</div><div class="td-sub">' + p.email + '</div></td>' +
       '<td><span class="status ' + (statusClasses[p.status]||'s-new') + '">' + p.status + '</span></td>' +
       '<td>' + lastTouchStr + '</td>' +
       '<td><span class="' + fu.cls + '">' + fu.label + '</span></td>' +
       '<td class="td-note">' + (p.notes||'').substring(0,60) + (p.notes&&p.notes.length>60?'&hellip;':'') + '</td>' +
-      '<td><button class="btn btn-sm" onclick="openEmailModal(' + p.id + ')">&#9993; Draft</button></td>' +
-    '</tr>';
+      '<td><button class="btn btn-sm" onclick="openEmailModal(' + p.id + ')">&#9993; Draft</button></td></tr>';
   }).join('');
 }
 
 function addProspect() {
-  const company = prompt('Company name:');
+  var company = prompt('Company name:');
   if(!company) return;
-  const contact = prompt('Contact name:') || '';
-  const email = prompt('Contact email:') || '';
-  D.prospects.push({id: Date.now(), company, type:'GC', contact, email, status:'New', lastTouch:'', followUpDays:14, notes:''});
+  var contact = prompt('Contact name:') || '';
+  var email = prompt('Contact email:') || '';
+  D.prospects.push({id: Date.now(), company:company, type:'GC', contact:contact, email:email, status:'New', lastTouch:'', followUpDays:14, notes:''});
   saveData();
   renderProspects();
 }
@@ -973,33 +898,29 @@ function addProspect() {
 // BIDS TABLE
 // ============================================================
 function renderBids() {
-  const tbody = document.getElementById('bids-tbody');
-  const statusClasses = {
-    'Estimating':'s-estimating','Active':'s-active','Bid Submitted':'s-bid-sub',
-    'Awarded':'s-awarded','Lost':'s-lost','Watching':'s-watching'
-  };
-  tbody.innerHTML = D.bids.map(b => {
-    const dueDate = b.due ? new Date(b.due + 'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : 'TBD';
-    const daysLeft = b.due ? Math.floor((new Date(b.due) - new Date()) / 86400000) : null;
-    const dueStr = daysLeft !== null ? dueDate + (daysLeft >= 0 ? ' (' + daysLeft + 'd)' : ' (past)') : 'TBD';
-    return '<tr>' +
-      '<td><div class="td-name">' + b.project + '</div><div class="td-sub">Owner: ' + b.owner + '</div></td>' +
+  var tbody = document.getElementById('bids-tbody');
+  if(!tbody) return;
+  var statusClasses = {'Estimating':'s-estimating','Active':'s-active','Bid Submitted':'s-bid-sub','Awarded':'s-awarded','Lost':'s-lost','Watching':'s-watching'};
+  tbody.innerHTML = D.bids.map(function(b) {
+    var dueDate = b.due ? new Date(b.due + 'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : 'TBD';
+    var daysLeft = b.due ? Math.floor((new Date(b.due) - new Date()) / 86400000) : null;
+    var dueStr = daysLeft !== null ? dueDate + (daysLeft >= 0 ? ' (' + daysLeft + 'd)' : ' (past)') : 'TBD';
+    return '<tr><td><div class="td-name">' + b.project + '</div><div class="td-sub">Owner: ' + b.owner + '</div></td>' +
       '<td>' + b.gc + '</td>' +
       '<td style="font-family:monospace;color:var(--accent)">' + b.value + '</td>' +
       '<td>' + dueStr + '</td>' +
       '<td><span class="status ' + (statusClasses[b.status]||'s-watching') + '">' + b.status + '</span></td>' +
-      '<td class="td-note">' + (b.notes||'').substring(0,70) + (b.notes&&b.notes.length>70?'&hellip;':'') + '</td>' +
-    '</tr>';
+      '<td class="td-note">' + (b.notes||'').substring(0,70) + (b.notes&&b.notes.length>70?'&hellip;':'') + '</td></tr>';
   }).join('');
 }
 
 function addBid() {
-  const project = prompt('Project name:');
+  var project = prompt('Project name:');
   if(!project) return;
-  const owner = prompt('Owner:') || '';
-  const gc = prompt('GC:') || '';
-  const value = prompt('Est. value (e.g. $200M):') || 'TBD';
-  D.bids.push({id: Date.now(), project, owner, gc, value, due:'', status:'Estimating', notes:''});
+  var owner = prompt('Owner:') || '';
+  var gc = prompt('GC:') || '';
+  var value = prompt('Est. value (e.g. $200M):') || 'TBD';
+  D.bids.push({id: Date.now(), project:project, owner:owner, gc:gc, value:value, due:'', status:'Estimating', notes:''});
   saveData();
   renderBids();
 }
@@ -1008,22 +929,18 @@ function addBid() {
 // ACCOUNTS TABLE
 // ============================================================
 function renderAccounts() {
-  const tbody = document.getElementById('accounts-tbody');
-  const relClasses = {Active:'s-active', 'Pre-qual':'s-estimating', Outreach:'s-outreach', Watching:'s-watching', New:'s-new', Qualified:'s-qualified'};
-  tbody.innerHTML = D.accounts.map(a => '<tr>' +
-    '<td class="td-name">' + a.company + '</td>' +
-    '<td>' + a.type + '</td>' +
-    '<td>' + a.region + '</td>' +
-    '<td>' + a.contact + '</td>' +
-    '<td>' + a.projects + '</td>' +
-    '<td><span class="status ' + (relClasses[a.rel]||'s-new') + '">' + a.rel + '</span></td>' +
-  '</tr>').join('');
+  var tbody = document.getElementById('accounts-tbody');
+  if(!tbody) return;
+  var relClasses = {Active:'s-active','Pre-qual':'s-estimating',Outreach:'s-outreach',Watching:'s-watching',New:'s-new',Qualified:'s-qualified'};
+  tbody.innerHTML = D.accounts.map(function(a) {
+    return '<tr><td class="td-name">' + a.company + '</td><td>' + a.type + '</td><td>' + a.region + '</td><td>' + a.contact + '</td><td>' + a.projects + '</td><td><span class="status ' + (relClasses[a.rel]||'s-new') + '">' + a.rel + '</span></td></tr>';
+  }).join('');
 }
 
 function addAccount() {
-  const company = prompt('Company name:');
+  var company = prompt('Company name:');
   if(!company) return;
-  D.accounts.push({id: Date.now(), company, type:'GC Partner', region:'TX', contact:'TBD', projects:'None', rel:'New'});
+  D.accounts.push({id: Date.now(), company:company, type:'GC Partner', region:'TX', contact:'TBD', projects:'None', rel:'New'});
   saveData();
   renderAccounts();
 }
@@ -1032,26 +949,20 @@ function addAccount() {
 // RESEARCH NOTES
 // ============================================================
 function renderResearch() {
-  const el = document.getElementById('research-grid');
-  const tagColors = {Market:'#56b2e8', 'JE Dunn':'#f2994a', 'Hensel Phelps':'#bb8cf5', 'Gray Const.':'#6fcf97', 'TX Market':'#e8c170', Samsung:'#56ccba', Hyperscale:'#eb5757', 'Pre-qual':'#f2c94c'};
-  el.innerHTML = D.research.map(r => {
-    const col = tagColors[r.tag] || '#9b9690';
-    return '<div class="rn-card">' +
-      '<div class="rn-header">' +
-        '<span class="rn-tag" style="background:' + col + '22;color:' + col + '">' + r.tag + '</span>' +
-        '<span class="rn-type">' + r.type + '</span>' +
-        '<span class="rn-date">' + r.date + '</span>' +
-      '</div>' +
-      '<div class="rn-text">' + r.text + '</div>' +
-    '</div>';
+  var el = document.getElementById('research-grid');
+  if(!el) return;
+  var tagColors = {Market:'#56b2e8','JE Dunn':'#f2994a','Hensel Phelps':'#bb8cf5','Gray Const.':'#6fcf97','TX Market':'#e8c170',Samsung:'#56ccba',Hyperscale:'#eb5757','Pre-qual':'#f2c94c'};
+  el.innerHTML = D.research.map(function(r) {
+    var col = tagColors[r.tag] || '#9b9690';
+    return '<div class="rn-card"><div class="rn-header"><span class="rn-tag" style="background:' + col + '22;color:' + col + '">' + r.tag + '</span><span class="rn-type">' + r.type + '</span><span class="rn-date">' + r.date + '</span></div><div class="rn-text">' + r.text + '</div></div>';
   }).join('');
 }
 
 function addNote() {
-  const text = prompt('Research note:');
+  var text = prompt('Research note:');
   if(!text) return;
-  const tag = prompt('Tag (e.g. Market, JE Dunn):') || 'Market';
-  D.research.unshift({id: Date.now(), tag, type:'Manual note', text, date: new Date().toISOString().substring(0,10)});
+  var tag = prompt('Tag (e.g. Market, JE Dunn):') || 'Market';
+  D.research.unshift({id: Date.now(), tag:tag, type:'Manual note', text:text, date: new Date().toISOString().substring(0,10)});
   saveData();
   renderResearch();
 }
@@ -1060,15 +971,13 @@ function addNote() {
 // INIT
 // ============================================================
 (function init() {
-  // Set greeting and date
-  const now = new Date();
-  const hour = now.getHours();
-  const greet = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
-  const el = document.getElementById('greeting');
+  var now = new Date();
+  var hour = now.getHours();
+  var greet = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+  var el = document.getElementById('greeting');
   if(el) el.textContent = greet + ', Keon.';
-  const dateEl = document.getElementById('date-display');
+  var dateEl = document.getElementById('date-display');
   if(dateEl) dateEl.textContent = now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
-  // Render morning brief
   renderMorning();
 })();
 </script>
