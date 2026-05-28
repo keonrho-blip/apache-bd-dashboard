@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Apache BD — TX Datacenter &amp; Semiconductor</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&amp;family=DM+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
   --bg: #0f0f0f;
@@ -28,7 +28,7 @@
   --blue-bg: rgba(86,178,232,0.1);
   --teal: #56ccba;
   --teal-bg: rgba(86,204,186,0.1);
-  --purple: #9b8cf5;
+  --purple: #bb8cf5;
   --purple-bg: rgba(155,140,245,0.1);
   --orange: #f2994a;
   --orange-bg: rgba(242,153,74,0.1);
@@ -46,1272 +46,1008 @@ body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-s
 
 /* Sidebar */
 .logo { padding: 0 1.25rem 1.5rem; border-bottom: 1px solid var(--border); margin-bottom: 1rem; }
-.logo-mark { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--accent); letter-spacing: 0.12em; text-transform: uppercase; }
-.logo-name { font-size: 15px; font-weight: 600; color: var(--text); margin-top: 2px; }
-.logo-sub  { font-size: 10px; color: var(--text3); margin-top: 3px; letter-spacing: 0.05em; }
-.nav-section { padding: 0.5rem 1.25rem; }
-.nav-label { font-size: 10px; font-weight: 500; color: var(--text3); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.4rem; }
-.nav-item { display: flex; align-items: center; gap: 0.5rem; padding: 0.45rem 0.75rem; border-radius: var(--radius-sm); cursor: pointer; font-size: 13px; color: var(--text2); transition: all 0.15s; margin-bottom: 2px; }
+.logo-title { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+.logo-sub { font-size: 11px; color: var(--text3); margin-top: 2px; }
+.nav-section { padding: 0 .75rem; margin-bottom: 1.5rem; }
+.nav-label { font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--text3); padding: .25rem .5rem; margin-bottom: .25rem; }
+.nav-item { display: flex; align-items: center; gap: .5rem; padding: .45rem .5rem; border-radius: var(--radius-sm); font-size: 13px; color: var(--text2); cursor: pointer; transition: all .15s; }
 .nav-item:hover { background: var(--surface2); color: var(--text); }
-.nav-item.active { background: rgba(232,193,112,0.08); color: var(--accent); }
-.nav-item svg { width: 14px; height: 14px; flex-shrink: 0; }
-.nav-badge { background: var(--red); color: #fff; font-size: 10px; font-weight: 600; padding: 1px 5px; border-radius: 10px; margin-left: auto; }
-.sidebar-footer { margin-top: auto; padding: 1rem 1.25rem; border-top: 1px solid var(--border); font-size: 10px; color: var(--text3); font-family: 'DM Mono', monospace; }
+.nav-item.active { background: rgba(232,193,112,0.1); color: var(--accent); }
+.nav-item .ic { width: 15px; font-size: 13px; opacity: .7; }
 
 /* Page header */
-.page-header { margin-bottom: 1.75rem; }
-.page-eyebrow { font-size: 10px; font-weight: 500; color: var(--text3); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.35rem; }
-.page-title { font-size: 26px; font-weight: 300; color: var(--text); line-height: 1.2; }
-.page-title span { font-size: 14px; color: var(--accent); font-weight: 400; }
-.page-date { font-size: 12px; color: var(--text3); margin-top: 4px; }
-
-/* Section visibility */
-.section { display: none; }
-.section.active { display: block; }
-
-/* Cards */
-.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 1rem; overflow: hidden; }
-.card-head { padding: 0.85rem 1.1rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
-.card-title { display: flex; align-items: center; gap: 0.4rem; font-size: 11px; font-weight: 500; color: var(--text2); letter-spacing: 0.06em; text-transform: uppercase; }
-.card-title svg { color: var(--accent); }
-.card-body { padding: 0.75rem 1.1rem; }
-
-/* Morning brief specific layout */
-.morning-grid { display: grid; grid-template-columns: 1fr 400px; gap: 1.25rem; }
-.morning-left { display: flex; flex-direction: column; gap: 1rem; }
-.morning-right { display: flex; flex-direction: column; gap: 1rem; }
+.page-header { margin-bottom: 2rem; }
+.page-header h1 { font-size: 1.75rem; font-weight: 600; letter-spacing: -.01em; }
+.page-header .date { font-size: 13px; color: var(--text3); margin-top: 4px; }
 
 /* Stat strip */
-.stat-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; margin-bottom: 1rem; }
-.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.1rem; position: relative; overflow: hidden; }
-.stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--accent); opacity: 0.4; }
-.stat-card.green::before { background: var(--green); }
-.stat-card.blue::before { background: var(--blue); }
-.stat-card.teal::before { background: var(--teal); }
-.stat-card.amber::before { background: var(--amber); }
-.stat-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.35rem; }
-.stat-value { font-size: 28px; font-weight: 300; color: var(--text); line-height: 1; }
-.stat-sub { font-size: 10px; color: var(--text3); margin-top: 4px; }
+.stat-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.25rem; border-top: 3px solid transparent; }
+.stat-card.blue { border-top-color: var(--blue); }
+.stat-card.amber { border-top-color: var(--amber); }
+.stat-card.green { border-top-color: var(--green); }
+.stat-card.teal { border-top-color: var(--teal); }
+.stat-label { font-size: 11px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--text3); }
+.stat-value { font-size: 2rem; font-weight: 700; margin: .25rem 0 .1rem; font-family: 'DM Mono', monospace; }
+.stat-value.blue { color: var(--blue); }
+.stat-value.amber { color: var(--amber); }
+.stat-value.green { color: var(--green); }
+.stat-value.teal { color: var(--teal); }
+.stat-sub { font-size: 12px; color: var(--text3); }
 
-/* Todo items */
-.todo-item { display: flex; align-items: flex-start; gap: 0.65rem; padding: 0.65rem 0; border-bottom: 1px solid var(--border); cursor: pointer; transition: background 0.1s; }
-.todo-item:last-child { border-bottom: none; }
-.todo-item:hover { background: rgba(255,255,255,0.02); margin: 0 -1.1rem; padding: 0.65rem 1.1rem; }
-.todo-item input[type=checkbox] { margin-top: 2px; accent-color: var(--accent); flex-shrink: 0; width: 14px; height: 14px; }
-.todo-text { flex: 1; font-size: 13px; color: var(--text); line-height: 1.4; }
-.todo-text.done { text-decoration: line-through; color: var(--text3); }
-.todo-tag { font-size: 10px; padding: 2px 7px; border-radius: 4px; background: var(--surface3); color: var(--text3); white-space: nowrap; flex-shrink: 0; }
-.todo-tag.Samsung { background: rgba(86,178,232,0.12); color: var(--blue); }
-.todo-tag.Prospects { background: rgba(155,140,245,0.12); color: var(--purple); }
-.todo-tag.Bids { background: rgba(242,201,76,0.12); color: var(--amber); }
-.todo-tag.TX { background: rgba(232,193,112,0.12); color: var(--accent); }
-.todo-actions { display: flex; align-items: center; gap: 0.3rem; flex-shrink: 0; }
+/* Morning grid */
+.morning-grid { display: grid; grid-template-columns: 1fr 340px; gap: 1.5rem; }
 
-/* Needs follow-up */
-.followup-item { display: flex; align-items: center; gap: 0.6rem; padding: 0.55rem 0; border-bottom: 1px solid var(--border); }
-.followup-item:last-child { border-bottom: none; }
-.followup-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-.followup-name { flex: 1; font-size: 12px; font-weight: 500; color: var(--text); }
-.followup-meta { font-size: 11px; color: var(--text3); }
-.followup-actions { display: flex; gap: 0.3rem; align-items: center; }
+/* Card */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
+.card-header { display: flex; align-items: center; justify-content: space-between; padding: .875rem 1.25rem; border-bottom: 1px solid var(--border); }
+.card-title { font-size: 12px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--text3); display: flex; align-items: center; gap: .5rem; }
+.card-body { padding: 1rem 1.25rem; }
 
-/* Pipeline stats */
-.pipeline-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
-.pip-stat { background: var(--surface2); border-radius: var(--radius-sm); padding: 0.7rem 0.8rem; }
-.pip-stat-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.2rem; }
-.pip-stat-val { font-size: 22px; font-weight: 300; color: var(--text); }
-
-/* TX Radar */
-.radar-item { display: flex; align-items: flex-start; justify-content: space-between; gap: 0.5rem; padding: 0.6rem 0; border-bottom: 1px solid var(--border); }
-.radar-item:last-child { border-bottom: none; }
-.radar-name { font-size: 12px; font-weight: 600; color: var(--text); }
-.radar-sub { font-size: 10px; color: var(--text3); margin-top: 2px; line-height: 1.4; }
-
-/* News feed on morning brief */
-.news-mini-feed { display: flex; flex-direction: column; gap: 0; }
-.news-card { display: flex; gap: 0.75rem; padding: 0.7rem 0; border-bottom: 1px solid var(--border); cursor: pointer; transition: background 0.12s; }
-.news-card:last-child { border-bottom: none; }
-.news-card:hover { background: rgba(255,255,255,0.02); margin: 0 -1.1rem; padding: 0.7rem 1.1rem; }
-.news-source-icon { width: 28px; height: 28px; border-radius: 6px; background: var(--surface3); display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; color: var(--accent); flex-shrink: 0; font-family: 'DM Mono', monospace; letter-spacing: 0; margin-top: 2px; }
-.news-content { flex: 1; min-width: 0; }
-.news-headline { font-size: 12px; font-weight: 500; color: var(--text); line-height: 1.4; margin-bottom: 3px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.news-summary { font-size: 11px; color: var(--text3); line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.news-meta { display: flex; align-items: center; gap: 0.4rem; margin-top: 4px; }
-.news-source-label { font-size: 10px; color: var(--accent); font-weight: 500; }
-.news-time { font-size: 10px; color: var(--text3); }
-.news-flag { font-size: 9px; padding: 1px 5px; border-radius: 3px; background: var(--green-bg); color: var(--green); font-weight: 600; }
-
-/* Daily actions */
-.action-item { display: flex; align-items: flex-start; gap: 0.6rem; padding: 0.6rem 0; border-bottom: 1px solid var(--border); }
+/* Daily Actions */
+.action-item { display: flex; align-items: flex-start; gap: .75rem; padding: .6rem 0; border-bottom: 1px solid var(--border); }
 .action-item:last-child { border-bottom: none; }
-.action-icon { width: 24px; height: 24px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
-.action-icon.red { background: var(--red-bg); }
-.action-icon.amber { background: var(--amber-bg); }
-.action-icon.blue { background: var(--blue-bg); }
-.action-icon.green { background: var(--green-bg); }
-.action-text { flex: 1; font-size: 12px; color: var(--text); line-height: 1.4; }
-.action-text small { display: block; color: var(--text3); font-size: 11px; margin-top: 1px; }
-.action-btn { font-size: 10px; padding: 3px 8px; border-radius: 4px; border: 1px solid var(--border2); background: transparent; color: var(--text2); cursor: pointer; white-space: nowrap; flex-shrink: 0; transition: all 0.15s; }
-.action-btn:hover { background: var(--surface3); color: var(--text); }
-.action-btn.primary { background: rgba(232,193,112,0.1); color: var(--accent); border-color: rgba(232,193,112,0.3); }
-.action-btn.primary:hover { background: rgba(232,193,112,0.2); }
+.action-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 4px; flex-shrink: 0; }
+.action-dot.red { background: var(--red); }
+.action-dot.amber { background: var(--amber); }
+.action-dot.blue { background: var(--blue); }
+.action-dot.green { background: var(--green); }
+.action-text { flex: 1; }
+.action-title { font-size: 13px; font-weight: 500; }
+.action-detail { font-size: 12px; color: var(--text3); margin-top: 2px; }
+.action-btn { font-size: 11px; font-weight: 600; padding: .25rem .6rem; border-radius: var(--radius-sm); border: 1px solid var(--border2); background: var(--surface2); color: var(--text2); cursor: pointer; white-space: nowrap; transition: all .15s; }
+.action-btn:hover { color: var(--text); border-color: var(--accent); }
 
-/* Metrics row */
-.metrics { display: flex; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; }
-.metric-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 0.85rem 1.1rem; flex: 1; min-width: 100px; }
-.metric-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 0.25rem; }
-.metric-value { font-size: 24px; font-weight: 300; color: var(--text); }
-.metric-sub { font-size: 10px; color: var(--text3); margin-top: 3px; }
+/* Todos */
+.todo-item { display: flex; align-items: flex-start; gap: .625rem; padding: .5rem 0; border-bottom: 1px solid var(--border); }
+.todo-item:last-child { border-bottom: none; }
+.todo-cb { width: 15px; height: 15px; border-radius: 3px; border: 1.5px solid var(--text3); background: transparent; cursor: pointer; flex-shrink: 0; margin-top: 1px; appearance: none; -webkit-appearance: none; }
+.todo-cb:checked { background: var(--accent); border-color: var(--accent); }
+.todo-cb:checked + .todo-text { text-decoration: line-through; color: var(--text3); }
+.todo-text { font-size: 13px; flex: 1; }
+.todo-tag { font-size: 10px; font-weight: 600; padding: .15rem .4rem; border-radius: 3px; letter-spacing: .04em; }
+.tag-bd { background: var(--blue-bg); color: var(--blue); }
+.tag-proj { background: var(--teal-bg); color: var(--teal); }
+.tag-intel { background: var(--purple-bg); color: var(--purple); }
+.tag-outreach { background: var(--orange-bg); color: var(--orange); }
+.add-todo { display: flex; align-items: center; gap: .5rem; margin-top: .75rem; }
+.add-todo input { flex: 1; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: .4rem .75rem; font-size: 13px; color: var(--text); outline: none; }
+.add-todo input::placeholder { color: var(--text3); }
+.add-todo input:focus { border-color: var(--accent); }
+.add-todo button { background: var(--surface3); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text2); padding: .4rem .75rem; font-size: 13px; cursor: pointer; }
+.add-todo button:hover { color: var(--accent); }
 
-/* Alert banner */
-.alert-banner { background: var(--red-bg); border: 1px solid rgba(235,87,87,0.2); border-radius: var(--radius-sm); padding: 0.6rem 1rem; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem; font-size: 12px; color: var(--red); }
+/* News feed */
+.feed-tabs { display: flex; gap: .25rem; }
+.feed-tab { font-size: 11px; font-weight: 600; padding: .25rem .6rem; border-radius: var(--radius-sm); border: 1px solid var(--border); background: transparent; color: var(--text3); cursor: pointer; transition: all .15s; }
+.feed-tab.active { background: var(--accent); border-color: var(--accent); color: #000; }
+.news-item { display: flex; gap: .875rem; padding: .75rem 0; border-bottom: 1px solid var(--border); }
+.news-item:last-child { border-bottom: none; }
+.news-icon { width: 32px; height: 32px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: #fff; flex-shrink: 0; }
+.news-body { flex: 1; min-width: 0; }
+.news-headline { font-size: 13px; font-weight: 500; line-height: 1.4; margin-bottom: 3px; }
+.news-headline a { color: var(--text); text-decoration: none; }
+.news-headline a:hover { color: var(--accent); }
+.news-summary { font-size: 12px; color: var(--text3); line-height: 1.4; margin-bottom: 4px; }
+.news-meta { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
+.news-source { font-size: 11px; font-weight: 600; color: var(--text3); }
+.news-time { font-size: 11px; color: var(--text3); }
+.news-tx-badge { font-size: 10px; font-weight: 600; padding: .1rem .35rem; border-radius: 3px; background: var(--green-bg); color: var(--green); letter-spacing: .04em; }
+.news-add-btn { font-size: 11px; padding: .15rem .5rem; border-radius: 3px; border: 1px solid var(--border2); background: transparent; color: var(--text3); cursor: pointer; transition: all .15s; }
+.news-add-btn:hover { border-color: var(--accent); color: var(--accent); }
 
-/* Buttons */
-.btn { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.4rem 0.85rem; border-radius: var(--radius-sm); border: none; cursor: pointer; font-size: 12px; font-family: 'DM Sans', sans-serif; transition: all 0.15s; font-weight: 500; }
-.btn-accent { background: rgba(232,193,112,0.12); color: var(--accent); border: 1px solid rgba(232,193,112,0.25); }
-.btn-accent:hover { background: rgba(232,193,112,0.2); }
-.btn-sm { padding: 0.3rem 0.65rem; font-size: 11px; background: var(--surface2); color: var(--text2); border: 1px solid var(--border2); }
-.btn-sm:hover { background: var(--surface3); color: var(--text); }
-.btn-sm.active { background: rgba(232,193,112,0.1); color: var(--accent); border-color: rgba(232,193,112,0.3); }
-.btn-ghost { background: transparent; color: var(--text3); border: none; padding: 0.2rem 0.4rem; }
-.btn-ghost:hover { color: var(--text); }
-.btn-danger { background: var(--red-bg); color: var(--red); border: 1px solid rgba(235,87,87,0.25); }
-.btn-danger:hover { background: rgba(235,87,87,0.2); }
-.btn-green { background: var(--green-bg); color: var(--green); border: 1px solid rgba(111,207,151,0.25); }
-.btn-green:hover { background: rgba(111,207,151,0.2); }
+/* Right column cards */
+.pipeline-item { display: flex; align-items: flex-start; justify-content: space-between; gap: .5rem; padding: .5rem 0; border-bottom: 1px solid var(--border); }
+.pipeline-item:last-child { border-bottom: none; }
+.pi-name { font-size: 13px; font-weight: 500; }
+.pi-sub { font-size: 11px; color: var(--text3); margin-top: 2px; }
+.pi-badge { font-size: 10px; font-weight: 600; padding: .2rem .5rem; border-radius: 3px; white-space: nowrap; flex-shrink: 0; letter-spacing: .03em; }
+.badge-estimating { background: var(--amber-bg); color: var(--amber); }
+.badge-active { background: var(--green-bg); color: var(--green); }
+.badge-bid-submitted { background: var(--blue-bg); color: var(--blue); }
+.badge-watching { background: var(--surface3); color: var(--text3); }
+.badge-awarded { background: rgba(111,207,151,0.2); color: var(--green); }
 
-/* Tables */
+.follow-item { display: flex; align-items: center; justify-content: space-between; gap: .5rem; padding: .5rem 0; border-bottom: 1px solid var(--border); }
+.follow-item:last-child { border-bottom: none; }
+.fi-name { font-size: 13px; font-weight: 500; }
+.fi-detail { font-size: 11px; color: var(--text3); }
+.fi-right { display: flex; align-items: center; gap: .5rem; }
+.countdown-red { font-size: 11px; font-weight: 600; color: var(--red); }
+.countdown-amber { font-size: 11px; font-weight: 600; color: var(--amber); }
+.countdown-ok { font-size: 11px; color: var(--text3); }
+.draft-btn { font-size: 11px; padding: .2rem .5rem; border-radius: 3px; border: 1px solid var(--border2); background: transparent; color: var(--text3); cursor: pointer; }
+.draft-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+/* Radar */
+.radar-item { display: flex; align-items: flex-start; justify-content: space-between; gap: .5rem; padding: .5rem 0; border-bottom: 1px solid var(--border); }
+.radar-item:last-child { border-bottom: none; }
+.ri-name { font-size: 13px; font-weight: 500; }
+.ri-sub { font-size: 11px; color: var(--text3); margin-top: 2px; }
+
+/* Main sections */
+.section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; }
+.section-title { font-size: 1.1rem; font-weight: 600; }
+.section-actions { display: flex; gap: .5rem; }
+.btn { display: inline-flex; align-items: center; gap: .4rem; padding: .45rem .9rem; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--surface2); color: var(--text2); font-size: 13px; cursor: pointer; transition: all .15s; }
+.btn:hover { color: var(--text); border-color: var(--border2); }
+.btn-primary { background: var(--accent); border-color: var(--accent); color: #000; font-weight: 600; }
+.btn-primary:hover { background: var(--accent2); border-color: var(--accent2); color: #000; }
+.btn-sm { padding: .3rem .65rem; font-size: 12px; }
+
+/* Table */
+.table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
 table { width: 100%; border-collapse: collapse; }
-th { font-size: 10px; color: var(--text3); font-weight: 500; text-transform: uppercase; letter-spacing: 0.07em; padding: 0.5rem 0.75rem; text-align: left; border-bottom: 1px solid var(--border); }
-td { padding: 0.65rem 0.75rem; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text); vertical-align: top; }
+th { background: var(--surface2); font-size: 11px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--text3); padding: .625rem 1rem; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
+td { padding: .75rem 1rem; border-bottom: 1px solid var(--border); font-size: 13px; vertical-align: top; }
 tr:last-child td { border-bottom: none; }
-tr:hover td { background: rgba(255,255,255,0.015); }
-.td-company { font-weight: 600; }
-.td-notes { max-width: 220px; font-size: 11px; color: var(--text2); line-height: 1.4; }
+tr:hover td { background: var(--surface2); }
+.td-name { font-weight: 500; }
+.td-sub { font-size: 11px; color: var(--text3); margin-top: 2px; }
+.td-note { font-size: 12px; color: var(--text2); }
 
 /* Status badges */
-.badge { font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 4px; display: inline-block; white-space: nowrap; }
-.badge-green { background: var(--green-bg); color: var(--green); }
-.badge-amber { background: var(--amber-bg); color: var(--amber); }
-.badge-blue { background: var(--blue-bg); color: var(--blue); }
-.badge-red { background: var(--red-bg); color: var(--red); }
-.badge-gray { background: var(--surface3); color: var(--text3); }
-.badge-purple { background: var(--purple-bg); color: var(--purple); }
-.badge-teal { background: var(--teal-bg); color: var(--teal); }
-.badge-orange { background: var(--orange-bg); color: var(--orange); }
+.status { display: inline-block; font-size: 10px; font-weight: 600; padding: .2rem .5rem; border-radius: 3px; letter-spacing: .04em; white-space: nowrap; }
+.s-outreach { background: var(--orange-bg); color: var(--orange); }
+.s-meeting { background: var(--blue-bg); color: var(--blue); }
+.s-proposal { background: var(--teal-bg); color: var(--teal); }
+.s-qualified { background: var(--purple-bg); color: var(--purple); }
+.s-new { background: var(--surface3); color: var(--text3); }
+.s-sent { background: rgba(111,207,151,0.15); color: var(--green); }
+.s-estimating { background: var(--amber-bg); color: var(--amber); }
+.s-active { background: var(--green-bg); color: var(--green); }
+.s-bid-sub { background: var(--blue-bg); color: var(--blue); }
+.s-awarded { background: rgba(111,207,151,0.2); color: var(--green); }
+.s-lost { background: var(--red-bg); color: var(--red); }
+.s-watching { background: var(--surface3); color: var(--text3); }
 
-/* Outreach */
-.outreach-bar { display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap; }
-.days-badge { font-size: 10px; padding: 2px 6px; border-radius: 4px; }
+/* Follow-up countdown */
+.fu-overdue { font-size: 11px; font-weight: 600; color: var(--red); }
+.fu-soon { font-size: 11px; font-weight: 600; color: var(--amber); }
+.fu-ok { font-size: 11px; color: var(--text3); }
+.fu-none { font-size: 11px; color: var(--text3); font-style: italic; }
 
-/* Forms */
-.form-row { margin-bottom: 0.75rem; }
-.form-row label { display: block; font-size: 11px; color: var(--text3); margin-bottom: 0.3rem; }
-.form-row input, .form-row select, .form-row textarea { width: 100%; background: var(--surface2); border: 1px solid var(--border2); border-radius: var(--radius-sm); padding: 0.45rem 0.65rem; color: var(--text); font-size: 13px; font-family: 'DM Sans', sans-serif; outline: none; }
-.form-row input:focus, .form-row select:focus, .form-row textarea:focus { border-color: rgba(232,193,112,0.4); }
-.form-row textarea { resize: vertical; min-height: 80px; }
-select option { background: var(--surface2); }
+/* Research notes */
+.research-grid { display: grid; gap: .75rem; }
+.rn-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.25rem; }
+.rn-header { display: flex; align-items: center; gap: .625rem; margin-bottom: .5rem; }
+.rn-tag { font-size: 10px; font-weight: 600; padding: .15rem .4rem; border-radius: 3px; }
+.rn-type { font-size: 11px; color: var(--text3); }
+.rn-date { font-size: 11px; color: var(--text3); margin-left: auto; }
+.rn-text { font-size: 13px; line-height: 1.6; color: var(--text2); }
 
-/* Draft email modal */
-.email-draft-box { background: var(--surface2); border: 1px solid var(--border2); border-radius: var(--radius-sm); padding: 0.85rem; font-size: 12px; color: var(--text2); line-height: 1.6; white-space: pre-wrap; margin-top: 0.75rem; font-family: 'DM Mono', monospace; max-height: 280px; overflow-y: auto; }
-.email-subject { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 0.5rem; }
-
-/* Research */
-.research-note { background: var(--surface2); border-radius: var(--radius-sm); padding: 0.75rem 0.85rem; margin-bottom: 0.6rem; }
-.research-meta { display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.4rem; flex-wrap: wrap; }
-.research-tag { font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 4px; background: rgba(232,193,112,0.1); color: var(--accent); }
-.research-type { font-size: 10px; padding: 2px 7px; border-radius: 4px; background: var(--surface3); color: var(--text3); }
-.research-date { font-size: 10px; color: var(--text3); margin-left: auto; }
-.research-text { font-size: 12px; color: var(--text2); line-height: 1.5; }
-
-/* Live news full page */
-.feed-tabs { display: flex; gap: 0.4rem; margin-bottom: 1rem; flex-wrap: wrap; }
-.news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0.75rem; }
-.news-full-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem; display: flex; flex-direction: column; gap: 0.5rem; transition: border-color 0.15s; }
-.news-full-card:hover { border-color: var(--border2); }
-.news-full-source { display: flex; align-items: center; gap: 0.5rem; }
-.news-full-icon { width: 24px; height: 24px; border-radius: 5px; background: var(--surface3); display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 700; color: var(--accent); font-family: 'DM Mono', monospace; }
-.news-full-label { font-size: 10px; font-weight: 600; color: var(--accent); }
-.news-full-time { font-size: 10px; color: var(--text3); margin-left: auto; }
-.news-full-title { font-size: 13px; font-weight: 500; color: var(--text); line-height: 1.4; }
-.news-full-summary { font-size: 11px; color: var(--text3); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-.news-full-footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: 0.4rem; }
-.news-full-link { font-size: 11px; color: var(--accent); text-decoration: none; }
-.news-full-link:hover { text-decoration: underline; }
-.news-lead-btn { font-size: 10px; padding: 2px 7px; border-radius: 4px; border: 1px solid rgba(111,207,151,0.3); background: var(--green-bg); color: var(--green); cursor: pointer; }
-.news-lead-btn:hover { background: rgba(111,207,151,0.2); }
-
-/* Accounts */
-.account-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.1rem; margin-bottom: 0.75rem; }
-.account-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 0.75rem; }
-.account-name { font-size: 14px; font-weight: 600; color: var(--text); }
-.account-type { font-size: 11px; color: var(--text3); margin-top: 2px; }
-.account-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.6rem; margin-bottom: 0.75rem; }
-.account-field label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; display: block; margin-bottom: 2px; }
-.account-field span { font-size: 12px; color: var(--text); font-weight: 500; }
-.account-note-area { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 0.5rem 0.65rem; color: var(--text); font-size: 12px; font-family: 'DM Sans', sans-serif; resize: vertical; min-height: 56px; outline: none; }
-.account-note-area:focus { border-color: rgba(232,193,112,0.4); }
+/* Live news */
+.news-page-item { display: flex; gap: 1rem; padding: 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: .75rem; }
+.npi-body { flex: 1; }
+.npi-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: .375rem; }
+.npi-title { font-size: 14px; font-weight: 500; line-height: 1.4; }
+.npi-title a { color: var(--text); text-decoration: none; }
+.npi-title a:hover { color: var(--accent); }
+.npi-summary { font-size: 13px; color: var(--text2); line-height: 1.5; margin-bottom: .5rem; }
+.npi-meta { display: flex; align-items: center; gap: .625rem; }
 
 /* Modal */
-.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100; align-items: center; justify-content: center; }
-.modal-overlay.open { display: flex; }
-.modal { background: var(--surface); border: 1px solid var(--border2); border-radius: var(--radius); padding: 1.5rem; width: 520px; max-width: 95vw; max-height: 85vh; overflow-y: auto; }
-.modal h3 { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 1.25rem; }
-.modal-footer { display: flex; gap: 0.5rem; justify-content: flex-end; margin-top: 1rem; }
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.7); display: flex; align-items: center; justify-content: center; z-index: 1000; }
+.modal { background: var(--surface); border: 1px solid var(--border2); border-radius: var(--radius); width: 560px; max-height: 80vh; display: flex; flex-direction: column; }
+.modal-header { display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); }
+.modal-title { font-size: 15px; font-weight: 600; }
+.modal-close { background: none; border: none; color: var(--text3); font-size: 18px; cursor: pointer; padding: .25rem; line-height: 1; }
+.modal-close:hover { color: var(--text); }
+.modal-body { padding: 1.25rem 1.5rem; overflow-y: auto; flex: 1; }
+.modal-footer { padding: 1rem 1.5rem; border-top: 1px solid var(--border); display: flex; gap: .75rem; justify-content: flex-end; }
+.email-meta { display: grid; grid-template-columns: auto 1fr; gap: .375rem 1rem; margin-bottom: 1rem; }
+.email-meta-label { font-size: 12px; color: var(--text3); font-weight: 600; }
+.email-meta-value { font-size: 12px; color: var(--text2); }
+.email-subject { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: .75rem; }
+.email-body-area { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: .875rem 1rem; font-size: 13px; line-height: 1.65; color: var(--text2); white-space: pre-wrap; min-height: 180px; }
+.sent-badge { display: inline-flex; align-items: center; gap: .375rem; font-size: 12px; font-weight: 600; color: var(--green); background: var(--green-bg); padding: .3rem .75rem; border-radius: 20px; }
+.type-toggle { display: flex; gap: .5rem; margin-bottom: 1rem; }
+.type-btn { padding: .3rem .75rem; font-size: 12px; font-weight: 600; border-radius: var(--radius-sm); border: 1px solid var(--border); background: transparent; color: var(--text3); cursor: pointer; }
+.type-btn.active { background: var(--accent); border-color: var(--accent); color: #000; }
 
-/* Divider label */
-.divider-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.1em; padding: 0.4rem 0; border-bottom: 1px solid var(--border); margin-bottom: 0.5rem; margin-top: 0.75rem; }
-
-/* Two col (legacy) */
-.two-col { display: grid; grid-template-columns: 1fr 400px; gap: 1.25rem; }
-
+/* Page visibility */
+.page { display: none; }
+.page.active { display: block; }
 </style>
 </head>
 <body>
 <div class="shell">
-  <aside class="sidebar">
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
     <div class="logo">
-      <div class="logo-mark">Apache Industrial</div>
-      <div class="logo-name">BD &middot; TX DC &amp; Semi</div>
-      <div class="logo-sub">DASHBOARD</div>
+      <div class="logo-title">Apache Industrial</div>
+      <div class="logo-sub">BD &middot; TX DC &amp; Semi</div>
     </div>
     <div class="nav-section">
       <div class="nav-label">Morning</div>
-      <div class="nav-item active" onclick="nav('morning', this)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-        Morning brief
-        <span class="nav-badge" id="alert-count" style="display:none"></span>
-      </div>
+      <div class="nav-item active" onclick="showPage('morning',this)"><span class="ic">☀️</span> Morning brief</div>
     </div>
     <div class="nav-section">
       <div class="nav-label">Tracker</div>
-      <div class="nav-item" onclick="nav('prospects', this)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        Prospects
-      </div>
-      <div class="nav-item" onclick="nav('bids', this)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-        Bids &amp; proposals
-      </div>
-      <div class="nav-item" onclick="nav('accounts', this)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-        Accounts
-      </div>
+      <div class="nav-item" onclick="showPage('prospects',this)"><span class="ic">📊</span> Prospects</div>
+      <div class="nav-item" onclick="showPage('bids',this)"><span class="ic">📄</span> Bids &amp; proposals</div>
+      <div class="nav-item" onclick="showPage('accounts',this)"><span class="ic">🏢</span> Accounts</div>
     </div>
     <div class="nav-section">
       <div class="nav-label">Intel</div>
-      <div class="nav-item" onclick="nav('research', this)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        Research notes
-      </div>
-      <div class="nav-item" onclick="nav('news', this)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a4 4 0 0 1-4 4zm0 0a4 4 0 0 1-4-4v-1h4"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="14" y2="17"/><polyline points="10 9 8 9 8 13"/></svg>
-        Live news
-      </div>
+      <div class="nav-item" onclick="showPage('research',this)"><span class="ic">🔍</span> Research notes</div>
+      <div class="nav-item" onclick="showPage('news',this)"><span class="ic">📰</span> Live news</div>
     </div>
-    <div class="sidebar-footer" id="sf-date"></div>
-  </aside>
+  </nav>
 
+  <!-- MAIN CONTENT -->
   <main class="main">
-
-    <!-- MORNING BRIEF -->
-    <div id="section-morning" class="section active">
+    <!-- MORNING BRIEF PAGE -->
+    <div id="page-morning" class="page active">
       <div class="page-header">
-        <div class="page-eyebrow" id="header-date"></div>
-        <div class="page-title">Good morning, Keon.</div>
+        <h1 id="greeting">Good morning, Keon.</h1>
+        <div class="date" id="date-display"></div>
       </div>
-
-      <div id="stale-alerts"></div>
-
-      <!-- STAT STRIP -->
-      <div class="stat-strip" id="morning-stats"></div>
-
+      <!-- Stat Strip -->
+      <div class="stat-strip" id="stat-strip"></div>
+      <!-- Morning Grid -->
       <div class="morning-grid">
-        <!-- LEFT COLUMN -->
-        <div class="morning-left">
-
-          <!-- DAILY ACTIONS (auto-generated) -->
+        <!-- Left column -->
+        <div style="display:flex;flex-direction:column;gap:1.25rem;">
+          <!-- Daily Actions -->
           <div class="card">
-            <div class="card-head">
-              <div class="card-title">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                Daily Actions
-              </div>
-              <span id="action-count" style="font-size:10px;color:var(--text3);"></span>
+            <div class="card-header">
+              <div class="card-title">⚡ Daily Actions</div>
             </div>
-            <div class="card-body" id="daily-actions-list"></div>
+            <div class="card-body" id="daily-actions"></div>
           </div>
-
-          <!-- TO-DOS -->
+          <!-- Todos -->
           <div class="card">
-            <div class="card-head">
-              <div class="card-title">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-                Today's to-dos
-              </div>
-              <button class="btn btn-accent" onclick="openModal('todo')">+ Add task</button>
-            </div>
-            <div class="card-body" id="todo-list"></div>
-          </div>
-
-          <!-- MORNING NEWS FEED -->
-          <div class="card">
-            <div class="card-head">
-              <div class="card-title">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a4 4 0 0 1-4 4zm0 0a4 4 0 0 1-4-4v-1h4"/></svg>
-                Market Intel Feed
-              </div>
-              <div style="display:flex;gap:0.3rem;">
-                <button class="btn btn-sm active" onclick="morningFeedSwitch('dc',this)">DC</button>
-                <button class="btn btn-sm" onclick="morningFeedSwitch('enr',this)">ENR</button>
-                <button class="btn btn-sm" onclick="morningFeedSwitch('semi',this)">Semi</button>
-              </div>
-            </div>
-            <div class="card-body" id="morning-news-list">
-              <div style="color:var(--text3);font-size:12px;padding:0.5rem 0;">Loading feed…</div>
-            </div>
-          </div>
-
-        </div><!-- end morning-left -->
-
-        <!-- RIGHT COLUMN -->
-        <div class="morning-right">
-
-          <!-- PIPELINE SNAPSHOT -->
-          <div class="card">
-            <div class="card-head">
-              <div class="card-title">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                Pipeline snapshot
-              </div>
-            </div>
-            <div class="card-body" id="snapshot"></div>
-          </div>
-
-          <!-- NEEDS FOLLOW-UP -->
-          <div class="card">
-            <div class="card-head">
-              <div class="card-title">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                Needs follow-up
-              </div>
-            </div>
-            <div class="card-body" id="followup-list"></div>
-          </div>
-
-          <!-- TX MARKET RADAR -->
-          <div class="card">
-            <div class="card-head">
-              <div class="card-title">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
-                Texas Market Radar
-              </div>
+            <div class="card-header">
+              <div class="card-title">✓ Today’s To-Dos</div>
+              <button class="btn btn-sm" onclick="addTodo()">+ Add task</button>
             </div>
             <div class="card-body">
-              <div class="radar-item">
-                <div><div class="radar-name">Samsung Taylor Ph.2</div><div class="radar-sub">Taylor, TX &middot; Semi Fab &middot; ~$17B &middot; GC: Hensel Phelps (likely)</div></div>
-                <span class="badge badge-amber">Estimating</span>
-              </div>
-              <div class="radar-item">
-                <div><div class="radar-name">Meta Temple Datacenter</div><div class="radar-sub">Temple, TX &middot; Hyperscale DC &middot; ~$800M &middot; GC: JE Dunn / Turner</div></div>
-                <span class="badge badge-amber">Estimating</span>
-              </div>
-              <div class="radar-item">
-                <div><div class="radar-name">TI Sherman (Ayrshire Ph.2)</div><div class="radar-sub">Sherman, TX &middot; Semi Fab &middot; ~$30B campus &middot; GC: Gray Construction</div></div>
-                <span class="badge badge-blue">Active</span>
-              </div>
-              <div class="radar-item">
-                <div><div class="radar-name">Project Frontier (Abilene)</div><div class="radar-sub">Abilene, TX &middot; Hyperscale DC &middot; $11M bid &middot; GC: Kiewit</div></div>
-                <span class="badge badge-green">Bid Submitted</span>
-              </div>
-              <div class="radar-item">
-                <div><div class="radar-name">Google DFW Expansion</div><div class="radar-sub">Dallas-Fort Worth, TX &middot; Hyperscale DC &middot; Multi-phase &middot; GC: TBD</div></div>
-                <span class="badge badge-gray">Watching</span>
+              <div id="todo-list"></div>
+              <div class="add-todo">
+                <input type="text" id="todo-input" placeholder="New task..." onkeydown="if(event.key==='Enter')addTodo()">
+                <button onclick="addTodo()">Add</button>
               </div>
             </div>
           </div>
-
-        </div><!-- end morning-right -->
-      </div><!-- end morning-grid -->
-    </div><!-- end section-morning -->
-
-    <!-- PROSPECTS -->
-    <div id="section-prospects" class="section">
-      <div class="page-header">
-        <div class="page-eyebrow">Tracker</div>
-        <div class="page-title">Prospects <span>&middot; TX Datacenter &amp; Semi</span></div>
-      </div>
-      <div class="metrics" id="p-metrics"></div>
-      <div class="card">
-        <div class="card-head">
-          <div style="display:flex;gap:0.5rem;align-items:center;">
-            <select id="p-filter-status" onchange="renderProspects()" class="btn btn-sm" style="border:1px solid var(--border2);">
-              <option value="">All statuses</option>
-              <option>Not contacted</option>
-              <option>Outreach sent</option>
-              <option>Responded</option>
-              <option>Meeting booked</option>
-              <option>Not interested</option>
-            </select>
-            <select id="p-filter-ind" onchange="renderProspects()" class="btn btn-sm" style="border:1px solid var(--border2);">
-              <option value="">All industries</option>
-              <option>Datacenter</option>
-              <option>Semiconductor</option>
-              <option>Industrial</option>
-              <option>Other</option>
-            </select>
-          </div>
-          <button class="btn btn-accent" onclick="openModal('prospect')">+ Add prospect</button>
-        </div>
-        <div style="overflow-x:auto;">
-          <table id="prospect-table">
-            <thead><tr>
-              <th>Company</th><th>Contact</th><th>Industry</th><th>Status</th><th>Last touch</th><th>Follow-up</th><th>Notes</th><th></th>
-            </tr></thead>
-            <tbody id="prospect-tbody"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- BIDS -->
-    <div id="section-bids" class="section">
-      <div class="page-header">
-        <div class="page-eyebrow">Tracker</div>
-        <div class="page-title">Bids &amp; Proposals <span>&middot; TX Focus</span></div>
-      </div>
-      <div class="metrics" id="b-metrics"></div>
-      <div class="card">
-        <div class="card-head">
-          <select id="b-filter-status" onchange="renderBids()" class="btn btn-sm" style="border:1px solid var(--border2);">
-            <option value="">All statuses</option>
-            <option>Estimating</option><option>Submitted</option><option>Under review</option>
-            <option>Awarded</option><option>Not awarded</option><option>No bid</option>
-          </select>
-          <button class="btn btn-accent" onclick="openModal('bid')">+ Add bid</button>
-        </div>
-        <div style="overflow-x:auto;">
-          <table id="bid-table">
-            <thead><tr>
-              <th>Project</th><th>Client</th><th>Scope</th><th>Value</th><th>Due date</th><th>Status</th><th>Notes</th><th></th>
-            </tr></thead>
-            <tbody id="bid-tbody"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- ACCOUNTS -->
-    <div id="section-accounts" class="section">
-      <div class="page-header">
-        <div class="page-eyebrow">Tracker</div>
-        <div class="page-title">Accounts</div>
-      </div>
-      <div class="metrics" id="a-metrics"></div>
-      <div style="display:flex;justify-content:flex-end;margin-bottom:0.75rem;">
-        <button class="btn btn-accent" onclick="openModal('account')">+ Add account</button>
-      </div>
-      <div id="account-list"></div>
-    </div>
-
-    <!-- RESEARCH -->
-    <div id="section-research" class="section">
-      <div class="page-header">
-        <div class="page-eyebrow">Intel</div>
-        <div class="page-title">Research notes</div>
-      </div>
-      <div class="two-col">
-        <div class="card">
-          <div class="card-head"><div class="card-title">Add research note</div></div>
-          <div class="card-body">
-            <div class="form-row">
-              <input id="f-res-tag" placeholder="Tag (e.g. Meta, JE Dunn, Datacenter TX)">
+          <!-- Market Intel Feed -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">📰 Market Intel Feed</div>
+              <div class="feed-tabs">
+                <button class="feed-tab active" onclick="loadFeed('dc',this)">DC</button>
+                <button class="feed-tab" onclick="loadFeed('enr',this)">ENR</button>
+                <button class="feed-tab" onclick="loadFeed('semi',this)">Semi</button>
+              </div>
             </div>
-            <div class="form-row">
-              <select id="f-res-type">
-                <option>Company intel</option><option>Project lead</option>
-                <option>Market news</option><option>Competitor</option><option>Other</option>
-              </select>
+            <div class="card-body" id="feed-container">
+              <div style="color:var(--text3);font-size:13px;">Loading feed…</div>
             </div>
-            <div class="form-row">
-              <textarea id="f-res-text" placeholder="Drop your research here..."></textarea>
-            </div>
-            <button class="btn btn-accent" onclick="saveResearch()">Save note</button>
           </div>
         </div>
-        <div>
-          <div class="card-title" style="margin-bottom:0.75rem;padding:0 0.1rem;">Saved notes</div>
-          <div id="research-list"></div>
+        <!-- Right column -->
+        <div style="display:flex;flex-direction:column;gap:1.25rem;">
+          <!-- Pipeline Snapshot -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">◕ Pipeline Snapshot</div>
+            </div>
+            <div class="card-body" id="pipeline-snap"></div>
+          </div>
+          <!-- Needs Follow-Up -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">🔔 Needs Follow-Up</div>
+            </div>
+            <div class="card-body" id="follow-up-list"></div>
+          </div>
+          <!-- Texas Market Radar -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">📏 Texas Market Radar</div>
+            </div>
+            <div class="card-body" id="tx-radar"></div>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- NEWS -->
-    <div id="section-news" class="section">
-      <div class="page-header">
-        <div class="page-eyebrow">Intel</div>
-        <div class="page-title">Live news</div>
+    <!-- PROSPECTS PAGE -->
+    <div id="page-prospects" class="page">
+      <div class="section-header">
+        <div class="section-title">Prospects</div>
+        <div class="section-actions">
+          <button class="btn btn-primary btn-sm" onclick="addProspect()">+ Add prospect</button>
+        </div>
       </div>
-      <div class="feed-tabs" id="feed-tabs">
-        <button class="btn btn-accent btn-sm" onclick="loadFeed('dc',this)">Datacenter</button>
-        <button class="btn btn-sm" onclick="loadFeed('enr',this)">ENR Construction</button>
-        <button class="btn btn-sm" onclick="loadFeed('cdive',this)">Construction Dive</button>
-        <button class="btn btn-sm" onclick="loadFeed('semi',this)">Semiconductor</button>
-        <button class="btn btn-sm" onclick="loadFeed('register',this)">The Register DC</button>
-        <button class="btn btn-sm" onclick="loadFeed('txbiz',this)">TX Biz Journal</button>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>Company</th><th>Type</th><th>Contact</th><th>Status</th>
+            <th>Last Touch</th><th>Follow-Up</th><th>Notes</th><th>Actions</th>
+          </tr></thead>
+          <tbody id="prospects-tbody"></tbody>
+        </table>
       </div>
-      <div style="font-size:11px;color:var(--text3);margin-bottom:0.75rem;" id="feed-label"></div>
-      <div class="news-grid" id="news-container"></div>
     </div>
 
+    <!-- BIDS PAGE -->
+    <div id="page-bids" class="page">
+      <div class="section-header">
+        <div class="section-title">Bids &amp; Proposals</div>
+        <button class="btn btn-primary btn-sm" onclick="addBid()">+ Add bid</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>Project</th><th>Owner / GC</th><th>Value</th><th>Due Date</th><th>Status</th><th>Notes</th>
+          </tr></thead>
+          <tbody id="bids-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ACCOUNTS PAGE -->
+    <div id="page-accounts" class="page">
+      <div class="section-header">
+        <div class="section-title">Accounts &amp; GC Partners</div>
+        <button class="btn btn-primary btn-sm" onclick="addAccount()">+ Add account</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>Company</th><th>Type</th><th>Region</th><th>Key Contact</th><th>Active Projects</th><th>Relationship</th>
+          </tr></thead>
+          <tbody id="accounts-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- RESEARCH NOTES PAGE -->
+    <div id="page-research" class="page">
+      <div class="section-header">
+        <div class="section-title">Research Notes</div>
+        <button class="btn btn-primary btn-sm" onclick="addNote()">+ Add note</button>
+      </div>
+      <div class="research-grid" id="research-grid"></div>
+    </div>
+
+    <!-- LIVE NEWS PAGE -->
+    <div id="page-news" class="page">
+      <div class="section-header">
+        <div class="section-title">Live News Feed</div>
+        <div class="feed-tabs">
+          <button class="feed-tab active" onclick="loadFullFeed('dc',this)">DC</button>
+          <button class="feed-tab" onclick="loadFullFeed('enr',this)">ENR</button>
+          <button class="feed-tab" onclick="loadFullFeed('semi',this)">Semi</button>
+        </div>
+      </div>
+      <div id="news-full-container"></div>
+    </div>
   </main>
 </div>
 
-<!-- MODALS -->
-<div class="modal-overlay" id="modal-overlay">
-  <div class="modal" id="modal-box">
-    <h3 id="modal-title">Add item</h3>
-    <div id="modal-body"></div>
-    <div class="modal-footer">
-      <button class="btn btn-sm" onclick="closeModal()">Cancel</button>
-      <button class="btn btn-accent" onclick="saveModal()" id="modal-save-btn">Save</button>
-    </div>
-  </div>
-</div>
-
 <!-- EMAIL DRAFT MODAL -->
-<div class="modal-overlay" id="email-modal">
-  <div class="modal" style="width:580px;">
-    <h3 id="email-modal-title">Draft outreach email</h3>
-    <div class="form-row">
-      <label>Subject</label>
-      <input id="email-subject-field" readonly style="background:var(--surface3);">
+<div id="email-modal" class="modal-overlay" style="display:none;">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-title">Draft Outreach Email</div>
+      <button class="modal-close" onclick="closeModal()">&times;</button>
     </div>
-    <div class="email-draft-box" id="email-body-field" contenteditable="true"></div>
-    <div style="margin-top:0.75rem;display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;">
-      <button class="btn btn-accent" onclick="copyEmail()">Copy to clipboard</button>
-      <button class="btn btn-sm" onclick="markOutreachSent(window._emailProspectId)">Mark as sent</button>
-      <button class="btn btn-ghost" onclick="closeEmailModal()">Cancel</button>
-      <span id="email-copy-confirm" style="font-size:11px;color:var(--green);display:none;">Copied!</span>
+    <div class="modal-body">
+      <div class="type-toggle">
+        <button class="type-btn active" id="cold-btn" onclick="switchTemplate('cold')">Cold Outreach</button>
+        <button class="type-btn" id="follow-btn" onclick="switchTemplate('follow')">Follow-Up</button>
+      </div>
+      <div class="email-meta">
+        <span class="email-meta-label">To:</span>
+        <span class="email-meta-value" id="modal-to"></span>
+        <span class="email-meta-label">Company:</span>
+        <span class="email-meta-value" id="modal-company"></span>
+      </div>
+      <div class="email-subject" id="modal-subject"></div>
+      <div class="email-body-area" id="modal-body-text"></div>
+      <div id="sent-status" style="margin-top:.75rem;display:none;"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="copyEmail()">Copy to Clipboard</button>
+      <button class="btn btn-primary" onclick="markSent()" id="mark-sent-btn">Mark as Sent</button>
     </div>
   </div>
 </div>
 <script>
-/* ===== DATA ===== */
+// ============================================================
+// DATA STORE
+// ============================================================
 const D = {
-  todos: [
-    { id:1, text:'Follow up with Mr. Na on warranty bond issuance status', tag:'Samsung', done:false },
-    { id:2, text:'Check estimating on Dynaten/JPS Utility Plant quote', tag:'Bids', done:false },
-    { id:3, text:'Send Hensel Phelps South Central outreach email', tag:'Prospects', done:false },
-    { id:4, text:'Send DPR Construction outreach email', tag:'Prospects', done:false },
-    { id:5, text:'Confirm Apollo.io contacts for JE Dunn follow-up', tag:'Prospects', done:false },
-    { id:6, text:'Research Gray Construction TX contacts for TI Sherman bid', tag:'TX Projects', done:false },
-    { id:7, text:'Send Austin Commercial cold outreach — datacenter coatings', tag:'Prospects', done:false },
-    { id:8, text:'Check Meta Temple, TX permit status — identify GC award', tag:'TX Projects', done:false },
+  prospects: JSON.parse(localStorage.getItem('bd_prospects') || 'null') || [
+    {id:1, company:'JE Dunn Construction', type:'GC', contact:'Brad Simmons', email:'brad.simmons@jedunn.com', status:'Meeting Scheduled', lastTouch:'2026-05-20', followUpDays:7, notes:'Active on Meta Temple datacenter (Temple TX). South Central division HQ in Dallas.'},
+    {id:2, company:'Hensel Phelps', type:'GC', contact:'Chris Avery', email:'chris.avery@henselphelps.com', status:'Qualified', lastTouch:'2026-05-15', followUpDays:14, notes:'Likely GC on Samsung Taylor Ph.2. Very active in TX semi fabs.'},
+    {id:3, company:'Turner Construction', type:'GC', contact:'Mike Odom', email:'m.odom@turnerconstruction.com', status:'Outreach Sent', lastTouch:'2026-05-10', followUpDays:7, notes:'National DC practice. DFW office covers TX hyperscale projects.'},
+    {id:4, company:'Gray Construction', type:'GC', contact:'Kyle Bren', email:'k.bren@gray.tv', status:'Proposal Sent', lastTouch:'2026-05-18', followUpDays:5, notes:'Building TI Sherman Ayrshire Ph.2. Semiconductor specialist.'},
+    {id:5, company:'Austin Commercial', type:'GC', contact:'Jeff Larson', email:'jlarson@austincommercial.com', status:'New', lastTouch:'', followUpDays:7, notes:'Dallas-based. Strong TX industrial and datacenter track record.'},
+    {id:6, company:'Skanska USA', type:'GC', contact:'Rachel Morales', email:'rachel.morales@skanska.com', status:'New', lastTouch:'', followUpDays:14, notes:'Major national presence. Pursuing TX hyperscale DC work aggressively.'},
+    {id:7, company:'Linbeck Group', type:'GC', contact:'Tom Hilliard', email:'t.hilliard@linbeck.com', status:'Meeting Scheduled', lastTouch:'2026-05-22', followUpDays:7, notes:'Houston HQ. Strong semi fab history in TX.'},
+    {id:8, company:'Whiting-Turner', type:'GC', contact:'Dave Patel', email:'d.patel@whiting-turner.com', status:'Outreach Sent', lastTouch:'2026-05-12', followUpDays:7, notes:'Active bidder on Google DFW expansion. Known for quality DC work.'},
+    {id:9, company:'Samsung Austin Semiconductor', type:'Owner', contact:'James Yu', email:'james.yu@samsung.com', status:'Qualified', lastTouch:'2026-05-08', followUpDays:30, notes:'Ongoing Taylor TX fab campus. Ph.2 bid opening expected Q3 2026.'},
+    {id:10, company:'Meta (Datacenter Dev)', type:'Owner', contact:'Ana Reyes', email:'ana.reyes@meta.com', status:'Outreach Sent', lastTouch:'2026-05-05', followUpDays:14, notes:'Temple TX hyperscale campus. $800M+ capex. Active through JE Dunn.'}
   ],
-  prospects: [
-    { id:1, company:'JE Dunn', contact:'TBD', industry:'Datacenter', status:'Meeting booked', lastTouch:'2026-05-22', followUpDays:7, notes:'Intro call done. Sent follow-up + Apache overview.' },
-    { id:2, company:'Hensel Phelps', contact:'TBD', industry:'Semiconductor', status:'Not contacted', lastTouch:'', followUpDays:7, notes:'Samsung Phase 2 target. Cold email ready.' },
-    { id:3, company:'DPR Construction', contact:'TBD', industry:'Datacenter', status:'Not contacted', lastTouch:'', followUpDays:7, notes:'Large datacenter footprint in TX.' },
-    { id:4, company:'Turner Construction', contact:'TBD', industry:'Datacenter', status:'Meeting booked', lastTouch:'2026-05-15', followUpDays:7, notes:'Intro meeting secured.' },
-    { id:5, company:'Kiewit', contact:'On-site PM', industry:'Datacenter', status:'Responded', lastTouch:'2026-05-10', followUpDays:7, notes:'$11M bid submitted. AllForm work active.' },
-    { id:6, company:'Austin Commercial', contact:'TBD', industry:'Datacenter', status:'Not contacted', lastTouch:'', followUpDays:7, notes:'AUS-based subsidiary of Austin Industries. Active GC on hyperscale DC in TX.' },
-    { id:7, company:'Skanska USA', contact:'TBD', industry:'Datacenter', status:'Not contacted', lastTouch:'', followUpDays:7, notes:'Large DC construction footprint in TX/Southwest. Pursue South Central office in Dallas.' },
-    { id:8, company:'Linbeck Group', contact:'TBD', industry:'Semiconductor', status:'Not contacted', lastTouch:'', followUpDays:7, notes:'Houston-based GC. Known sub on Samsung Austin R+D campus.' },
-    { id:9, company:'Whiting-Turner', contact:'TBD', industry:'Datacenter', status:'Not contacted', lastTouch:'', followUpDays:7, notes:'ENR Top 10 CM. Active in TX hyperscale market (Meta, Google).' },
-    { id:10, company:'Gray Construction', contact:'TBD', industry:'Semiconductor', status:'Outreach sent', lastTouch:'2026-05-20', followUpDays:7, notes:'Specializes in industrial/semi fab. Building TI Ayrshire Phase 2 in Sherman, TX.' },
+  bids: JSON.parse(localStorage.getItem('bd_bids') || 'null') || [
+    {id:1, project:'Samsung Taylor Ph.2 (Fab Expansion)', owner:'Samsung Austin Semi', gc:'Hensel Phelps', value:'$875M', due:'2026-07-15', status:'Estimating', notes:'Electrical distribution, MV switchgear, bus duct. Critical path item.'},
+    {id:2, project:'Meta Temple Datacenter (Phase 1)', owner:'Meta', gc:'JE Dunn', value:'$800M', due:'2026-06-30', status:'Estimating', notes:'UPS systems, generator tie-in, critical power. 240MW campus.'},
+    {id:3, project:'TI Sherman (Ayrshire Ph.2)', owner:'Texas Instruments', gc:'Gray Construction', value:'$300M', due:'2026-06-01', status:'Active', notes:'Semi fab MV distribution. Apache has existing relationship with Gray.'},
+    {id:4, project:'Project Frontier (Abilene DC)', owner:'Unknown Hyperscaler', gc:'Kiewit', value:'$1.4B', due:'2026-08-20', status:'Bid Submitted', notes:'Kiewit pre-qual submitted. 72-hr follow-up needed on contact.'},
+    {id:5, project:'Google DFW Expansion', owner:'Google', gc:'Multiple-TBD', value:'Unknown', due:'2026-09-15', status:'Watching', notes:'Watching permit filings. GC selection expected Q3. Track Whiting-Turner.'},
+    {id:6, project:'NTT DFW (Phase 3)', owner:'NTT Data Centers', gc:'Austin Commercial', value:'$220M', due:'2026-07-01', status:'Estimating', notes:'Existing vendor list. Need to qualify. Austin Commercial is GC.'}
   ],
-  bids: [
-    { id:1, project:'Samsung SUE Painting', client:'SECAI', scope:'Coatings', value:'$599K', due:'2025-09-01', status:'Awarded', notes:'First direct Samsung contract.' },
-    { id:2, project:'Samsung Mechanical', client:'SECAI', scope:'Insulation', value:'$1.4M', due:'2026-04-30', status:'Awarded', notes:'CCD active. Work completing April 30.' },
-    { id:3, project:'Project Frontier Bldg 1', client:'Kiewit', scope:'Coatings & Insulation', value:'$11M', due:'2026-05-01', status:'Submitted', notes:'AllForm scope active. Awaiting full award.' },
-    { id:4, project:'JPS Utility Plant', client:'Dynaten', scope:'Mech. Insulation', value:'TBD', due:'2026-04-29', status:'Estimating', notes:'Overdue. Estimating in progress.' },
-    { id:5, project:'Samsung Taylor Ph.2 – Fire Protection', client:'Hensel Phelps', scope:'Coatings & Firestopping', value:'TBD', due:'2026-08-01', status:'Estimating', notes:'Target bid for HP Ph.2 scope. Samsung Taylor campus expansion.' },
-    { id:6, project:'Meta Temple DC – Mechanical Insulation', client:'Gray Construction', scope:'Mech. Insulation', value:'TBD', due:'2026-07-15', status:'Estimating', notes:'Meta datacenter in Temple, TX.' },
-    { id:7, project:'TI Sherman Fab (Ayrshire Ph.2)', client:'Gray Construction', scope:'Industrial Coatings', value:'TBD', due:'2026-09-01', status:'Estimating', notes:'Texas Instruments semiconductor fab expansion in Sherman, TX.' },
+  accounts: JSON.parse(localStorage.getItem('bd_accounts') || 'null') || [
+    {id:1, company:'JE Dunn Construction', type:'GC Partner', region:'Dallas / Temple TX', contact:'Brad Simmons', projects:'Meta Temple DC', rel:'Active'},
+    {id:2, company:'Hensel Phelps', type:'GC Partner', region:'Austin TX', contact:'Chris Avery', projects:'Samsung Taylor Ph.2', rel:'Active'},
+    {id:3, company:'Gray Construction', type:'GC Partner', region:'Statewide TX', contact:'Kyle Bren', projects:'TI Sherman', rel:'Active'},
+    {id:4, company:'Kiewit Building Group', type:'GC Partner', region:'TX / National', contact:'Scott Tran', projects:'Project Frontier', rel:'Pre-qual'},
+    {id:5, company:'Turner Construction', type:'GC Partner', region:'DFW', contact:'Mike Odom', projects:'Google DFW (watching)', rel:'Outreach'},
+    {id:6, company:'Samsung Austin Semiconductor', type:'Owner/Dev', region:'Taylor TX', contact:'James Yu', projects:'Taylor Fab Ph.2', rel:'Qualified'},
+    {id:7, company:'Meta Platforms (DC)', type:'Owner/Dev', region:'Temple TX', contact:'Ana Reyes', projects:'Temple DC Ph.1', rel:'Outreach'},
+    {id:8, company:'NTT Data Centers', type:'Owner/Dev', region:'DFW', contact:'Pam Choi', projects:'DFW Ph.3', rel:'New'},
+    {id:9, company:'Google (Data Centers)', type:'Owner/Dev', region:'DFW', contact:'N/A', projects:'DFW Expansion', rel:'Watching'},
+    {id:10, company:'Texas Instruments', type:'Owner/Dev', region:'Sherman TX', contact:'Derek Mills', projects:'Ayrshire Ph.2', rel:'Active'}
   ],
-  accounts: [
-    { id:1, name:'Samsung Semiconductor (SECAI)', type:'Direct Contract', contact:'Hyeonjun Na', value:'$1.99M+', status:'Active', health:'Good', notes:'Weekly on-site visits. Warranty bond in progress. 4th floor OAC scope pending new CCD.' },
-    { id:2, name:'Kiewit — Project Frontier', type:'GC Subcontract', contact:'On-site PM', value:'$11M bid', status:'Active', health:'Active bid', notes:'AllForm work on-site in Abilene, TX. Coatings & insulation bid submitted.' },
-    { id:3, name:'Veltri Steel', type:'GC Subcontract', contact:'TBD', value:'Scaffolding scope', status:'Complete', health:'Completed', notes:'Scaffolding at Samsung. Project complete.' },
+  research: JSON.parse(localStorage.getItem('bd_research') || 'null') || [
+    {id:1, tag:'Market', type:'Market news', text:'Google Alerts set up for: datacenter Texas, Samsung Taylor TX, semiconductor fab Texas, hyperscale Texas. Alerts hitting inbox daily.', date:'2026-05-22'},
+    {id:2, tag:'JE Dunn', type:'Company intel', text:'JE Dunn ranked #7 nationally in datacenter construction (ENR). South Central division active in Austin. Meta Temple is an active $800M campus project in Temple TX.', date:'2026-05-20'},
+    {id:3, tag:'Hensel Phelps', type:'Company intel', text:'Hensel Phelps has managed Samsung projects since 1997 Austin campus. Likely GC for Samsung Taylor Ph.2. Key contact is Chris Avery (Austin office).', date:'2026-05-18'},
+    {id:4, tag:'Gray Const.', type:'Company intel', text:'Gray Construction specializes in industrial, semiconductor, and DC builds. Building TI Sherman Ayrshire Ph.2. Known for self-perform concrete and steel.', date:'2026-05-15'},
+    {id:5, tag:'TX Market', type:'Market analysis', text:'Texas leads US in planned datacenter capacity additions 2025-2027. Key markets: Austin Metro, DFW, Temple, Sherman, Abilene. Semiconductor fabs concentrated in Austin and Sherman corridors.', date:'2026-05-12'},
+    {id:6, tag:'Samsung', type:'Project intel', text:'Samsung Taylor campus is a $17B+ multi-phase investment. Phase 1 complete (TSMC competitor). Phase 2 construction expected to break ground Q4 2026. Apache should pre-qualify with HP now.', date:'2026-05-10'},
+    {id:7, tag:'Hyperscale', type:'Market analysis', text:'Meta, Google, and Microsoft all have active TX datacenter expansions. NTT DFW Ph.3 is a strong near-term target. Kiewit is the leading GC for Project Frontier in Abilene.', date:'2026-05-08'},
+    {id:8, tag:'Pre-qual', type:'Action item', text:'Need to pre-qualify with: Skanska USA Building (hyperscale DC division), Austin Commercial (NTT DFW), Whiting-Turner (Google DFW). Priority action this week.', date:'2026-05-05'}
   ],
-  research: [
-    { id:1, tag:'Market', type:'Market news', text:'Google Alerts set up for: datacenter Texas, Samsung Taylor TX, semiconductor fab Texas, hyperscale Texas. Alerts hitting inbox daily.', date:'2026-05-22' },
-    { id:2, tag:'JE Dunn', type:'Company intel', text:'JE Dunn ranked #7 nationally in datacenter construction (ENR). South Central division active in Austin. Meta Temple (Temple, TX) is an active $800M+ project GC by JE Dunn. Intro call completed May 22.', date:'2026-05-22' },
-    { id:3, tag:'Hensel Phelps', type:'Company intel', text:'Hensel Phelps has managed Samsung projects since 1997 Austin campus. Likely GC for Samsung Taylor Phase 2. South Central division based in Austin.', date:'2026-05-20' },
-    { id:4, tag:'Gray Construction', type:'Company intel', text:'Gray Construction specializes in industrial/semiconductor/DC builds. Building TI Sherman (Ayrshire) Phase 2 fab. HQ in Lexington KY but heavy TX presence. Key target for coating/insulation subs.', date:'2026-05-27' },
-    { id:5, tag:'TX Market', type:'Market news', text:'Texas leads US in planned datacenter capacity additions 2025-2027. Key markets: Austin Metro, Dallas-Fort Worth, Abilene (Project Frontier), San Antonio. Over 8GW of announced hyperscale projects.', date:'2026-05-27' },
-    { id:6, tag:'Samsung Taylor', type:'Project lead', text:'Samsung Taylor TX campus: Phase 1 ($17B) nearing completion. Phase 2 ($17B+) expected to break ground 2026. Hensel Phelps and Skanska leading contenders for GC. Apache already on Phase 1 via SECAI direct.', date:'2026-05-27' },
-    { id:7, tag:'Meta Temple', type:'Project lead', text:'Meta datacenter in Temple TX (near Killeen) — $800M+ facility. JE Dunn or Turner likely CM. 400MW+ AI-ready. Under construction 2026. Need to ID insulation/coatings sub window.', date:'2026-05-27' },
-    { id:8, tag:'Austin Commercial', type:'Company intel', text:'Austin Commercial (subsidiary of Austin Industries) is top-3 TX industrial GC. Key DC and semiconductor fab experience. South Central HQ in Dallas. Contact target: VP of Pre-Construction.', date:'2026-05-27' },
-    { id:9, tag:'DPR Construction', type:'Company intel', text:'DPR active on 12+ datacenter projects in TX. Austin office leads advanced tech/life science. Key contact: Business Development Manager TX. Pursue for coatings/fireproofing scope on hyperscale projects.', date:'2026-05-27' },
-  ],
-  nextId: 200,
+  todos: JSON.parse(localStorage.getItem('bd_todos') || 'null') || [
+    {id:1, text:'Follow up with Brad Simmons (JE Dunn) on Meta Temple bid', tag:'BD', done:false},
+    {id:2, text:'Pull Samsung Taylor Ph.2 permit filings from Taylor city portal', tag:'Intel', done:false},
+    {id:3, text:'Pre-qualify with Skanska USA Building (hyperscale DC division)', tag:'BD', done:false},
+    {id:4, text:'Research NTT DFW Phase 3 GC selection timeline', tag:'Intel', done:false},
+    {id:5, text:'Draft cold outreach to Austin Commercial (Jeff Larson)', tag:'Outreach', done:false},
+    {id:6, text:'Check ENR TX top contractors list for new semi fab targets', tag:'Intel', done:false},
+    {id:7, text:'Update bid values on Project Frontier and Google DFW', tag:'BD', done:false}
+  ]
 };
 
-/* ===== UTILS ===== */
+function saveData() {
+  localStorage.setItem('bd_prospects', JSON.stringify(D.prospects));
+  localStorage.setItem('bd_bids', JSON.stringify(D.bids));
+  localStorage.setItem('bd_accounts', JSON.stringify(D.accounts));
+  localStorage.setItem('bd_research', JSON.stringify(D.research));
+  localStorage.setItem('bd_todos', JSON.stringify(D.todos));
+}
+// ============================================================
+// NAVIGATION
+// ============================================================
+function showPage(id, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  if(el) el.classList.add('active');
+  if(id === 'morning') renderMorning();
+  if(id === 'prospects') renderProspects();
+  if(id === 'bids') renderBids();
+  if(id === 'accounts') renderAccounts();
+  if(id === 'research') renderResearch();
+  if(id === 'news') loadFullFeed('dc', document.querySelector('#page-news .feed-tab'));
+}
+
+// ============================================================
+// MORNING BRIEF
+// ============================================================
+function renderMorning() {
+  renderStatStrip();
+  renderDailyActions();
+  renderTodos();
+  renderPipelineSnap();
+  renderFollowUpList();
+  renderRadar();
+  loadFeed('dc', document.querySelector('.feed-tab.active'));
+}
+
+function renderStatStrip() {
+  const activeBids = D.bids.filter(b => ['Estimating','Active','Bid Submitted'].includes(b.status)).length;
+  const awarded = D.bids.filter(b => b.status === 'Awarded').length;
+  const prospects = D.prospects.length;
+  const meetings = D.prospects.filter(p => p.status === 'Meeting Scheduled').length;
+  const s = document.getElementById('stat-strip');
+  s.innerHTML = `
+    <div class="stat-card blue"><div class="stat-label">Active Bids</div><div class="stat-value blue">${activeBids}</div><div class="stat-sub">in pipeline</div></div>
+    <div class="stat-card amber"><div class="stat-label">Awarded YTD</div><div class="stat-value amber">${awarded}</div><div class="stat-sub">projects won</div></div>
+    <div class="stat-card green"><div class="stat-label">Prospects</div><div class="stat-value green">${prospects}</div><div class="stat-sub">tracked contacts</div></div>
+    <div class="stat-card teal"><div class="stat-label">Meetings</div><div class="stat-value teal">${meetings}</div><div class="stat-sub">scheduled</div></div>
+  `;
+}
+
 function daysSince(dateStr) {
-  if (!dateStr) return 999;
-  const d = new Date(dateStr), now = new Date();
+  if(!dateStr) return null;
+  const d = new Date(dateStr);
+  const now = new Date();
   return Math.floor((now - d) / 86400000);
 }
-function followUpDue(p) {
-  if (!p.lastTouch) return null;
-  const days = daysSince(p.lastTouch);
-  const due = (p.followUpDays || 7) - days;
-  return due;
-}
-function timeAgo(dateStr) {
-  if (!dateStr) return '';
-  const d = daysSince(dateStr);
-  if (d === 0) return 'Today';
-  if (d === 1) return '1d ago';
-  return d + 'd ago';
-}
-function today() { return new Date().toISOString().slice(0,10); }
-function save() { try { localStorage.setItem('apache-bd-v3', JSON.stringify(D)); } catch(e){} }
-function load() {
-  try {
-    const s = localStorage.getItem('apache-bd-v3');
-    if (s) {
-      const p = JSON.parse(s);
-      ['todos','prospects','bids','accounts','research'].forEach(k => { if(p[k]) D[k]=p[k]; });
-      if(p.nextId) D.nextId = p.nextId;
-    }
-  } catch(e) {}
+
+function followUpCountdown(p) {
+  if(!p.lastTouch) return {label:'Not started', cls:'fu-none'};
+  const ds = daysSince(p.lastTouch);
+  const threshold = p.followUpDays || 14;
+  const remaining = threshold - ds;
+  if(remaining < 0) return {label: Math.abs(remaining) + 'd overdue', cls:'fu-overdue'};
+  if(remaining <= 3) return {label: 'in ' + remaining + 'd', cls:'fu-soon'};
+  return {label: 'in ' + remaining + 'd', cls:'fu-ok'};
 }
 
-/* ===== STATUS BADGE ===== */
-function pBadge(s) {
-  const map = {
-    'Meeting booked':  ['badge-green','Meeting booked'],
-    'Responded':       ['badge-teal','Responded'],
-    'Outreach sent':   ['badge-blue','Outreach sent'],
-    'Not contacted':   ['badge-gray','Not contacted'],
-    'Not interested':  ['badge-red','Not interested'],
-    'Awarded':         ['badge-green','Awarded'],
-    'Submitted':       ['badge-blue','Submitted'],
-    'Under review':    ['badge-purple','Under review'],
-    'Estimating':      ['badge-amber','Estimating'],
-    'Not awarded':     ['badge-red','Not awarded'],
-    'No bid':          ['badge-gray','No bid'],
-    'Active':          ['badge-teal','Active'],
-    'Complete':        ['badge-gray','Complete'],
-  };
-  const [cls,label] = map[s] || ['badge-gray',s];
-  return '<span class="badge '+cls+'">' + label + '</span>';
-}
-
-/* ===== NAV ===== */
-function nav(section, el) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.getElementById('section-'+section).classList.add('active');
-  if (el) el.classList.add('active');
-  if (section === 'morning') { renderMorning(); renderDailyActions(); loadMorningFeed('dc'); }
-  if (section === 'prospects') renderProspects();
-  if (section === 'bids') renderBids();
-  if (section === 'accounts') renderAccounts();
-  if (section === 'research') renderResearch();
-  if (section === 'news') { loadFeed('dc', document.querySelector('#feed-tabs .btn-accent')); }
-}
-
-/* ===== MORNING ===== */
-function renderMorning() {
-  // Date
-  const now = new Date();
-  const dayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  const monNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-  const ds = dayNames[now.getDay()]+', '+monNames[now.getMonth()]+' '+now.getDate()+', '+now.getFullYear();
-  document.getElementById('header-date').textContent = ds;
-  document.getElementById('sf-date').textContent = now.toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'});
-
-  // Stat strip
-  const activeBids = D.bids.filter(b=>['Submitted','Estimating','Under review'].includes(b.status)).length;
-  const awarded = D.bids.filter(b=>b.status==='Awarded').length;
-  const prospects = D.prospects.length;
-  const meetings = D.prospects.filter(p=>p.status==='Meeting booked').length;
-  document.getElementById('morning-stats').innerHTML =
-    '<div class="stat-card amber"><div class="stat-label">Active Bids</div><div class="stat-value">'+activeBids+'</div><div class="stat-sub">in pipeline</div></div>'+
-    '<div class="stat-card green"><div class="stat-label">Awarded</div><div class="stat-value">'+awarded+'</div><div class="stat-sub">contracts</div></div>'+
-    '<div class="stat-card blue"><div class="stat-label">Prospects</div><div class="stat-value">'+prospects+'</div><div class="stat-sub">TX DC &amp; Semi</div></div>'+
-    '<div class="stat-card teal"><div class="stat-label">Meetings</div><div class="stat-value">'+meetings+'</div><div class="stat-sub">booked</div></div>';
-
-  // Todos
-  const pending = D.todos.filter(t=>!t.done);
-  const alertEl = document.getElementById('alert-count');
-  if (pending.length > 0) { alertEl.textContent = pending.length; alertEl.style.display='inline'; }
-  else { alertEl.style.display='none'; }
-
-  document.getElementById('todo-list').innerHTML = D.todos.map(t => {
-    const tagClass = t.tag.includes('TX') ? 'TX' : t.tag;
-    return `<div class="todo-item" id="todo-${t.id}">
-      <input type="checkbox" ${t.done?'checked':''} onchange="toggleTodo(${t.id})">
-      <span class="todo-text${t.done?' done':''}">${t.text}</span>
-      <span class="todo-tag ${tagClass}">${t.tag}</span>
-      <button class="btn btn-ghost" onclick="deleteTodo(${t.id})" style="color:var(--red);opacity:0.5;font-size:14px;" title="Delete">&#10005;</button>
-    </div>`;
-  }).join('');
-
-  // Pipeline snapshot
-  document.getElementById('snapshot').innerHTML = `
-    <div class="pipeline-grid">
-      <div class="pip-stat"><div class="pip-stat-label">Active bids</div><div class="pip-stat-val">${activeBids}</div></div>
-      <div class="pip-stat"><div class="pip-stat-label">Awarded</div><div class="pip-stat-val">${awarded}</div></div>
-      <div class="pip-stat"><div class="pip-stat-label">Prospects</div><div class="pip-stat-val">${prospects}</div></div>
-      <div class="pip-stat"><div class="pip-stat-label">Meetings booked</div><div class="pip-stat-val">${meetings}</div></div>
-    </div>`;
-
-  // Needs follow-up
-  const stale = D.prospects.filter(p => {
-    if (!p.lastTouch && p.status !== 'Not contacted') return true;
-    if (p.lastTouch && daysSince(p.lastTouch) >= (p.followUpDays||7)) return true;
-    if (!p.lastTouch) return false;
-    return false;
-  });
-  const fuHtml = [...D.bids.filter(b=>b.status==='Estimating').map(b=>({
-    name:b.project,meta:'Bid estimating',color:'var(--amber)',type:'bid',id:b.id
-  })), ...stale.map(p=>({
-    name:p.company,
-    meta: p.lastTouch ? timeAgo(p.lastTouch) : 'no contact',
-    color: followUpDue(p)!==null && followUpDue(p)<0 ? 'var(--red)' : 'var(--amber)',
-    type:'prospect',id:p.id,status:p.status
-  }))].map(item => `<div class="followup-item">
-    <div class="followup-dot" style="background:${item.color}"></div>
-    <span class="followup-name">${item.name}</span>
-    <span class="followup-meta">${item.meta}</span>
-    <div class="followup-actions">
-      ${item.type==='prospect' ? `<button class="btn btn-sm" onclick="openEmailDraft(${item.id})" title="Draft email" style="font-size:10px;padding:2px 6px;">✉ Draft</button>` : ''}
-      ${pBadge(item.status||'Estimating')}
-    </div>
-  </div>`).join('');
-  document.getElementById('followup-list').innerHTML = fuHtml || '<div style="color:var(--text3);font-size:12px;padding:0.5rem 0;">No items need attention.</div>';
-
-  // Stale alert banner
-  const overdue = D.prospects.filter(p=>p.lastTouch && daysSince(p.lastTouch)>=14);
-  const bidsDue = D.bids.filter(b=>b.due && daysSince(b.due)>0 && b.status==='Estimating');
-  const total = overdue.length + bidsDue.length;
-  document.getElementById('stale-alerts').innerHTML = total>0
-    ? `<div class="alert-banner"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> ${total} items need your attention — check follow-up list.</div>`
-    : '';
-}
-
-/* ===== DAILY ACTIONS (auto-surfaced) ===== */
 function renderDailyActions() {
-  const actions = [];
+  const el = document.getElementById('daily-actions');
+  const items = [];
 
-  // Overdue contacts (14+ days)
-  D.prospects.filter(p=>p.lastTouch && daysSince(p.lastTouch)>=14).forEach(p=>{
-    actions.push({ icon:'✉', iconClass:'red', text:p.company+' — no contact in '+daysSince(p.lastTouch)+'d', sub:'Last touch: '+p.lastTouch, btnLabel:'Draft email', btnClass:'primary', cb:'openEmailDraft('+p.id+')' });
-  });
-
-  // Prospects with no contact ever
-  D.prospects.filter(p=>!p.lastTouch && p.status==='Not contacted').forEach(p=>{
-    actions.push({ icon:'→', iconClass:'blue', text:'New prospect: '+p.company+' — not yet contacted', sub:p.industry+' · '+p.notes.substring(0,60)+'...', btnLabel:'Draft email', btnClass:'primary', cb:'openEmailDraft('+p.id+')' });
-  });
-
-  // Bids with past due dates
-  D.bids.filter(b=>b.due && daysSince(b.due)>0 && b.status==='Estimating').forEach(b=>{
-    actions.push({ icon:'!', iconClass:'amber', text:b.project+' — bid overdue by '+daysSince(b.due)+'d', sub:'Client: '+b.client+' · Due: '+b.due, btnLabel:'View bid', btnClass:'', cb:"nav('bids',document.querySelector('.nav-item:nth-child(2)'))" });
-  });
-
-  // Follow-ups due soon (within 2 days)
-  D.prospects.filter(p=>p.lastTouch && followUpDue(p)!==null && followUpDue(p)>=0 && followUpDue(p)<=2).forEach(p=>{
-    const due = followUpDue(p);
-    actions.push({ icon:'↻', iconClass:'green', text:p.company+' — follow-up due '+(due===0?'today':'in '+due+'d'), sub:'Status: '+p.status+' · Last touch: '+p.lastTouch, btnLabel:'Draft follow-up', btnClass:'primary', cb:'openEmailDraft('+p.id+')' });
-  });
-
-  const countEl = document.getElementById('action-count');
-  if (countEl) countEl.textContent = actions.length ? actions.length+' items' : 'All clear';
-
-  document.getElementById('daily-actions-list').innerHTML = actions.length
-    ? actions.map(a=>`<div class="action-item">
-        <div class="action-icon ${a.iconClass}" style="font-size:13px;font-weight:700;color:var(--${a.iconClass});">${a.icon}</div>
-        <div class="action-text">${a.text}<small>${a.sub}</small></div>
-        <button class="action-btn ${a.btnClass}" onclick="${a.cb}">${a.btnLabel}</button>
-      </div>`).join('')
-    : '<div style="color:var(--text3);font-size:12px;padding:0.5rem 0;display:flex;align-items:center;gap:0.4rem;"><span style="color:var(--green);">✓</span> All clear — no urgent actions today.</div>';
-}
-
-/* ===== TODO ===== */
-function toggleTodo(id) {
-  const t = D.todos.find(t=>t.id===id);
-  if (t) { t.done = !t.done; save(); renderMorning(); }
-}
-function deleteTodo(id) {
-  D.todos = D.todos.filter(t=>t.id!==id); save(); renderMorning();
-}
-
-/* ===== PROSPECTS ===== */
-function renderProspects() {
-  const sf = document.getElementById('p-filter-status')?.value||'';
-  const ind = document.getElementById('p-filter-ind')?.value||'';
-  let list = D.prospects;
-  if (sf) list = list.filter(p=>p.status===sf);
-  if (ind) list = list.filter(p=>p.industry===ind);
-
-  const contacted = D.prospects.filter(p=>p.status!=='Not contacted').length;
-  const meetings = D.prospects.filter(p=>p.status==='Meeting booked').length;
-  const rr = D.prospects.length ? Math.round(contacted/D.prospects.length*100) : 0;
-  document.getElementById('p-metrics').innerHTML =
-    '<div class="metric-box"><div class="metric-label">Total</div><div class="metric-value">'+D.prospects.length+'</div></div>'+
-    '<div class="metric-box"><div class="metric-label">Contacted</div><div class="metric-value">'+contacted+'</div></div>'+
-    '<div class="metric-box"><div class="metric-label">Meetings</div><div class="metric-value">'+meetings+'</div></div>'+
-    '<div class="metric-box"><div class="metric-label">Response rate</div><div class="metric-value">'+rr+'%</div></div>';
-
-  document.getElementById('prospect-tbody').innerHTML = list.map(p => {
-    const ds = daysSince(p.lastTouch);
-    const fuDue = followUpDue(p);
-    let fuHtml = '<span style="color:var(--text3);font-size:11px;">—</span>';
-    if (p.lastTouch && fuDue !== null) {
-      if (fuDue < 0) fuHtml = '<span class="badge badge-red">'+Math.abs(fuDue)+'d overdue</span>';
-      else if (fuDue <= 2) fuHtml = '<span class="badge badge-amber">in '+fuDue+'d</span>';
-      else fuHtml = '<span style="font-size:11px;color:var(--text3);">in '+fuDue+'d</span>';
-    } else if (!p.lastTouch && p.status==='Not contacted') {
-      fuHtml = '<span class="badge badge-gray">not started</span>';
+  // Overdue contacts
+  D.prospects.forEach(p => {
+    if(!p.lastTouch) {
+      items.push({color:'amber', title:'No contact yet: ' + p.company, detail:'Status: ' + p.status, action:'Draft email', onClick:'openEmailModal(' + p.id + ')'});
+    } else {
+      const ds = daysSince(p.lastTouch);
+      const threshold = p.followUpDays || 14;
+      if(ds >= threshold) {
+        items.push({color:'red', title:'Follow-up overdue: ' + p.company, detail:ds + ' days since last touch (threshold: ' + threshold + 'd)', action:'Draft email', onClick:'openEmailModal(' + p.id + ')'});
+      }
     }
-    return `<tr>
-      <td class="td-company">${p.company}</td>
-      <td>${p.contact}</td>
-      <td><span style="font-size:11px;color:var(--text3);">${p.industry}</span></td>
-      <td>${pBadge(p.status)}</td>
-      <td><span style="font-size:11px;color:${p.lastTouch&&ds>=14?'var(--red)':'var(--text3)'};">${p.lastTouch?timeAgo(p.lastTouch):'—'}</span></td>
-      <td>${fuHtml}</td>
-      <td class="td-notes">${p.notes}</td>
-      <td><div style="display:flex;gap:0.3rem;">
-        <button class="btn btn-sm" onclick="openEmailDraft(${p.id})" title="Draft email" style="font-size:10px;padding:2px 6px;">✉ Draft</button>
-        <button class="btn btn-ghost" onclick="deleteItem('prospect',${p.id})" style="color:var(--red);font-size:12px;" title="Delete">&#10005;</button>
-      </div></td>
-    </tr>`;
-  }).join('');
-}
-
-/* ===== BIDS ===== */
-function renderBids() {
-  const sf = document.getElementById('b-filter-status')?.value||'';
-  let list = D.bids;
-  if (sf) list = list.filter(b=>b.status===sf);
-  const active = D.bids.filter(b=>['Submitted','Estimating','Under review'].includes(b.status)).length;
-  const awarded = D.bids.filter(b=>b.status==='Awarded').length;
-  const wr = D.bids.length ? Math.round(awarded/D.bids.length*100) : 0;
-  document.getElementById('b-metrics').innerHTML =
-    '<div class="metric-box"><div class="metric-label">Total bids</div><div class="metric-value">'+D.bids.length+'</div></div>'+
-    '<div class="metric-box"><div class="metric-label">Active</div><div class="metric-value">'+active+'</div></div>'+
-    '<div class="metric-box"><div class="metric-label">Awarded</div><div class="metric-value">'+awarded+'</div></div>'+
-    '<div class="metric-box"><div class="metric-label">Win rate</div><div class="metric-value">'+wr+'%</div></div>';
-  document.getElementById('bid-tbody').innerHTML = list.map(b => {
-    const overdue = b.due && daysSince(b.due)>0 && b.status==='Estimating';
-    return `<tr>
-      <td class="td-company">${b.project}</td>
-      <td>${b.client}</td>
-      <td>${b.scope}</td>
-      <td style="font-weight:600;">${b.value}</td>
-      <td><span style="color:${overdue?'var(--red)':'var(--text)'};">${b.due} ${overdue?'⚠':''}    </span></td>
-      <td>${pBadge(b.status)}</td>
-      <td class="td-notes">${b.notes}</td>
-      <td><button class="btn btn-ghost" onclick="deleteItem('bid',${b.id})" style="color:var(--red);font-size:12px;" title="Delete">&#10005;</button></td>
-    </tr>`;
-  }).join('');
-}
-
-/* ===== ACCOUNTS ===== */
-function renderAccounts() {
-  const active = D.accounts.filter(a=>a.status==='Active').length;
-  document.getElementById('a-metrics').innerHTML =
-    '<div class="metric-box"><div class="metric-label">Total accounts</div><div class="metric-value">'+D.accounts.length+'</div></div>'+
-    '<div class="metric-box"><div class="metric-label">Active</div><div class="metric-value">'+active+'</div><div class="metric-sub">active accounts</div></div>';
-  document.getElementById('account-list').innerHTML = D.accounts.map(a => `
-    <div class="account-card">
-      <div class="account-header">
-        <div><div class="account-name">${a.name}</div><div class="account-type">${a.type}</div></div>
-        <div style="display:flex;gap:0.4rem;align-items:center;">
-          ${pBadge(a.status)}
-          <button class="btn btn-ghost" onclick="deleteItem('account',${a.id})" style="color:var(--red);font-size:12px;">&#10005;</button>
-        </div>
-      </div>
-      <div class="account-grid">
-        <div class="account-field"><label>Contact</label><span>${a.contact}</span></div>
-        <div class="account-field"><label>Value</label><span>${a.value}</span></div>
-        <div class="account-field"><label>Health</label><span>${a.health}</span></div>
-        <div class="account-field"><label>Status</label><span>${a.status}</span></div>
-      </div>
-      <textarea class="account-note-area" id="anote-${a.id}" rows="2">${a.notes}</textarea>
-      <div style="display:flex;justify-content:flex-end;margin-top:0.4rem;">
-        <button class="btn btn-sm" onclick="saveAccountNote(${a.id})">save note</button>
-      </div>
-    </div>`).join('');
-}
-function saveAccountNote(id) {
-  const a = D.accounts.find(a=>a.id===id);
-  if (a) { a.notes = document.getElementById('anote-'+id).value; save(); }
-}
-
-/* ===== RESEARCH ===== */
-function renderResearch() {
-  document.getElementById('research-list').innerHTML = [...D.research].reverse().map(r=>`
-    <div class="research-note">
-      <div class="research-meta">
-        <span class="research-tag">${r.tag}</span>
-        <span class="research-type">${r.type}</span>
-        <span class="research-date">${r.date}</span>
-        <button class="btn btn-ghost" onclick="deleteItem('research',${r.id})" style="color:var(--red);font-size:11px;margin-left:auto;">&#10005;</button>
-      </div>
-      <div class="research-text">${r.text}</div>
-    </div>`).join('');
-}
-function saveResearch() {
-  const tag = document.getElementById('f-res-tag').value.trim();
-  const type = document.getElementById('f-res-type').value;
-  const text = document.getElementById('f-res-text').value.trim();
-  if (!text) return;
-  D.research.push({ id:D.nextId++, tag:tag||'General', type, text, date:today() });
-  save(); renderResearch();
-  document.getElementById('f-res-tag').value='';
-  document.getElementById('f-res-text').value='';
-}
-
-/* ===== DELETE ===== */
-function deleteItem(type, id) {
-  if (type==='prospect') D.prospects = D.prospects.filter(p=>p.id!==id);
-  if (type==='bid') D.bids = D.bids.filter(b=>b.id!==id);
-  if (type==='account') D.accounts = D.accounts.filter(a=>a.id!==id);
-  if (type==='research') D.research = D.research.filter(r=>r.id!==id);
-  save();
-  if (type==='prospect') renderProspects();
-  if (type==='bid') renderBids();
-  if (type==='account') renderAccounts();
-  if (type==='research') renderResearch();
-}
-
-/* ===== MODAL ===== */
-let _modalType = '';
-let _modalEditId = null;
-function openModal(type, id) {
-  _modalType = type; _modalEditId = id||null;
-  const titles = { todo:'Add task', prospect:'Add prospect', bid:'Add bid', account:'Add account' };
-  document.getElementById('modal-title').textContent = id ? 'Edit '+type : titles[type]||'Add';
-  let html = '';
-  if (type==='todo') {
-    const t = id ? D.todos.find(t=>t.id===id) : null;
-    html = `<div class="form-row"><label>Task</label><input id="f-text" value="${t?t.text:''}"></div>
-      <div class="form-row"><label>Tag</label><select id="f-tag">
-        <option>Samsung</option><option>Prospects</option><option>Bids</option>
-        <option>Accounts</option><option>TX Projects</option><option>Internal</option><option>Other</option>
-      </select></div>`;
-  } else if (type==='prospect') {
-    const p = id ? D.prospects.find(p=>p.id===id) : null;
-    html = `<div class="form-row"><label>Company</label><input id="f-company" value="${p?p.company:''}"></div>
-      <div class="form-row"><label>Primary contact</label><input id="f-contact" value="${p?p.contact:''}"></div>
-      <div class="form-row"><label>Industry</label><select id="f-industry">
-        <option${p&&p.industry==='Datacenter'?' selected':''}>Datacenter</option>
-        <option${p&&p.industry==='Semiconductor'?' selected':''}>Semiconductor</option>
-        <option${p&&p.industry==='Industrial'?' selected':''}>Industrial</option>
-        <option${p&&p.industry==='Other'?' selected':''}>Other</option>
-      </select></div>
-      <div class="form-row"><label>Status</label><select id="f-status">
-        <option${p&&p.status==='Not contacted'?' selected':''}>Not contacted</option>
-        <option${p&&p.status==='Outreach sent'?' selected':''}>Outreach sent</option>
-        <option${p&&p.status==='Responded'?' selected':''}>Responded</option>
-        <option${p&&p.status==='Meeting booked'?' selected':''}>Meeting booked</option>
-        <option${p&&p.status==='Not interested'?' selected':''}>Not interested</option>
-      </select></div>
-      <div class="form-row"><label>Last touch (YYYY-MM-DD)</label><input id="f-last" value="${p?p.lastTouch:''}"></div>
-      <div class="form-row"><label>Follow-up after (days)</label><input id="f-followup" type="number" value="${p?p.followUpDays:7}"></div>
-      <div class="form-row"><label>Notes</label><textarea id="f-notes">${p?p.notes:''}</textarea></div>`;
-  } else if (type==='bid') {
-    const b = id ? D.bids.find(b=>b.id===id) : null;
-    html = `<div class="form-row"><label>Project name</label><input id="f-project" value="${b?b.project:''}"></div>
-      <div class="form-row"><label>Client (GC)</label><input id="f-client" value="${b?b.client:''}"></div>
-      <div class="form-row"><label>Scope</label><input id="f-scope" value="${b?b.scope:''}"></div>
-      <div class="form-row"><label>Value</label><input id="f-value" value="${b?b.value:''}"></div>
-      <div class="form-row"><label>Due date (YYYY-MM-DD)</label><input id="f-due" value="${b?b.due:''}"></div>
-      <div class="form-row"><label>Status</label><select id="f-bstatus">
-        <option>Estimating</option><option>Submitted</option><option>Under review</option>
-        <option>Awarded</option><option>Not awarded</option><option>No bid</option>
-      </select></div>
-      <div class="form-row"><label>Notes</label><textarea id="f-notes">${b?b.notes:''}</textarea></div>`;
-  } else if (type==='account') {
-    html = `<div class="form-row"><label>Account name</label><input id="f-name"></div>
-      <div class="form-row"><label>Type</label><select id="f-atype"><option>Direct Contract</option><option>GC Subcontract</option><option>Other</option></select></div>
-      <div class="form-row"><label>Primary contact</label><input id="f-contact"></div>
-      <div class="form-row"><label>Value</label><input id="f-value"></div>
-      <div class="form-row"><label>Status</label><select id="f-astatus"><option>Active</option><option>On hold</option><option>Complete</option></select></div>
-      <div class="form-row"><label>Health</label><input id="f-health"></div>
-      <div class="form-row"><label>Notes</label><textarea id="f-notes"></textarea></div>`;
-  }
-  document.getElementById('modal-body').innerHTML = html;
-  document.getElementById('modal-overlay').classList.add('open');
-}
-function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); }
-function saveModal() {
-  const type = _modalType;
-  if (type==='todo') {
-    const text = document.getElementById('f-text').value.trim();
-    const tag = document.getElementById('f-tag').value;
-    if (!text) return;
-    if (_modalEditId) { const t=D.todos.find(t=>t.id===_modalEditId); if(t){t.text=text;t.tag=tag;} }
-    else D.todos.push({ id:D.nextId++, text, tag, done:false });
-    save(); renderMorning();
-  } else if (type==='prospect') {
-    const company = document.getElementById('f-company').value.trim();
-    if (!company) return;
-    const obj = {
-      id:_modalEditId||D.nextId++, company,
-      contact:document.getElementById('f-contact').value,
-      industry:document.getElementById('f-industry').value,
-      status:document.getElementById('f-status').value,
-      lastTouch:document.getElementById('f-last').value,
-      followUpDays:parseInt(document.getElementById('f-followup').value)||7,
-      notes:document.getElementById('f-notes').value,
-    };
-    if (_modalEditId) { const i=D.prospects.findIndex(p=>p.id===_modalEditId); if(i>-1)D.prospects[i]=obj; }
-    else D.prospects.push(obj);
-    save(); renderProspects();
-  } else if (type==='bid') {
-    const project = document.getElementById('f-project').value.trim();
-    if (!project) return;
-    const obj = {
-      id:_modalEditId||D.nextId++, project,
-      client:document.getElementById('f-client').value,
-      scope:document.getElementById('f-scope').value,
-      value:document.getElementById('f-value').value,
-      due:document.getElementById('f-due').value,
-      status:document.getElementById('f-bstatus').value,
-      notes:document.getElementById('f-notes').value,
-    };
-    if (_modalEditId) { const i=D.bids.findIndex(b=>b.id===_modalEditId); if(i>-1)D.bids[i]=obj; }
-    else D.bids.push(obj);
-    save(); renderBids();
-  } else if (type==='account') {
-    D.accounts.push({
-      id:D.nextId++,
-      name:document.getElementById('f-name').value,
-      type:document.getElementById('f-atype').value,
-      contact:document.getElementById('f-contact').value,
-      value:document.getElementById('f-value').value,
-      status:document.getElementById('f-astatus').value,
-      health:document.getElementById('f-health').value,
-      notes:document.getElementById('f-notes').value,
-    });
-    save(); renderAccounts();
-  }
-  closeModal();
-}
-
-/* ===== EMAIL DRAFT ===== */
-window._emailProspectId = null;
-function openEmailDraft(prospectId) {
-  const p = D.prospects.find(p=>p.id===prospectId);
-  if (!p) return;
-  window._emailProspectId = prospectId;
-  const isFollowUp = p.status === 'Outreach sent' || (p.lastTouch && daysSince(p.lastTouch) >= 1);
-  const subjectLine = isFollowUp
-    ? 'Following up — Apache Industrial · '+p.industry+' Coatings & Insulation'
-    : 'Apache Industrial Introduction — '+p.industry+' Coatings & Insulation';
-  document.getElementById('email-modal-title').textContent = isFollowUp ? 'Follow-up email — '+p.company : 'Cold outreach — '+p.company;
-  document.getElementById('email-subject-field').value = subjectLine;
-  const greeting = p.contact && p.contact !== 'TBD' ? 'Hi '+p.contact.split(' ')[0]+',' : 'Hi,';
-  const bodyText = isFollowUp
-    ? `${greeting}
-
-I wanted to follow up on my previous note regarding Apache Industrial's capabilities in industrial coatings, mechanical insulation, and firestopping — specifically for ${p.industry.toLowerCase()} projects across Texas.
-
-We've recently completed work on Samsung's semiconductor facility in Taylor, TX, and are actively bidding on several hyperscale datacenter and fab projects in the region. I'd love to find 15 minutes to connect and share how we might support your work in Texas.
-
-Would you be open to a brief call this week or next?
-
-Best regards,
-Keon
-Apache Industrial
-Business Development — TX Datacenter & Semiconductor`
-    : `${greeting}
-
-My name is Keon, and I lead business development for Apache Industrial — a specialty contractor focused on industrial coatings, mechanical insulation, and firestopping for datacenter and semiconductor projects in Texas.
-
-We've had the opportunity to work on Samsung's semiconductor campus in Taylor, TX, and are currently pursuing several large-scale projects across the state, including hyperscale datacenters and semiconductor fabs.
-
-I'd love to connect briefly to introduce Apache and explore how we might support your upcoming projects. Would you have 15 minutes this week?
-
-Best regards,
-Keon
-Apache Industrial
-Business Development — TX Datacenter & Semiconductor`;
-  document.getElementById('email-body-field').textContent = bodyText;
-  document.getElementById('email-modal').classList.add('open');
-  document.getElementById('email-copy-confirm').style.display='none';
-}
-function closeEmailModal() { document.getElementById('email-modal').classList.remove('open'); }
-function copyEmail() {
-  const subject = document.getElementById('email-subject-field').value;
-  const body = document.getElementById('email-body-field').textContent;
-  const full = 'Subject: '+subject+'\n\n'+body;
-  navigator.clipboard.writeText(full).then(()=>{
-    const c = document.getElementById('email-copy-confirm');
-    c.style.display='inline'; setTimeout(()=>c.style.display='none',2500);
   });
-}
-function markOutreachSent(id) {
-  const p = D.prospects.find(p=>p.id===id);
-  if (p) {
-    p.status = 'Outreach sent';
-    p.lastTouch = today();
-    save();
-    closeEmailModal();
-    renderMorning(); renderDailyActions();
-    if (document.getElementById('section-prospects').classList.contains('active')) renderProspects();
+
+  // Bids due soon (within 30 days)
+  const now = new Date();
+  D.bids.forEach(b => {
+    if(!b.due) return;
+    const daysToGo = Math.floor((new Date(b.due) - now) / 86400000);
+    if(daysToGo >= 0 && daysToGo <= 30 && ['Estimating','Active'].includes(b.status)) {
+      items.push({color:'blue', title:'Bid due in ' + daysToGo + 'd: ' + b.project.substring(0,35), detail:'Value: ' + b.value + ' | GC: ' + b.gc, action:'View bid', onClick:'showPage(\'bids\',document.querySelectorAll(\'.nav-item\')[2])'});
+    }
+  });
+
+  if(items.length === 0) {
+    el.innerHTML = '<div style="color:var(--text3);font-size:13px;padding:.5rem 0;">\u2713 All caught up \u2014 no urgent actions today.</div>';
+    return;
   }
+
+  el.innerHTML = items.map(i => `
+    <div class="action-item">
+      <div class="action-dot ${i.color}"></div>
+      <div class="action-text">
+        <div class="action-title">${i.title}</div>
+        <div class="action-detail">${i.detail}</div>
+      </div>
+      <button class="action-btn" onclick="${i.onClick}">${i.action}</button>
+    </div>
+  `).join('');
 }
 
-/* ===== RSS / NEWS ===== */
-const RSS_FEEDS = {
-  dc:       { label: 'DataCenter Dynamics', abbr: 'DC',  url: 'https://www.datacenterdynamics.com/en/rss/' },
-  enr:      { label: 'ENR Construction',    abbr: 'ENR', url: 'https://www.enr.com/rss/news' },
-  cdive:    { label: 'Construction Dive',   abbr: 'CD',  url: 'https://www.constructiondive.com/feeds/news/' },
-  semi:     { label: 'EE Times',            abbr: 'EE',  url: 'https://www.eetimes.com/feed/' },
-  register: { label: 'The Register DC',     abbr: 'REG', url: 'https://www.theregister.com/data_centre/headlines.atom' },
-  txbiz:    { label: 'TX Biz Journal',      abbr: 'TX',  url: 'https://www.bizjournals.com/austin/news/technology/feed.rss' },
+function renderTodos() {
+  const el = document.getElementById('todo-list');
+  const tagClasses = {BD:'tag-bd', Intel:'tag-intel', Outreach:'tag-outreach', Proj:'tag-proj'};
+  el.innerHTML = D.todos.map(t => `
+    <div class="todo-item" id="todo-${t.id}">
+      <input type="checkbox" class="todo-cb" ${t.done?'checked':''} onchange="toggleTodo(${t.id},this.checked)">
+      <span class="todo-text ${t.done?'':''}"${t.done?' style="text-decoration:line-through;color:var(--text3)"':''}>${t.text}</span>
+      <span class="todo-tag ${tagClasses[t.tag]||'tag-intel'}">${t.tag}</span>
+    </div>
+  `).join('');
+}
+
+function toggleTodo(id, checked) {
+  const t = D.todos.find(x => x.id === id);
+  if(t) { t.done = checked; saveData(); }
+}
+
+function addTodo() {
+  const inp = document.getElementById('todo-input');
+  const val = (inp.value || '').trim();
+  if(!val) return;
+  D.todos.push({id: Date.now(), text: val, tag: 'BD', done: false});
+  saveData();
+  inp.value = '';
+  renderTodos();
+}
+
+function renderPipelineSnap() {
+  const el = document.getElementById('pipeline-snap');
+  const statusMap = {
+    'Estimating':'badge-estimating', 'Active':'badge-active',
+    'Bid Submitted':'badge-bid-submitted', 'Awarded':'badge-awarded', 'Watching':'badge-watching'
+  };
+  el.innerHTML = D.bids.slice(0,6).map(b => `
+    <div class="pipeline-item">
+      <div><div class="pi-name">${b.project.substring(0,32)}${b.project.length>32?'&hellip;':''}</div>
+      <div class="pi-sub">${b.owner} &middot; ${b.value}</div></div>
+      <span class="pi-badge ${statusMap[b.status]||'badge-watching'}">${b.status}</span>
+    </div>
+  `).join('');
+}
+
+function renderFollowUpList() {
+  const el = document.getElementById('follow-up-list');
+  const needsFollowUp = D.prospects.filter(p => {
+    if(!p.lastTouch) return true;
+    const ds = daysSince(p.lastTouch);
+    return ds >= (p.followUpDays || 14) - 3;
+  }).slice(0, 6);
+
+  if(!needsFollowUp.length) {
+    el.innerHTML = '<div style="color:var(--text3);font-size:13px;">All contacts up to date!</div>';
+    return;
+  }
+  el.innerHTML = needsFollowUp.map(p => {
+    const fu = followUpCountdown(p);
+    return `<div class="follow-item">
+      <div><div class="fi-name">${p.company}</div><div class="fi-detail">${p.contact} &middot; ${p.status}</div></div>
+      <div class="fi-right">
+        <span class="${fu.cls}">${fu.label}</span>
+        <button class="draft-btn" onclick="openEmailModal(${p.id})">&#9993; Draft</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderRadar() {
+  const el = document.getElementById('tx-radar');
+  el.innerHTML = D.bids.map(b => {
+    const statusMap = {'Estimating':'badge-estimating','Active':'badge-active','Bid Submitted':'badge-bid-submitted','Awarded':'badge-awarded','Watching':'badge-watching'};
+    return `<div class="radar-item">
+      <div><div class="ri-name">${b.project.substring(0,28)}${b.project.length>28?'&hellip;':''}</div>
+      <div class="ri-sub">${b.owner} &middot; ${b.value} &middot; GC: ${b.gc}</div></div>
+      <span class="pi-badge ${statusMap[b.status]||'badge-watching'}">${b.status}</span>
+    </div>`;
+  }).join('');
+}
+// ============================================================
+// NEWS FEED (Morning Brief mini version)
+// ============================================================
+const FEEDS = {
+  dc: {
+    name: 'Data Center Dynamics',
+    abbr: 'DC',
+    color: '#56b2e8',
+    items: [
+      {title:'Meta breaks ground on 2GW Texas datacenter campus',url:'https://www.datacenterdynamics.com',summary:'Meta is expanding its Temple TX campus to become one of the largest hyperscale sites in the US, targeting 2GW of IT load by 2030.',source:'DCD',time:'2h ago',tx:true},
+      {title:'Samsung Taylor fab Phase 2 permitting moves forward',url:'https://www.datacenterdynamics.com',summary:'Taylor TX planning documents show Samsung Austin Semiconductor filing for utility connections on the Phase 2 expansion footprint.',source:'DCD',time:'4h ago',tx:true},
+      {title:'Texas leads nation in new datacenter construction starts',url:'https://www.datacenterdynamics.com',summary:'ENR and DCD data show TX accounting for 28% of new hyperscale groundbreakings in H1 2026, driven by power availability and tax incentives.',source:'DCD',time:'6h ago',tx:true},
+      {title:'Google announces 500MW DFW hyperscale expansion',url:'https://www.datacenterdynamics.com',summary:'Google confirms a major DFW datacenter build, with GC procurement expected to begin Q3 2026. Multiple TX-based contractors pursuing pre-qual.',source:'DCD',time:'1d ago',tx:true},
+      {title:'NTT Data Centers advances DFW Phase 3 planning',url:'https://www.datacenterdynamics.com',summary:'NTT has published an RFP for electrical subcontractors on the 180MW DFW Phase 3 campus. Austin Commercial is primary GC.',source:'DCD',time:'1d ago',tx:true},
+      {title:'Hyperscale power demand driving TX grid upgrades',url:'https://www.datacenterdynamics.com',summary:'ERCOT planning documents reveal $4B in transmission upgrades tied to new datacenter load in Central and North TX through 2028.',source:'DCD',time:'2d ago',tx:false}
+    ]
+  },
+  enr: {
+    name: 'Engineering News-Record',
+    abbr: 'ENR',
+    color: '#f2994a',
+    items: [
+      {title:'Top TX contractors ranked by datacenter revenue',url:'https://www.enr.com',summary:'ENR 2026 rankings show Hensel Phelps, JE Dunn, and Gray Construction among top 10 TX GCs for mission-critical builds.',source:'ENR',time:'3h ago',tx:true},
+      {title:'Kiewit awarded Project Frontier datacenter contract',url:'https://www.enr.com',summary:'Kiewit Building Group wins the prime GC slot on the $1.4B Abilene TX hyperscale campus known internally as Project Frontier.',source:'ENR',time:'5h ago',tx:true},
+      {title:'Gray Construction expands TX semiconductor practice',url:'https://www.enr.com',summary:'Gray Construction opens new Austin office targeting semiconductor fab and advanced manufacturing clients in the TX growth corridor.',source:'ENR',time:'8h ago',tx:true},
+      {title:'ENR Southwest regional awards 2026 announced',url:'https://www.enr.com',summary:'Several TX datacenter and fab projects recognized for innovation in electrical systems integration and critical power design.',source:'ENR',time:'1d ago',tx:false},
+      {title:'Construction costs surge for TX hyperscale builds',url:'https://www.enr.com',summary:'Material and labor shortages push TX datacenter construction costs 18% above national average, driving demand for specialized subcontractors.',source:'ENR',time:'2d ago',tx:true},
+      {title:'JE Dunn promotes leadership in TX datacenter division',url:'https://www.enr.com',summary:'Brad Simmons named VP of Mission Critical for JE Dunn South Central division, overseeing all TX datacenter pursuits.',source:'ENR',time:'2d ago',tx:true}
+    ]
+  },
+  semi: {
+    name: 'Semiconductor Industry',
+    abbr: 'Semi',
+    color: '#bb8cf5',
+    items: [
+      {title:'Texas Instruments confirms Ayrshire Ph.2 timeline',url:'https://www.semiconductor-today.com',summary:'TI confirms construction timeline for the Sherman TX Ayrshire Phase 2 fab, with mechanical and electrical bids due June 2026.',source:'Semi Today',time:'1h ago',tx:true},
+      {title:'Samsung Taylor campus achieves full production',url:'https://www.semiconductor-today.com',summary:'Samsung Austin Semiconductor announces Phase 1 at Taylor TX has reached full production capacity ahead of schedule, accelerating Phase 2 plans.',source:'Semi Today',time:'3h ago',tx:true},
+      {title:'New fab investment roundup: Texas gains 3 new projects',url:'https://www.semiconductor-today.com',summary:'Three new semiconductor manufacturing projects announced in TX this quarter, adding to Texas growing position as a US fab hub.',source:'Semi Today',time:'6h ago',tx:true},
+      {title:'CHIPS Act funding accelerates TX fab construction',url:'https://www.semiconductor-today.com',summary:'Federal CHIPS Act awards to TX-based fab projects are expected to accelerate construction timelines by 6-12 months, boosting subcontractor demand.',source:'Semi Today',time:'1d ago',tx:true},
+      {title:'Micron evaluates TX site for memory fab expansion',url:'https://www.semiconductor-today.com',summary:'Micron Technology is reportedly evaluating sites in the Austin and Sherman TX corridors for a new advanced memory manufacturing facility.',source:'Semi Today',time:'1d ago',tx:true},
+      {title:'GreenFab initiative targets semiconductor water reuse',url:'https://www.semiconductor-today.com',summary:'TX Water Development Board partnering with semiconductor manufacturers on water recycling systems for new fab facilities.',source:'Semi Today',time:'2d ago',tx:false}
+    ]
+  }
 };
 
-const TX_KEYWORDS = ['texas','datacenter','data center','semiconductor','hyperscale','fab','austin','dallas','taylor','abilene','sherman','temple','coatings','insulation','kiewit','turner','hensel','dunn','skanska'];
+let currentFeedTab = 'dc';
 
-function proxyUrl(url) {
-  return 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(url);
-}
-
-function parseItems(xml) {
-  const items = xml.querySelectorAll('item').length
-    ? [...xml.querySelectorAll('item')]
-    : [...xml.querySelectorAll('entry')];
-  return items.slice(0, 20).map(el => {
-    const get = (tags) => { for(const t of tags){ const n=el.querySelector(t); if(n&&n.textContent) return n.textContent.trim(); } return ''; };
-    const getLinkAttr = () => { const l=el.querySelector('link'); return l ? (l.getAttribute('href')||l.textContent.trim()) : ''; };
-    return {
-      title: get(['title']),
-      summary: get(['description','summary','content']).replace(/<[^>]+>/g,'').substring(0,200),
-      link: getLinkAttr(),
-      date: get(['pubDate','published','updated']),
-    };
-  });
-}
-
-function isTXRelevant(item) {
-  const text = (item.title + ' ' + item.summary).toLowerCase();
-  return TX_KEYWORDS.some(k => text.includes(k));
-}
-
-function timeAgoFromStr(dateStr) {
-  if (!dateStr) return '';
-  try {
-    const d = new Date(dateStr), now = new Date();
-    const h = Math.floor((now-d)/3600000);
-    if (h < 1) return 'just now';
-    if (h < 24) return h+'h ago';
-    return Math.floor(h/24)+'d ago';
-  } catch(e) { return ''; }
-}
-
-// Full page news feed
-let _currentFeedBtn = null;
-async function loadFeed(key, btn) {
-  const feed = RSS_FEEDS[key];
-  if (!feed) return;
-  if (_currentFeedBtn) _currentFeedBtn.className = 'btn btn-sm';
-  if (btn) { btn.className = 'btn btn-accent btn-sm'; _currentFeedBtn = btn; }
-  const label = document.getElementById('feed-label');
-  const container = document.getElementById('news-container');
-  if (!container) return;
-  if (label) label.textContent = feed.label + ' · loading…';
-  container.innerHTML = '<div style="color:var(--text3);font-size:12px;padding:1rem;">Fetching feed…</div>';
-  try {
-    const r = await fetch(proxyUrl(feed.url));
-    const text = await r.text();
-    const xml = new DOMParser().parseFromString(text, 'text/xml');
-    const items = parseItems(xml);
-    if (label) label.textContent = feed.label + ' · ' + items.length + ' articles · ' + new Date().toLocaleTimeString();
-    container.innerHTML = items.map((item, idx) => {
-      const relevant = isTXRelevant(item);
-      // Store item data for lead button
-      window._feedItems = window._feedItems || {};
-      window._feedItems[key + '_' + idx] = { title: item.title, source: feed.label };
-      return '<div class="news-full-card">' +
-        '<div class="news-full-source">' +
-          '<div class="news-full-icon">' + feed.abbr + '</div>' +
-          '<span class="news-full-label">' + feed.label + '</span>' +
-          '<span class="news-full-time">' + timeAgoFromStr(item.date) + '</span>' +
+function loadFeed(key, tabEl) {
+  currentFeedTab = key;
+  document.querySelectorAll('.feed-tab').forEach(t => t.classList.remove('active'));
+  if(tabEl) tabEl.classList.add('active');
+  const feed = FEEDS[key];
+  const container = document.getElementById('feed-container');
+  if(!feed || !container) return;
+  const items = feed.items.slice(0,5);
+  container.innerHTML = items.map((item, idx) => {
+    const dataKey = key + '_' + idx;
+    return '<div class="news-item">' +
+      '<div class="news-icon" style="background:' + feed.color + '">' + feed.abbr + '</div>' +
+      '<div class="news-body">' +
+        '<div class="news-headline"><a href="' + item.url + '" target="_blank">' + item.title + '</a></div>' +
+        '<div class="news-summary">' + item.summary.substring(0,120) + '&hellip;</div>' +
+        '<div class="news-meta">' +
+          '<span class="news-source">' + item.source + '</span>' +
+          '<span class="news-time">' + item.time + '</span>' +
+          (item.tx ? '<span class="news-tx-badge">TX</span>' : '') +
+          (item.tx ? '<button class="news-add-btn" data-key="' + dataKey + '" onclick="addNewsLeadById(this)">+ Add as lead</button>' : '') +
         '</div>' +
-        '<div class="news-full-title">' + item.title + '</div>' +
-        '<div class="news-full-summary">' + item.summary + '</div>' +
-        '<div class="news-full-footer">' +
-          '<a class="news-full-link" href="' + item.link + '" target="_blank" rel="noopener">Read article →</a>' +
-          (relevant ? '<button class="news-lead-btn" data-key="' + key + '_' + idx + '" onclick="addNewsLeadById(this)">+ Add as lead</button>' : '') +
-        '</div>' +
-      '</div>';
-    }).join('');
-  } catch(e) {
-    if (label) label.textContent = feed.label + ' · error loading';
-    container.innerHTML = '<div style="color:var(--red);font-size:12px;padding:1rem;">Could not load feed. Check connection.</div>';
-  }
+      '</div>' +
+    '</div>';
+  }).join('');
 }
 
 function addNewsLeadById(btn) {
   const key = btn.getAttribute('data-key');
-  const item = (window._feedItems || {})[key];
-  if (!item) return;
-  D.research.push({ id:D.nextId++, tag:item.source, type:'Project lead', text:'[From ' + item.source + '] ' + item.title, date:today() });
-  save();
-  btn.textContent = '✓ Added';
-  btn.style.background = 'var(--green-bg)';
+  const parts = key.split('_');
+  const feedKey = parts[0];
+  const idx = parseInt(parts[1]);
+  const feed = FEEDS[feedKey];
+  if(!feed || !feed.items[idx]) return;
+  const item = feed.items[idx];
+  const newNote = {id: Date.now(), tag: feed.name.substring(0,12), type:'News lead', text: item.title + ': ' + item.summary, date: new Date().toISOString().substring(0,10)};
+  D.research.push(newNote);
+  saveData();
+  btn.textContent = 'Added!';
   btn.style.color = 'var(--green)';
   btn.disabled = true;
 }
 
+function loadFullFeed(key, tabEl) {
+  document.querySelectorAll('#page-news .feed-tab').forEach(t => t.classList.remove('active'));
+  if(tabEl) tabEl.classList.add('active');
+  const feed = FEEDS[key];
+  const container = document.getElementById('news-full-container');
+  if(!feed || !container) return;
+  container.innerHTML = feed.items.map((item, idx) => {
+    const dataKey = key + '_' + idx;
+    return '<div class="news-page-item">' +
+      '<div class="news-icon" style="background:' + feed.color + ';width:40px;height:40px;font-size:12px;">' + feed.abbr + '</div>' +
+      '<div class="npi-body">' +
+        '<div class="npi-head">' +
+          '<div class="npi-title"><a href="' + item.url + '" target="_blank">' + item.title + '</a></div>' +
+          (item.tx ? '<button class="news-add-btn" data-key="' + dataKey + '" onclick="addNewsLeadById(this)">+ Add as lead</button>' : '') +
+        '</div>' +
+        '<div class="npi-summary">' + item.summary + '</div>' +
+        '<div class="npi-meta">' +
+          '<span class="news-source">' + item.source + '</span>' +
+          '<span class="news-time">' + item.time + '</span>' +
+          (item.tx ? '<span class="news-tx-badge">TX Relevant</span>' : '') +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+// ============================================================
+// EMAIL MODAL
+// ============================================================
+let _currentProspectId = null;
+let _currentTemplate = 'cold';
 
-// Morning mini-feed
-let _morningFeedKey = 'dc';
-async function loadMorningFeed(key) {
-  _morningFeedKey = key;
-  const feed = RSS_FEEDS[key];
-  const container = document.getElementById('morning-news-list');
-  if (!container) return;
-  container.innerHTML = '<div style="color:var(--text3);font-size:12px;padding:0.4rem 0;">Loading…</div>';
-  try {
-    const r = await fetch(proxyUrl(feed.url));
-    const text = await r.text();
-    const xml = new DOMParser().parseFromString(text, 'text/xml');
-    const items = parseItems(xml).slice(0, 6);
-    container.innerHTML = items.map(item => {
-      const relevant = isTXRelevant(item);
-      return `<div class="news-card" onclick="window.open('${item.link}','_blank')">
-        <div class="news-source-icon">${feed.abbr}</div>
-        <div class="news-content">
-          <div class="news-headline">${item.title}</div>
-          <div class="news-summary">${item.summary}</div>
-          <div class="news-meta">
-            <span class="news-source-label">${feed.label}</span>
-            <span class="news-time">${timeAgoFromStr(item.date)}</span>
-            ${relevant ? '<span class="news-flag">TX Relevant</span>' : ''}
-          </div>
-        </div>
-      </div>`;
-    }).join('');
-  } catch(e) {
-    container.innerHTML = '<div style="color:var(--text3);font-size:12px;padding:0.4rem 0;">Feed unavailable — check connection.</div>';
+function openEmailModal(prospectId) {
+  _currentProspectId = prospectId;
+  _currentTemplate = 'cold';
+  const p = D.prospects.find(x => x.id === prospectId);
+  if(!p) return;
+  document.getElementById('modal-title').textContent = 'Draft Email: ' + p.company;
+  document.getElementById('modal-to').textContent = p.contact + ' <' + p.email + '>';
+  document.getElementById('modal-company').textContent = p.company;
+  document.getElementById('sent-status').style.display = 'none';
+  document.getElementById('mark-sent-btn').style.display = 'inline-flex';
+  document.getElementById('cold-btn').classList.add('active');
+  document.getElementById('follow-btn').classList.remove('active');
+  switchTemplate('cold');
+  document.getElementById('email-modal').style.display = 'flex';
+}
+
+function switchTemplate(type) {
+  _currentTemplate = type;
+  const p = D.prospects.find(x => x.id === _currentProspectId);
+  if(!p) return;
+  document.getElementById('cold-btn').classList.toggle('active', type === 'cold');
+  document.getElementById('follow-btn').classList.toggle('active', type === 'follow');
+  
+  if(type === 'cold') {
+    document.getElementById('modal-subject').textContent = 'Subject: Apache Industrial - Electrical & Power Systems for ' + p.company + ' Projects';
+    document.getElementById('modal-body-text').textContent = [
+      'Hi ' + p.contact.split(' ')[0] + ',',
+      '',
+      'I hope this finds you well. My name is Keon Rho with Apache Industrial - we are a specialized electrical and power systems contractor with deep experience in hyperscale datacenter and semiconductor fab construction across Texas.',
+      '',
+      'We have recently completed work on major TX datacenter and fab projects, and are actively bidding on Samsung Taylor, Meta Temple, and TI Sherman alongside several GC partners.',
+      '',
+      'I would love to find 15 minutes to introduce Apache and explore how we might support ' + p.company + ' on upcoming TX projects. Would you have time this week or next?',
+      '',
+      'Best regards,',
+      'Keon Rho',
+      'Business Development | Apache Industrial',
+      'keon.rho@apache-industrial.com'
+    ].join('
+');
+  } else {
+    const ds = p.lastTouch ? daysSince(p.lastTouch) : null;
+    const daysText = ds ? ds + ' days ago' : 'recently';
+    document.getElementById('modal-subject').textContent = 'Subject: Following up - Apache Industrial & ' + p.company;
+    document.getElementById('modal-body-text').textContent = [
+      'Hi ' + p.contact.split(' ')[0] + ',',
+      '',
+      'I wanted to follow up on my previous note from ' + daysText + '. I know things get busy, so I wanted to resurface Apache Industrial as a potential partner for your upcoming TX electrical and power work.',
+      '',
+      'We have strong capacity in MV switchgear, UPS integration, generator tie-in, and critical power distribution - the exact scope that comes up on hyperscale DC and semiconductor fab projects.',
+      '',
+      'Would a quick 15-minute call this week work? Happy to send over our capability statement and references first.',
+      '',
+      'Thanks for your time,',
+      'Keon Rho',
+      'Business Development | Apache Industrial',
+      'keon.rho@apache-industrial.com'
+    ].join('
+');
   }
 }
 
-function morningFeedSwitch(key, el) {
-  document.querySelectorAll('#section-morning .card .btn-sm').forEach(b=>b.classList.remove('active'));
-  if(el) el.classList.add('active');
-  loadMorningFeed(key);
+function copyEmail() {
+  const subject = document.getElementById('modal-subject').textContent;
+  const body = document.getElementById('modal-body-text').textContent;
+  navigator.clipboard.writeText(subject + '\n\n' + body).then(() => {
+    const btn = event.target;
+    btn.textContent = 'Copied!';
+    setTimeout(() => { btn.textContent = 'Copy to Clipboard'; }, 2000);
+  });
 }
 
-/* ===== INIT ===== */
-window.addEventListener('DOMContentLoaded', () => {
-  load();
+function markSent() {
+  const p = D.prospects.find(x => x.id === _currentProspectId);
+  if(!p) return;
+  p.lastTouch = new Date().toISOString().substring(0,10);
+  p.status = 'Outreach Sent';
+  saveData();
+  const sentDiv = document.getElementById('sent-status');
+  sentDiv.innerHTML = '<span class="sent-badge">\u2713 Sent ' + new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) + '</span>';
+  sentDiv.style.display = 'block';
+  document.getElementById('mark-sent-btn').style.display = 'none';
   renderMorning();
-  renderDailyActions();
-  loadMorningFeed('dc');
-});
+}
+
+function closeModal() {
+  document.getElementById('email-modal').style.display = 'none';
+  _currentProspectId = null;
+}
+
+// ============================================================
+// PROSPECTS TABLE
+// ============================================================
+function renderProspects() {
+  const tbody = document.getElementById('prospects-tbody');
+  const statusClasses = {
+    'Outreach Sent':'s-outreach','Meeting Scheduled':'s-meeting','Proposal Sent':'s-proposal',
+    'Qualified':'s-qualified','New':'s-new','Outreach sent':'s-sent'
+  };
+  tbody.innerHTML = D.prospects.map(p => {
+    const fu = followUpCountdown(p);
+    const lastTouchStr = p.lastTouch ? new Date(p.lastTouch + 'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'}) : 'Never';
+    return '<tr>' +
+      '<td><div class="td-name">' + p.company + '</div><div class="td-sub">' + p.type + '</div></td>' +
+      '<td>' + p.type + '</td>' +
+      '<td><div>' + p.contact + '</div><div class="td-sub">' + p.email + '</div></td>' +
+      '<td><span class="status ' + (statusClasses[p.status]||'s-new') + '">' + p.status + '</span></td>' +
+      '<td>' + lastTouchStr + '</td>' +
+      '<td><span class="' + fu.cls + '">' + fu.label + '</span></td>' +
+      '<td class="td-note">' + (p.notes||'').substring(0,60) + (p.notes&&p.notes.length>60?'&hellip;':'') + '</td>' +
+      '<td><button class="btn btn-sm" onclick="openEmailModal(' + p.id + ')">&#9993; Draft</button></td>' +
+    '</tr>';
+  }).join('');
+}
+
+function addProspect() {
+  const company = prompt('Company name:');
+  if(!company) return;
+  const contact = prompt('Contact name:') || '';
+  const email = prompt('Contact email:') || '';
+  D.prospects.push({id: Date.now(), company, type:'GC', contact, email, status:'New', lastTouch:'', followUpDays:14, notes:''});
+  saveData();
+  renderProspects();
+}
+
+// ============================================================
+// BIDS TABLE
+// ============================================================
+function renderBids() {
+  const tbody = document.getElementById('bids-tbody');
+  const statusClasses = {
+    'Estimating':'s-estimating','Active':'s-active','Bid Submitted':'s-bid-sub',
+    'Awarded':'s-awarded','Lost':'s-lost','Watching':'s-watching'
+  };
+  tbody.innerHTML = D.bids.map(b => {
+    const dueDate = b.due ? new Date(b.due + 'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : 'TBD';
+    const daysLeft = b.due ? Math.floor((new Date(b.due) - new Date()) / 86400000) : null;
+    const dueStr = daysLeft !== null ? dueDate + (daysLeft >= 0 ? ' (' + daysLeft + 'd)' : ' (past)') : 'TBD';
+    return '<tr>' +
+      '<td><div class="td-name">' + b.project + '</div><div class="td-sub">Owner: ' + b.owner + '</div></td>' +
+      '<td>' + b.gc + '</td>' +
+      '<td style="font-family:monospace;color:var(--accent)">' + b.value + '</td>' +
+      '<td>' + dueStr + '</td>' +
+      '<td><span class="status ' + (statusClasses[b.status]||'s-watching') + '">' + b.status + '</span></td>' +
+      '<td class="td-note">' + (b.notes||'').substring(0,70) + (b.notes&&b.notes.length>70?'&hellip;':'') + '</td>' +
+    '</tr>';
+  }).join('');
+}
+
+function addBid() {
+  const project = prompt('Project name:');
+  if(!project) return;
+  const owner = prompt('Owner:') || '';
+  const gc = prompt('GC:') || '';
+  const value = prompt('Est. value (e.g. $200M):') || 'TBD';
+  D.bids.push({id: Date.now(), project, owner, gc, value, due:'', status:'Estimating', notes:''});
+  saveData();
+  renderBids();
+}
+
+// ============================================================
+// ACCOUNTS TABLE
+// ============================================================
+function renderAccounts() {
+  const tbody = document.getElementById('accounts-tbody');
+  const relClasses = {Active:'s-active', 'Pre-qual':'s-estimating', Outreach:'s-outreach', Watching:'s-watching', New:'s-new', Qualified:'s-qualified'};
+  tbody.innerHTML = D.accounts.map(a => '<tr>' +
+    '<td class="td-name">' + a.company + '</td>' +
+    '<td>' + a.type + '</td>' +
+    '<td>' + a.region + '</td>' +
+    '<td>' + a.contact + '</td>' +
+    '<td>' + a.projects + '</td>' +
+    '<td><span class="status ' + (relClasses[a.rel]||'s-new') + '">' + a.rel + '</span></td>' +
+  '</tr>').join('');
+}
+
+function addAccount() {
+  const company = prompt('Company name:');
+  if(!company) return;
+  D.accounts.push({id: Date.now(), company, type:'GC Partner', region:'TX', contact:'TBD', projects:'None', rel:'New'});
+  saveData();
+  renderAccounts();
+}
+
+// ============================================================
+// RESEARCH NOTES
+// ============================================================
+function renderResearch() {
+  const el = document.getElementById('research-grid');
+  const tagColors = {Market:'#56b2e8', 'JE Dunn':'#f2994a', 'Hensel Phelps':'#bb8cf5', 'Gray Const.':'#6fcf97', 'TX Market':'#e8c170', Samsung:'#56ccba', Hyperscale:'#eb5757', 'Pre-qual':'#f2c94c'};
+  el.innerHTML = D.research.map(r => {
+    const col = tagColors[r.tag] || '#9b9690';
+    return '<div class="rn-card">' +
+      '<div class="rn-header">' +
+        '<span class="rn-tag" style="background:' + col + '22;color:' + col + '">' + r.tag + '</span>' +
+        '<span class="rn-type">' + r.type + '</span>' +
+        '<span class="rn-date">' + r.date + '</span>' +
+      '</div>' +
+      '<div class="rn-text">' + r.text + '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function addNote() {
+  const text = prompt('Research note:');
+  if(!text) return;
+  const tag = prompt('Tag (e.g. Market, JE Dunn):') || 'Market';
+  D.research.unshift({id: Date.now(), tag, type:'Manual note', text, date: new Date().toISOString().substring(0,10)});
+  saveData();
+  renderResearch();
+}
+
+// ============================================================
+// INIT
+// ============================================================
+(function init() {
+  // Set greeting and date
+  const now = new Date();
+  const hour = now.getHours();
+  const greet = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+  const el = document.getElementById('greeting');
+  if(el) el.textContent = greet + ', Keon.';
+  const dateEl = document.getElementById('date-display');
+  if(dateEl) dateEl.textContent = now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+  // Render morning brief
+  renderMorning();
+})();
 </script>
 </body>
 </html>
