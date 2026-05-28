@@ -619,7 +619,7 @@ function renderDailyActions() {
     if(!b.due) return;
     const daysToGo = Math.floor((new Date(b.due) - now) / 86400000);
     if(daysToGo >= 0 && daysToGo <= 30 && ['Estimating','Active'].includes(b.status)) {
-      items.push({color:'blue', title:'Bid due in ' + daysToGo + 'd: ' + b.project.substring(0,35), detail:'Value: ' + b.value + ' | GC: ' + b.gc, action:'View bid', onClick:"showPage('bids',document.querySelectorAll('.nav-item')[2])"});
+      items.push({color:'blue', title:'Bid due in ' + daysToGo + 'd: ' + b.project.substring(0,35), detail:'Value: ' + b.value + ' | GC: ' + (b.gc||b.scope||''), action:'View bid', onClick:"showPage('bids',document.querySelectorAll('.nav-item')[2])"});
     }
   });
   if(items.length === 0) {
@@ -661,7 +661,7 @@ function renderPipelineSnap() {
   const statusMap = {'Estimating':'badge-estimating','Active':'badge-active','Bid Submitted':'badge-bid-submitted','Awarded':'badge-awarded','Watching':'badge-watching'};
   el.innerHTML = D.bids.slice(0,6).map(function(b) {
     const name = b.project.substring(0,32) + (b.project.length>32?'&hellip;':'');
-    return '<div class="pipeline-item"><div><div class="pi-name">' + name + '</div><div class="pi-sub">' + b.owner + ' &middot; ' + b.value + '</div></div><span class="pi-badge ' + (statusMap[b.status]||'badge-watching') + '">' + b.status + '</span></div>';
+    return '<div class="pipeline-item"><div><div class="pi-name">' + name + '</div><div class="pi-sub">' + (b.owner||b.client||'') + ' &middot; ' + b.value + '</div></div><span class="pi-badge ' + (statusMap[b.status]||'badge-watching') + '">' + b.status + '</span></div>';
   }).join('');
 }
 
@@ -689,7 +689,7 @@ function renderRadar() {
   const statusMap = {'Estimating':'badge-estimating','Active':'badge-active','Bid Submitted':'badge-bid-submitted','Awarded':'badge-awarded','Watching':'badge-watching'};
   el.innerHTML = D.bids.map(function(b) {
     const name = b.project.substring(0,28) + (b.project.length>28?'&hellip;':'');
-    return '<div class="radar-item"><div><div class="ri-name">' + name + '</div><div class="ri-sub">' + b.owner + ' &middot; ' + b.value + ' &middot; GC: ' + b.gc + '</div></div><span class="pi-badge ' + (statusMap[b.status]||'badge-watching') + '">' + b.status + '</span></div>';
+    return '<div class="radar-item"><div><div class="ri-name">' + name + '</div><div class="ri-sub">' + (b.owner||b.client||'') + ' &middot; ' + b.value + ' &middot; GC: ' + (b.gc||b.scope||'') + '</div></div><span class="pi-badge ' + (statusMap[b.status]||'badge-watching') + '">' + b.status + '</span></div>';
   }).join('');
 }
 // ============================================================
@@ -806,7 +806,7 @@ function openEmailModal(prospectId) {
   var p = D.prospects.find(function(x) { return x.id === prospectId; });
   if(!p) return;
   document.getElementById('modal-title').textContent = 'Draft Email: ' + p.company;
-  document.getElementById('modal-to').textContent = p.contact + ' <' + p.email + '>';
+  document.getElementById('modal-to').textContent = p.contact + ' <' + (p.email||'') + '>';
   document.getElementById('modal-company').textContent = p.company;
   document.getElementById('sent-status').style.display = 'none';
   document.getElementById('mark-sent-btn').style.display = 'inline-flex';
@@ -873,9 +873,9 @@ function renderProspects() {
   tbody.innerHTML = D.prospects.map(function(p) {
     var fu = followUpCountdown(p);
     var lastTouchStr = p.lastTouch ? new Date(p.lastTouch + 'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'}) : 'Never';
-    return '<tr><td><div class="td-name">' + p.company + '</div><div class="td-sub">' + p.type + '</div></td>' +
-      '<td>' + p.type + '</td>' +
-      '<td><div>' + p.contact + '</div><div class="td-sub">' + p.email + '</div></td>' +
+    return '<tr><td><div class="td-name">' + p.company + '</div><div class="td-sub">' + (p.type||p.industry||'GC') + '</div></td>' +
+      '<td>' + (p.type||p.industry||'GC') + '</td>' +
+      '<td><div>' + p.contact + '</div><div class="td-sub">' + (p.email||'') + '</div></td>' +
       '<td><span class="status ' + (statusClasses[p.status]||'s-new') + '">' + p.status + '</span></td>' +
       '<td>' + lastTouchStr + '</td>' +
       '<td><span class="' + fu.cls + '">' + fu.label + '</span></td>' +
@@ -905,8 +905,8 @@ function renderBids() {
     var dueDate = b.due ? new Date(b.due + 'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : 'TBD';
     var daysLeft = b.due ? Math.floor((new Date(b.due) - new Date()) / 86400000) : null;
     var dueStr = daysLeft !== null ? dueDate + (daysLeft >= 0 ? ' (' + daysLeft + 'd)' : ' (past)') : 'TBD';
-    return '<tr><td><div class="td-name">' + b.project + '</div><div class="td-sub">Owner: ' + b.owner + '</div></td>' +
-      '<td>' + b.gc + '</td>' +
+    return '<tr><td><div class="td-name">' + b.project + '</div><div class="td-sub">Owner: ' + (b.owner||b.client||'') + '</div></td>' +
+      '<td>' + (b.gc||b.scope||'') + '</td>' +
       '<td style="font-family:monospace;color:var(--accent)">' + b.value + '</td>' +
       '<td>' + dueStr + '</td>' +
       '<td><span class="status ' + (statusClasses[b.status]||'s-watching') + '">' + b.status + '</span></td>' +
@@ -933,7 +933,7 @@ function renderAccounts() {
   if(!tbody) return;
   var relClasses = {Active:'s-active','Pre-qual':'s-estimating',Outreach:'s-outreach',Watching:'s-watching',New:'s-new',Qualified:'s-qualified'};
   tbody.innerHTML = D.accounts.map(function(a) {
-    return '<tr><td class="td-name">' + a.company + '</td><td>' + a.type + '</td><td>' + a.region + '</td><td>' + a.contact + '</td><td>' + a.projects + '</td><td><span class="status ' + (relClasses[a.rel]||'s-new') + '">' + a.rel + '</span></td></tr>';
+    return '<tr><td class="td-name">' + (a.company||a.name||'') + '</td><td>' + a.type + '</td><td>' + a.region + '</td><td>' + a.contact + '</td><td>' + a.projects + '</td><td><span class="status ' + (relClasses[a.rel]||'s-new') + '">' + a.rel + '</span></td></tr>';
   }).join('');
 }
 
