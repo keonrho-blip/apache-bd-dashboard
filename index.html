@@ -459,8 +459,35 @@ tr:hover td { background: var(--surface2); }
 // ============================================================
 // DATA STORE
 // ============================================================
+// ============================================================
+// DATA STORE — reads/writes to localStorage key 'apache-bd-v3'
+// ============================================================
+(function migrateStorage() {
+  // Migrate old separate keys to unified key if needed
+  const old = ['bd_prospects','bd_bids','bd_accounts','bd_research','bd_todos'];
+  if(old.some(k => localStorage.getItem(k))) {
+    const merged = {
+      prospects: JSON.parse(localStorage.getItem('bd_prospects') || 'null'),
+      bids: JSON.parse(localStorage.getItem('bd_bids') || 'null'),
+      accounts: JSON.parse(localStorage.getItem('bd_accounts') || 'null'),
+      research: JSON.parse(localStorage.getItem('bd_research') || 'null'),
+      todos: JSON.parse(localStorage.getItem('bd_todos') || 'null')
+    };
+    const existing = JSON.parse(localStorage.getItem('apache-bd-v3') || '{}');
+    if(merged.prospects) existing.prospects = merged.prospects;
+    if(merged.bids) existing.bids = merged.bids;
+    if(merged.accounts) existing.accounts = merged.accounts;
+    if(merged.research) existing.research = merged.research;
+    if(merged.todos) existing.todos = merged.todos;
+    localStorage.setItem('apache-bd-v3', JSON.stringify(existing));
+    old.forEach(k => localStorage.removeItem(k));
+  }
+})();
+
+const _stored = JSON.parse(localStorage.getItem('apache-bd-v3') || '{}');
+
 const D = {
-  prospects: JSON.parse(localStorage.getItem('bd_prospects') || 'null') || [
+  prospects: _stored.prospects || [
     {id:1, company:'JE Dunn Construction', type:'GC', contact:'Brad Simmons', email:'brad.simmons@jedunn.com', status:'Meeting Scheduled', lastTouch:'2026-05-20', followUpDays:7, notes:'Active on Meta Temple datacenter (Temple TX). South Central division HQ in Dallas.'},
     {id:2, company:'Hensel Phelps', type:'GC', contact:'Chris Avery', email:'chris.avery@henselphelps.com', status:'Qualified', lastTouch:'2026-05-15', followUpDays:14, notes:'Likely GC on Samsung Taylor Ph.2. Very active in TX semi fabs.'},
     {id:3, company:'Turner Construction', type:'GC', contact:'Mike Odom', email:'m.odom@turnerconstruction.com', status:'Outreach Sent', lastTouch:'2026-05-10', followUpDays:7, notes:'National DC practice. DFW office covers TX hyperscale projects.'},
@@ -472,7 +499,7 @@ const D = {
     {id:9, company:'Samsung Austin Semiconductor', type:'Owner', contact:'James Yu', email:'james.yu@samsung.com', status:'Qualified', lastTouch:'2026-05-08', followUpDays:30, notes:'Ongoing Taylor TX fab campus. Ph.2 bid opening expected Q3 2026.'},
     {id:10, company:'Meta (Datacenter Dev)', type:'Owner', contact:'Ana Reyes', email:'ana.reyes@meta.com', status:'Outreach Sent', lastTouch:'2026-05-05', followUpDays:14, notes:'Temple TX hyperscale campus. $800M+ capex. Active through JE Dunn.'}
   ],
-  bids: JSON.parse(localStorage.getItem('bd_bids') || 'null') || [
+  bids: _stored.bids || [
     {id:1, project:'Samsung Taylor Ph.2 (Fab Expansion)', owner:'Samsung Austin Semi', gc:'Hensel Phelps', value:'$875M', due:'2026-07-15', status:'Estimating', notes:'Electrical distribution, MV switchgear, bus duct. Critical path item.'},
     {id:2, project:'Meta Temple Datacenter (Phase 1)', owner:'Meta', gc:'JE Dunn', value:'$800M', due:'2026-06-30', status:'Estimating', notes:'UPS systems, generator tie-in, critical power. 240MW campus.'},
     {id:3, project:'TI Sherman (Ayrshire Ph.2)', owner:'Texas Instruments', gc:'Gray Construction', value:'$300M', due:'2026-06-01', status:'Active', notes:'Semi fab MV distribution. Apache has existing relationship with Gray.'},
@@ -480,7 +507,7 @@ const D = {
     {id:5, project:'Google DFW Expansion', owner:'Google', gc:'Multiple-TBD', value:'Unknown', due:'2026-09-15', status:'Watching', notes:'Watching permit filings. GC selection expected Q3. Track Whiting-Turner.'},
     {id:6, project:'NTT DFW (Phase 3)', owner:'NTT Data Centers', gc:'Austin Commercial', value:'$220M', due:'2026-07-01', status:'Estimating', notes:'Existing vendor list. Need to qualify. Austin Commercial is GC.'}
   ],
-  accounts: JSON.parse(localStorage.getItem('bd_accounts') || 'null') || [
+  accounts: _stored.accounts || [
     {id:1, company:'JE Dunn Construction', type:'GC Partner', region:'Dallas / Temple TX', contact:'Brad Simmons', projects:'Meta Temple DC', rel:'Active'},
     {id:2, company:'Hensel Phelps', type:'GC Partner', region:'Austin TX', contact:'Chris Avery', projects:'Samsung Taylor Ph.2', rel:'Active'},
     {id:3, company:'Gray Construction', type:'GC Partner', region:'Statewide TX', contact:'Kyle Bren', projects:'TI Sherman', rel:'Active'},
@@ -492,7 +519,7 @@ const D = {
     {id:9, company:'Google (Data Centers)', type:'Owner/Dev', region:'DFW', contact:'N/A', projects:'DFW Expansion', rel:'Watching'},
     {id:10, company:'Texas Instruments', type:'Owner/Dev', region:'Sherman TX', contact:'Derek Mills', projects:'Ayrshire Ph.2', rel:'Active'}
   ],
-  research: JSON.parse(localStorage.getItem('bd_research') || 'null') || [
+  research: _stored.research || [
     {id:1, tag:'Market', type:'Market news', text:'Google Alerts set up for: datacenter Texas, Samsung Taylor TX, semiconductor fab Texas, hyperscale Texas. Alerts hitting inbox daily.', date:'2026-05-22'},
     {id:2, tag:'JE Dunn', type:'Company intel', text:'JE Dunn ranked #7 nationally in datacenter construction (ENR). South Central division active in Austin. Meta Temple is an active $800M campus project in Temple TX.', date:'2026-05-20'},
     {id:3, tag:'Hensel Phelps', type:'Company intel', text:'Hensel Phelps has managed Samsung projects since 1997 Austin campus. Likely GC for Samsung Taylor Ph.2. Key contact is Chris Avery (Austin office).', date:'2026-05-18'},
@@ -502,7 +529,7 @@ const D = {
     {id:7, tag:'Hyperscale', type:'Market analysis', text:'Meta, Google, and Microsoft all have active TX datacenter expansions. NTT DFW Ph.3 is a strong near-term target. Kiewit is the leading GC for Project Frontier in Abilene.', date:'2026-05-08'},
     {id:8, tag:'Pre-qual', type:'Action item', text:'Need to pre-qualify with: Skanska USA Building (hyperscale DC division), Austin Commercial (NTT DFW), Whiting-Turner (Google DFW). Priority action this week.', date:'2026-05-05'}
   ],
-  todos: JSON.parse(localStorage.getItem('bd_todos') || 'null') || [
+  todos: _stored.todos || [
     {id:1, text:'Follow up with Brad Simmons (JE Dunn) on Meta Temple bid', tag:'BD', done:false},
     {id:2, text:'Pull Samsung Taylor Ph.2 permit filings from Taylor city portal', tag:'Intel', done:false},
     {id:3, text:'Pre-qualify with Skanska USA Building (hyperscale DC division)', tag:'BD', done:false},
@@ -538,19 +565,15 @@ function showPage(id, el) {
 
 // ============================================================
 // MORNING BRIEF
-// ============================================================
-function renderMorning() {
-  renderStatStrip();
-  renderDailyActions();
-  renderTodos();
-  renderPipelineSnap();
-  renderFollowUpList();
-  renderRadar();
-  loadFeed('dc', document.querySelector('.feed-tab.active'));
-}
-
-function renderStatStrip() {
-  const activeBids = D.bids.filter(b => ['Estimating','Active','Bid Submitted'].includes(b.status)).length;
+function saveData() {
+  const stored = JSON.parse(localStorage.getItem('apache-bd-v3') || '{}');
+  stored.prospects = D.prospects;
+  stored.bids = D.bids;
+  stored.accounts = D.accounts;
+  stored.research = D.research;
+  stored.todos = D.todos;
+  localStorage.setItem('apache-bd-v3', JSON.stringify(stored));
+}b => ['Estimating','Active','Bid Submitted'].includes(b.status)).length;
   const awarded = D.bids.filter(b => b.status === 'Awarded').length;
   const prospects = D.prospects.length;
   const meetings = D.prospects.filter(p => p.status === 'Meeting Scheduled').length;
