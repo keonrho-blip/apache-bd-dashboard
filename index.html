@@ -1228,21 +1228,24 @@ async function loadFeed(key, btn) {
     const xml = new DOMParser().parseFromString(text, 'text/xml');
     const items = parseItems(xml);
     if (label) label.textContent = feed.label + ' · ' + items.length + ' articles · ' + new Date().toLocaleTimeString();
-    container.innerHTML = items.map(item => {
+    container.innerHTML = items.map((item, idx) => {
       const relevant = isTXRelevant(item);
-      return `<div class="news-full-card">
-        <div class="news-full-source">
-          <div class="news-full-icon">${feed.abbr}</div>
-          <span class="news-full-label">${feed.label}</span>
-          <span class="news-full-time">${timeAgoFromStr(item.date)}</span>
-        </div>
-        <div class="news-full-title">${item.title}</div>
-        <div class="news-full-summary">${item.summary}</div>
-        <div class="news-full-footer">
-          <a class="news-full-link" href="${item.link}" target="_blank" rel="noopener">Read article →</a>
-          ${relevant ? '<button class="news-lead-btn" onclick="addNewsLead(this,\'' + item.title.replace(/'/g,"\'").substring(0,80) + '\',\'' + feed.label + '\')">+ Add as lead</button>' : ''}
-        </div>
-      </div>`;
+      // Store item data for lead button
+      window._feedItems = window._feedItems || {};
+      window._feedItems[key + '_' + idx] = { title: item.title, source: feed.label };
+      return '<div class="news-full-card">' +
+        '<div class="news-full-source">' +
+          '<div class="news-full-icon">' + feed.abbr + '</div>' +
+          '<span class="news-full-label">' + feed.label + '</span>' +
+          '<span class="news-full-time">' + timeAgoFromStr(item.date) + '</span>' +
+        '</div>' +
+        '<div class="news-full-title">' + item.title + '</div>' +
+        '<div class="news-full-summary">' + item.summary + '</div>' +
+        '<div class="news-full-footer">' +
+          '<a class="news-full-link" href="' + item.link + '" target="_blank" rel="noopener">Read article →</a>' +
+          (relevant ? '<button class="news-lead-btn" data-key="' + key + '_' + idx + '" onclick="addNewsLeadById(this)">+ Add as lead</button>' : '') +
+        '</div>' +
+      '</div>';
     }).join('');
   } catch(e) {
     if (label) label.textContent = feed.label + ' · error loading';
@@ -1250,14 +1253,18 @@ async function loadFeed(key, btn) {
   }
 }
 
-function addNewsLead(btn, title, source) {
-  D.research.push({ id:D.nextId++, tag:source, type:'Project lead', text:'[From '+source+'] '+title, date:today() });
+function addNewsLeadById(btn) {
+  const key = btn.getAttribute('data-key');
+  const item = (window._feedItems || {})[key];
+  if (!item) return;
+  D.research.push({ id:D.nextId++, tag:item.source, type:'Project lead', text:'[From ' + item.source + '] ' + item.title, date:today() });
   save();
   btn.textContent = '✓ Added';
-  btn.style.background='var(--green-bg)';
-  btn.style.color='var(--green)';
+  btn.style.background = 'var(--green-bg)';
+  btn.style.color = 'var(--green)';
   btn.disabled = true;
 }
+
 
 // Morning mini-feed
 let _morningFeedKey = 'dc';
