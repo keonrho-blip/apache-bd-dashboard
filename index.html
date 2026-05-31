@@ -573,14 +573,39 @@ function renderStatStrip() {
   const activeBids = D.bids.filter(function(b) { return ['Estimating','Active','Bid Submitted'].includes(b.status); }).length;
   const awarded = D.bids.filter(function(b) { return b.status === 'Awarded'; }).length;
   const prospects = D.prospects.length;
-  const meetings = D.prospects.filter(function(p) { return p.status === 'Meeting Scheduled'; }).length;
-  const s = document.getElementById('stat-strip');
+  const meetings = D.prospects.filter(function(p) { return p.status === 'Meeting booked'; }).length;
+
+  function parseBidVal(v) {
+    if (!v || v === 'TBD' || v === '') return null;
+    var s = v.replace(/[$,]/g, '').trim();
+    if (s.slice(-1).toUpperCase() === 'K') return parseFloat(s) * 1000;
+    if (s.slice(-1).toUpperCase() === 'M') return parseFloat(s) * 1000000;
+    var n = parseFloat(s);
+    return isNaN(n) ? null : n;
+  }
+  function fmtBidVal(val) {
+    if (val >= 1000000) { var m = val/1000000; return '$' + (m === Math.floor(m) ? m : parseFloat(m.toFixed(1))) + 'M'; }
+    if (val >= 1000) return '$' + Math.round(val/1000) + 'K';
+    return '$' + val.toLocaleString();
+  }
+  var awardedTotal = 0, pipelineTotal = 0, pipelineHasTBD = false;
+  D.bids.forEach(function(b) {
+    var v = parseBidVal(b.value);
+    if (b.status === 'Awarded') { if (v !== null) awardedTotal += v; }
+    else if (['Estimating','Active','Bid Submitted','Submitted'].includes(b.status)) {
+      if (v !== null) pipelineTotal += v; else pipelineHasTBD = true;
+    }
+  });
+  var awardedValStr = awardedTotal > 0 ? fmtBidVal(awardedTotal) + ' awarded' : 'projects won';
+  var pipelineValStr = (pipelineTotal > 0 ? fmtBidVal(pipelineTotal) : '') + (pipelineHasTBD ? '+' : '') + ' pipeline';
+
+  var s = document.getElementById('stat-strip');
   if(!s) return;
-  s.innerHTML = '<div class="stat-card blue"><div class="stat-label">Active Bids</div><div class="stat-value blue">' + activeBids + '</div><div class="stat-sub">in pipeline</div></div>' +
-    '<div class="stat-card amber"><div class="stat-label">Awarded YTD</div><div class="stat-value amber">' + awarded + '</div><div class="stat-sub">projects won</div></div>' +
+  s.innerHTML = '<div class="stat-card blue"><div class="stat-label">Active Bids</div><div class="stat-value blue">' + activeBids + '</div><div class="stat-sub">' + pipelineValStr + '</div></div>' +
+    '<div class="stat-card amber"><div class="stat-label">Awarded YTD</div><div class="stat-value amber">' + awarded + '</div><div class="stat-sub">' + awardedValStr + '</div></div>' +
     '<div class="stat-card green"><div class="stat-label">Prospects</div><div class="stat-value green">' + prospects + '</div><div class="stat-sub">tracked contacts</div></div>' +
     '<div class="stat-card teal"><div class="stat-label">Meetings</div><div class="stat-value teal">' + meetings + '</div><div class="stat-sub">scheduled</div></div>';
-}
+}}
 
 function daysSince(dateStr) {
   if(!dateStr) return null;
