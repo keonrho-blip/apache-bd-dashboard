@@ -74,6 +74,7 @@ body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-s
 .stat-value.green { color: var(--green); }
 .stat-value.teal { color: var(--teal); }
 .stat-sub { font-size: 12px; color: var(--text3); }
+.stat-count { font-size: 11px; color: var(--text3); font-weight: 400; margin-top: .15rem; }
 
 /* Morning grid */
 .morning-grid { display: grid; grid-template-columns: 1fr 340px; gap: 1.5rem; }
@@ -570,11 +571,17 @@ function renderMorning() {
 }
 
 function renderStatStrip() {
-  const activeBids = D.bids.filter(function(b) { return ['Estimating','Active','Bid Submitted'].includes(b.status); }).length;
-  const awarded = D.bids.filter(function(b) { return b.status === 'Awarded'; }).length;
-  const prospects = D.prospects.length;
-  const meetings = D.prospects.filter(function(p) { return p.status === 'Meeting booked'; }).length;
+  const activeBidsList = D.bids.filter(function(b) { return ['Estimating','Active','Bid Submitted'].includes(b.status); });
+  const activeBidsCount = activeBidsList.length;
+  const awardedList = D.bids.filter(function(b) { return b.status === 'Awarded'; });
+  const awardedCount = awardedList.length;
+  const prospectsCount = D.prospects.length;
 
+  // Win rate
+  const closedBids = D.bids.filter(function(b) { return ['Awarded','Lost'].includes(b.status); });
+  const winRate = closedBids.length > 0 ? Math.round((awardedCount / closedBids.length) * 100) : 0;
+
+  // $ value helpers
   function parseBidVal(v) {
     if (!v || v === 'TBD' || v === '') return null;
     var s = v.replace(/[$,]/g, '').trim();
@@ -596,15 +603,32 @@ function renderStatStrip() {
       if (v !== null) pipelineTotal += v; else pipelineHasTBD = true;
     }
   });
-  var awardedValStr = awardedTotal > 0 ? fmtBidVal(awardedTotal) + ' awarded' : 'projects won';
-  var pipelineValStr = (pipelineTotal > 0 ? fmtBidVal(pipelineTotal) : '') + (pipelineHasTBD ? '+' : '') + ' pipeline';
+  var awardedValStr = awardedTotal > 0 ? fmtBidVal(awardedTotal) : '--';
+  var pipelineValStr = (pipelineTotal > 0 ? fmtBidVal(pipelineTotal) : '') + (pipelineHasTBD ? '+' : '');
 
   var s = document.getElementById('stat-strip');
   if(!s) return;
-  s.innerHTML = '<div class="stat-card blue"><div class="stat-label">Active Bids</div><div class="stat-value blue">' + activeBids + '</div><div class="stat-sub">' + pipelineValStr + '</div></div>' +
-    '<div class="stat-card amber"><div class="stat-label">Awarded YTD</div><div class="stat-value amber">' + awarded + '</div><div class="stat-sub">' + awardedValStr + '</div></div>' +
-    '<div class="stat-card green"><div class="stat-label">Prospects</div><div class="stat-value green">' + prospects + '</div><div class="stat-sub">tracked contacts</div></div>' +
-    '<div class="stat-card teal"><div class="stat-label">Meetings</div><div class="stat-value teal">' + meetings + '</div><div class="stat-sub">scheduled</div></div>';
+  s.innerHTML =
+    '<div class="stat-card blue">' +
+      '<div class="stat-label">Active Bids</div>' +
+      '<div class="stat-value blue">' + pipelineValStr + '</div>' +
+      '<div class="stat-count">' + activeBidsCount + ' bids in pipeline</div>' +
+    '</div>' +
+    '<div class="stat-card amber">' +
+      '<div class="stat-label">Awarded YTD</div>' +
+      '<div class="stat-value amber">' + awardedValStr + '</div>' +
+      '<div class="stat-count">' + awardedCount + ' projects won</div>' +
+    '</div>' +
+    '<div class="stat-card green">' +
+      '<div class="stat-label">Prospects</div>' +
+      '<div class="stat-value green">' + prospectsCount + '</div>' +
+      '<div class="stat-count">tracked contacts</div>' +
+    '</div>' +
+    '<div class="stat-card teal">' +
+      '<div class="stat-label">Win Rate</div>' +
+      '<div class="stat-value teal">' + winRate + '%</div>' +
+      '<div class="stat-count">' + awardedCount + ' of ' + closedBids.length + ' bids closed</div>' +
+    '</div>';
 }
 
 function daysSince(dateStr) {
