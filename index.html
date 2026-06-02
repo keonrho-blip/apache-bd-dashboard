@@ -78,6 +78,14 @@ body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-s
 
 /* Morning grid */
 .morning-grid { display: grid; grid-template-columns: 1fr 340px; gap: 1.5rem; }
+    .combined-card { margin-bottom: 1.5rem; }
+    .combined-body { display: grid; grid-template-columns: 1fr 1px 1fr; gap: 1.5rem; align-items: start; }
+    .combined-divider { background: var(--border); width: 1px; align-self: stretch; }
+    .combined-col { min-width: 0; }
+    .combined-subhead { display: flex; align-items: center; justify-content: space-between; margin-bottom: .5rem; padding-bottom: .4rem; border-bottom: 1px solid var(--border); }
+    .subhead-label { font-size: 11px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--text2); }
+    .snapshot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; align-items: start; }
+    @media (max-width: 900px) { .combined-body { grid-template-columns: 1fr; } .combined-divider { display: none; } }
 
 /* Card */
 .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
@@ -316,34 +324,48 @@ tr:hover td { background: var(--surface2); }
       <!-- Stat Strip -->
       <div class="stat-strip" id="stat-strip"></div>
       <!-- Morning Grid -->
-      <div class="morning-grid">
-        <!-- Left column -->
-        <div style="display:flex;flex-direction:column;gap:1.25rem;">
-          <!-- Daily Actions -->
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">��  Daily Actions</div>
-              <button class="btn btn-sm" onclick="addDailyAction()">+ Add</button>
-            </div>
-            <div class="card-body" id="daily-actions"></div>
+      <!-- Combined Daily Actions & To-Dos (full width) -->
+      <div class="card combined-card">
+        <div class="card-header">
+          <div class="card-title">✓ Daily Actions &amp; To-Dos</div>
+        </div>
+        <div class="card-body combined-body">
+          <div class="combined-col">
+            <div class="combined-subhead"><span class="subhead-label">Actions</span><button class="btn btn-sm" onclick="addDailyAction()">+ Add</button></div>
+            <div id="daily-actions"></div>
           </div>
-          <!-- Todos -->
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">✓ Today’s To-Dos</div>
-              <button class="btn btn-sm" onclick="addTodo()">+ Add task</button>
-            </div>
-            <div class="card-body">
-              <div id="todo-list"></div>
-              <div class="add-todo">
-                <input type="text" id="todo-input" placeholder="New task..." onkeydown="if(event.key==='Enter')addTodo()">
-                <button onclick="addTodo()">Add</button>
-              </div>
+          <div class="combined-divider"></div>
+          <div class="combined-col">
+            <div class="combined-subhead"><span class="subhead-label">To-Dos</span><button class="btn btn-sm" onclick="addTodo()">+ Add task</button></div>
+            <div id="todo-list"></div>
+            <div class="add-todo">
+              <input type="text" id="todo-input" placeholder="New task..." onkeydown="if(event.key==='Enter') addTodo()">
+              <button onclick="addTodo()">Add</button>
             </div>
           </div>
-
-          <!-- Completed Activity Log -->
-          <div class="card">
+        </div>
+      </div>
+      <!-- Symmetrical card grid -->
+      <div class="snapshot-grid">
+        <div class="card">
+            <div class="card-header">
+              <div class="card-title">◕ Pipeline Snapshot</div>
+            </div>
+            <div class="card-body" id="pipeline-snap"></div>
+          </div>
+        <div class="card">
+            <div class="card-header">
+              <div class="card-title">🔔 Needs Follow-Up</div>
+            </div>
+            <div class="card-body" id="follow-up-list"></div>
+          </div>
+        <div class="card">
+            <div class="card-header">
+              <div class="card-title">📏 Texas Market Radar</div>
+            </div>
+            <div class="card-body" id="tx-radar"></div>
+          </div>
+        <div class="card">
             <div class="card-header">
               <div class="card-title"> Completed Activity</div>
               <div style="display:flex;align-items:center;gap:8px;">
@@ -357,8 +379,7 @@ tr:hover td { background: var(--surface2); }
               <button onclick="addCompletedEntry()">Add</button>
             </div>
           </div>
-          <!-- Market Intel Feed -->
-          <div class="card">
+        <div class="card">
             <div class="card-header">
               <div class="card-title">📰 Market Intel Feed</div>
               <div class="feed-tabs">
@@ -371,31 +392,6 @@ tr:hover td { background: var(--surface2); }
               <div style="color:var(--text3);font-size:13px;">Loading feed…</div>
             </div>
           </div>
-        </div>
-        <!-- Right column -->
-        <div style="display:flex;flex-direction:column;gap:1.25rem;">
-          <!-- Pipeline Snapshot -->
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">◕ Pipeline Snapshot</div>
-            </div>
-            <div class="card-body" id="pipeline-snap"></div>
-          </div>
-          <!-- Needs Follow-Up -->
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">🔔 Needs Follow-Up</div>
-            </div>
-            <div class="card-body" id="follow-up-list"></div>
-          </div>
-          <!-- Texas Market Radar -->
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">📏 Texas Market Radar</div>
-            </div>
-            <div class="card-body" id="tx-radar"></div>
-          </div>
-        </div>
       </div>
     </div>
 
@@ -580,6 +576,7 @@ const D = {
   ]
 ,
   dailyActions: _stored.dailyActions || [],
+      dismissedAuto: _stored.dismissedAuto || [],
   completedLog: _stored.completedLog || []
 };
 
@@ -739,6 +736,7 @@ function renderDailyActions() {
     }
   });
   var addRow = '<div class="add-action-row"><input id="new-action-input" placeholder="Add a daily action..." onkeydown="if(event.key===\x27Enter\x27)addDailyAction()"><button onclick="addDailyAction()">+ Add</button></div>';
+  if (D.dismissedAuto && D.dismissedAuto.length) { autoItems = autoItems.filter(function(it) { return D.dismissedAuto.indexOf(it.title) === -1; }); }
   if(autoItems.length === 0 && D.dailyActions.length === 0) {
     el.innerHTML = '<div style="color:var(--text3);font-size:13px;padding:.5rem 0">&#x2713; All caught up &mdash; no urgent actions today.</div>' + addRow;
     return;
@@ -765,17 +763,17 @@ function renderTodos() {
 }
 
 function toggleTodo(id, checked) {
-  var t = D.todos.find(function(x) { return x.id === id; });
-  if(!t) return;
-  t.done = checked;
-  if(checked) {
-    var entry = {id: Date.now(), type:'todo', title: t.text, tag: t.tag, account: accountForTitle(t.text), completedAt: new Date().toISOString()};
-    D.completedLog.unshift(entry);
-  }
-  saveData();
-  renderTodos();
-  renderCompletedLog();
-}
+      var t = D.todos.find(function(x) { return x.id === id; });
+      if (!t) return;
+      if (checked) {
+        var entry = {id: Date.now(), type: 'todo', title: t.text, tag: t.tag, account: accountForTitle(t.text), completedAt: new Date().toISOString()};
+        D.completedLog.unshift(entry);
+        D.todos = D.todos.filter(function(x) { return x.id !== id; });
+      }
+      saveData();
+      renderTodos();
+      renderCompletedLog();
+    }
 
 function addTodo() {
   const inp = document.getElementById('todo-input');
@@ -801,17 +799,15 @@ function addDailyAction() {
 }
 
 function toggleDailyAction(id) {
-  var a = D.dailyActions.find(function(x) { return x.id === id; });
-  if(!a) return;
-  a.done = !a.done;
-  if(a.done) {
-    var entry = {id: Date.now(), type:'action', title: a.title, tag:'Daily Action', account: accountForTitle(a.title), completedAt: new Date().toISOString()};
-    D.completedLog.unshift(entry);
-  }
-  saveData();
-  renderDailyActions();
-  renderCompletedLog();
-}
+      var a = D.dailyActions.find(function(x) { return x.id === id; });
+      if (!a) return;
+      var entry = {id: Date.now(), type: 'action', title: a.title, tag: 'Daily Action', account: accountForTitle(a.title), completedAt: new Date().toISOString()};
+      D.completedLog.unshift(entry);
+      D.dailyActions = D.dailyActions.filter(function(x) { return x.id !== id; });
+      saveData();
+      renderDailyActions();
+      renderCompletedLog();
+    }
 
 function deleteDailyAction(id) {
   D.dailyActions = D.dailyActions.filter(function(a) { return a.id !== id; });
@@ -820,17 +816,16 @@ function deleteDailyAction(id) {
 }
 
 function markAutoActionDone(btn) {
-  var _autoTitle = btn.closest('.action-item').querySelector('.action-title').textContent;
-  var entry = {id: Date.now(), type:'action', title: _autoTitle, tag:'Auto Action', account: accountForTitle(_autoTitle), completedAt: new Date().toISOString()};
-  D.completedLog.unshift(entry);
-  saveData();
-  var item = btn.closest('.action-item');
-  item.style.opacity = '0.4';
-  var titleEl = item.querySelector('.action-title');
-  if(titleEl) titleEl.style.textDecoration = 'line-through';
-  btn.disabled = true;
-  renderCompletedLog();
-}
+      var item = btn.closest('.action-item');
+      var _autoTitle = item.querySelector('.action-title').textContent;
+      var entry = {id: Date.now(), type: 'action', title: _autoTitle, tag: 'Auto Action', account: accountForTitle(_autoTitle), completedAt: new Date().toISOString()};
+      D.completedLog.unshift(entry);
+      if (!D.dismissedAuto) D.dismissedAuto = [];
+      if (D.dismissedAuto.indexOf(_autoTitle) === -1) D.dismissedAuto.push(_autoTitle);
+      saveData();
+      renderDailyActions();
+      renderCompletedLog();
+    }
 
 function deleteTodo(id) {
   D.todos = D.todos.filter(function(t) { return t.id !== id; });
