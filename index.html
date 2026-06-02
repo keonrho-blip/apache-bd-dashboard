@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Apache BD â TX Datacenter &amp; Semiconductor</title>
+<title>Apache BD Ã¢ÂÂ TX Datacenter &amp; Semiconductor</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&amp;family=DM+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -290,18 +290,18 @@ tr:hover td { background: var(--surface2); }
     </div>
     <div class="nav-section">
       <div class="nav-label">Morning</div>
-      <div class="nav-item active" onclick="showPage('morning',this)"><span class="ic">âï¸</span> Morning brief</div>
+      <div class="nav-item active" onclick="showPage('morning',this)"><span class="ic">Ã¢ÂÂÃ¯Â¸Â</span> Morning brief</div>
     </div>
     <div class="nav-section">
       <div class="nav-label">Tracker</div>
-      <div class="nav-item" onclick="showPage('prospects',this)"><span class="ic">ð</span> Prospects</div>
-      <div class="nav-item" onclick="showPage('bids',this)"><span class="ic">ð</span> Bids &amp; proposals</div>
-      <div class="nav-item" onclick="showPage('accounts',this)"><span class="ic">ð¢</span> Accounts</div>
+      <div class="nav-item" onclick="showPage('prospects',this)"><span class="ic">Ã°ÂÂÂ</span> Prospects</div>
+      <div class="nav-item" onclick="showPage('bids',this)"><span class="ic">Ã°ÂÂÂ</span> Bids &amp; proposals</div>
+      <div class="nav-item" onclick="showPage('accounts',this)"><span class="ic">Ã°ÂÂÂ¢</span> Accounts</div>
     </div>
     <div class="nav-section">
       <div class="nav-label">Intel</div>
-      <div class="nav-item" onclick="showPage('research',this)"><span class="ic">ð</span> Research notes</div>
-      <div class="nav-item" onclick="showPage('news',this)"><span class="ic">ð°</span> Live news</div>
+      <div class="nav-item" onclick="showPage('research',this)"><span class="ic">Ã°ÂÂÂ</span> Research notes</div>
+      <div class="nav-item" onclick="showPage('news',this)"><span class="ic">Ã°ÂÂÂ°</span> Live news</div>
     </div>
   </nav>
 
@@ -322,7 +322,7 @@ tr:hover td { background: var(--surface2); }
           <!-- Daily Actions -->
           <div class="card">
             <div class="card-header">
-              <div class="card-title">¡  Daily Actions</div>
+              <div class="card-title">ÂÂ¡  Daily Actions</div>
               <button class="btn btn-sm" onclick="addDailyAction()">+ Add</button>
             </div>
             <div class="card-body" id="daily-actions"></div>
@@ -330,7 +330,7 @@ tr:hover td { background: var(--surface2); }
           <!-- Todos -->
           <div class="card">
             <div class="card-header">
-              <div class="card-title">â Todayâs To-Dos</div>
+              <div class="card-title">Ã¢ÂÂ TodayÃ¢ÂÂs To-Dos</div>
               <button class="btn btn-sm" onclick="addTodo()">+ Add task</button>
             </div>
             <div class="card-body">
@@ -345,7 +345,7 @@ tr:hover td { background: var(--surface2); }
           <!-- Completed Activity Log -->
           <div class="card">
             <div class="card-header">
-              <div class="card-title">✔ Completed Activity</div>
+              <div class="card-title">â Completed Activity</div>
               <button class="btn btn-sm" style="color:var(--text3);font-size:11px;" onclick="clearCompletedLog()">Clear</button>
             </div>
             <div class="card-body" id="completed-log"></div>
@@ -353,7 +353,7 @@ tr:hover td { background: var(--surface2); }
           <!-- Market Intel Feed -->
           <div class="card">
             <div class="card-header">
-              <div class="card-title">ð° Market Intel Feed</div>
+              <div class="card-title">Ã°ÂÂÂ° Market Intel Feed</div>
               <div class="feed-tabs">
                 <button class="feed-tab active" onclick="loadFeed('dc',this)">DC</button>
                 <button class="feed-tab" onclick="loadFeed('enr',this)">ENR</button>
@@ -361,7 +361,7 @@ tr:hover td { background: var(--surface2); }
               </div>
             </div>
             <div class="card-body" id="feed-container">
-              <div style="color:var(--text3);font-size:13px;">Loading feedâ¦</div>
+              <div style="color:var(--text3);font-size:13px;">Loading feedÃ¢ÂÂ¦</div>
             </div>
           </div>
         </div>
@@ -370,21 +370,21 @@ tr:hover td { background: var(--surface2); }
           <!-- Pipeline Snapshot -->
           <div class="card">
             <div class="card-header">
-              <div class="card-title">â Pipeline Snapshot</div>
+              <div class="card-title">Ã¢ÂÂ Pipeline Snapshot</div>
             </div>
             <div class="card-body" id="pipeline-snap"></div>
           </div>
           <!-- Needs Follow-Up -->
           <div class="card">
             <div class="card-header">
-              <div class="card-title">ð Needs Follow-Up</div>
+              <div class="card-title">Ã°ÂÂÂ Needs Follow-Up</div>
             </div>
             <div class="card-body" id="follow-up-list"></div>
           </div>
           <!-- Texas Market Radar -->
           <div class="card">
             <div class="card-header">
-              <div class="card-title">ð Texas Market Radar</div>
+              <div class="card-title">Ã°ÂÂÂ Texas Market Radar</div>
             </div>
             <div class="card-body" id="tx-radar"></div>
           </div>
@@ -699,12 +699,12 @@ function renderDailyActions() {
   var autoItems = [];
   D.prospects.forEach(function(p) {
     if(!p.lastTouch) {
-      autoItems.push({id:'auto_p'+p.id, color:'amber', title:'No contact yet: ' + p.company, detail:'Status: ' + p.status, action:'Draft email', onClick:'openEmailModal(' + p.id + ')', isAuto:true});
+      autoItems.push({color:'amber', title:'No contact yet: ' + p.company, detail:'Status: ' + p.status, action:'Draft email', onClick:'openEmailModal(' + p.id + ')'});
     } else {
       var ds = daysSince(p.lastTouch);
       var threshold = p.followUpDays || 14;
       if(ds >= threshold) {
-        autoItems.push({id:'auto_p'+p.id, color:'red', title:'Follow-up overdue: ' + p.company, detail:ds + ' days since last touch (threshold: ' + threshold + 'd)', action:'Draft email', onClick:'openEmailModal(' + p.id + ')', isAuto:true});
+        autoItems.push({color:'red', title:'Follow-up overdue: ' + p.company, detail:ds + ' days since last touch (threshold: ' + threshold + 'd)', action:'Draft email', onClick:'openEmailModal(' + p.id + ')'});
       }
     }
   });
@@ -713,23 +713,24 @@ function renderDailyActions() {
     if(!b.due) return;
     var daysToGo = Math.floor((new Date(b.due) - now) / 86400000);
     if(daysToGo >= 0 && daysToGo <= 30 && ['Estimating','Active'].includes(b.status)) {
-      autoItems.push({id:'auto_b'+b.id, color:'blue', title:'Bid due in ' + daysToGo + 'd: ' + b.project.substring(0,35), detail:'Value: ' + b.value + ' | GC: ' + (b.gc||b.scope||''), action:'View bid', onClick:"showPage('bids',document.querySelectorAll('.nav-item')[2])", isAuto:true});
+      autoItems.push({color:'blue', title:'Bid due in ' + daysToGo + 'd: ' + b.project.substring(0,35), detail:'Value: ' + b.value + ' | GC: ' + (b.gc||b.scope||''), action:'View bid', onClick:"showPage('bids',document.querySelectorAll('.nav-item')[2])"});
     }
   });
+  var addRow = '<div class="add-action-row"><input id="new-action-input" placeholder="Add a daily action..." onkeydown="if(event.key===\x27Enter\x27)addDailyAction()"><button onclick="addDailyAction()">+ Add</button></div>';
   if(autoItems.length === 0 && D.dailyActions.length === 0) {
-    el.innerHTML = '<div style="color:var(--text3);font-size:13px;padding:.5rem 0">\u2713 All caught up \u2014 no urgent actions today.</div>' +
-      '<div class="add-action-row"><input id="new-action-input" placeholder="Add a daily action..." onkeydown="if(event.key===\'Enter\')addDailyAction()"><button onclick="addDailyAction()">Add</button></div>';
+    el.innerHTML = '<div style="color:var(--text3);font-size:13px;padding:.5rem 0">&#x2713; All caught up &mdash; no urgent actions today.</div>' + addRow;
     return;
   }
   var html = '';
-  autoItems.forEach(function(i) {
-    html += '<div class="action-item"><div class="action-dot ' + i.color + '"></div><div class="action-text"><div class="action-title">' + i.title + '</div><div class="action-detail">' + i.detail + '</div></div><div class="action-controls"><button class="action-btn" onclick="' + i.onClick + '">' + i.action + '</button><button class="action-ctrl-btn done-btn" title="Mark done" onclick="markAutoActionDone('' + i.id + '',this)">\u2713</button></div></div>';
+  autoItems.forEach(function(item) {
+    html += '<div class="action-item"><div class="action-dot ' + item.color + '"></div><div class="action-text"><div class="action-title">' + item.title + '</div><div class="action-detail">' + item.detail + '</div></div><div class="action-controls"><button class="action-btn" onclick="' + item.onClick + '">' + item.action + '</button><button class="action-ctrl-btn done-btn" title="Mark done" onclick="markAutoActionDone(this)">&#x2713;</button></div></div>';
   });
   D.dailyActions.forEach(function(a) {
-    html += '<div class="action-item' + (a.done?' done-action':'') + '" id="da-'+a.id+'"><div class="action-dot ' + (a.done?'green':'blue') + '"></div><div class="action-text"><div class="action-title">' + a.title + '</div>' + (a.detail?'<div class="action-detail">'+a.detail+'</div>':'') + '</div><div class="action-controls"><button class="action-ctrl-btn done-btn" title="' + (a.done?'Undo':'Mark done') + '" onclick="toggleDailyAction(' + a.id + ')">' + (a.done?'\u21ba':'\u2713') + '</button><button class="action-ctrl-btn del-btn" title="Delete" onclick="deleteDailyAction(' + a.id + ')">\u00d7</button></div></div>';
+    var doneIcon = a.done ? '&#x21ba;' : '&#x2713;';
+    var doneTitle = a.done ? 'Undo' : 'Mark done';
+    html += '<div class="action-item' + (a.done ? ' done-action' : '') + '" id="da-' + a.id + '"><div class="action-dot ' + (a.done ? 'green' : 'blue') + '"></div><div class="action-text"><div class="action-title">' + a.title + '</div>' + (a.detail ? '<div class="action-detail">' + a.detail + '</div>' : '') + '</div><div class="action-controls"><button class="action-ctrl-btn done-btn" title="' + doneTitle + '" onclick="toggleDailyAction(' + a.id + ')">' + doneIcon + '</button><button class="action-ctrl-btn del-btn" title="Delete" onclick="deleteDailyAction(' + a.id + ')">&#x00d7;</button></div></div>';
   });
-  html += '<div class="add-action-row"><input id="new-action-input" placeholder="Add a daily action..." onkeydown="if(event.key===\'Enter\')addDailyAction()"><button onclick="addDailyAction()">Add</button></div>';
-  el.innerHTML = html;
+  el.innerHTML = html + addRow;
 }
 
 function renderTodos() {
@@ -796,12 +797,14 @@ function deleteDailyAction(id) {
   renderDailyActions();
 }
 
-function markAutoActionDone(itemId, btn) {
+function markAutoActionDone(btn) {
   var entry = {id: Date.now(), type:'action', title: btn.closest('.action-item').querySelector('.action-title').textContent, tag:'Auto Action', completedAt: new Date().toISOString()};
   D.completedLog.unshift(entry);
   saveData();
-  btn.closest('.action-item').style.opacity = '0.4';
-  btn.closest('.action-item').querySelector('.action-title').style.textDecoration = 'line-through';
+  var item = btn.closest('.action-item');
+  item.style.opacity = '0.4';
+  var titleEl = item.querySelector('.action-title');
+  if(titleEl) titleEl.style.textDecoration = 'line-through';
   btn.disabled = true;
   renderCompletedLog();
 }
