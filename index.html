@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Apache BD Ã¢ÂÂ TX Datacenter &amp; Semiconductor</title>
+<title>Apache BD — TX Datacenter &amp; Semiconductor</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&amp;family=DM+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -290,18 +290,18 @@ tr:hover td { background: var(--surface2); }
     </div>
     <div class="nav-section">
       <div class="nav-label">Morning</div>
-      <div class="nav-item active" onclick="showPage('morning',this)"><span class="ic">Ã¢ÂÂÃ¯Â¸Â</span> Morning brief</div>
+      <div class="nav-item active" onclick="showPage('morning',this)"><span class="ic">☀️</span> Morning brief</div>
     </div>
     <div class="nav-section">
       <div class="nav-label">Tracker</div>
-      <div class="nav-item" onclick="showPage('prospects',this)"><span class="ic">Ã°ÂÂÂ</span> Prospects</div>
-      <div class="nav-item" onclick="showPage('bids',this)"><span class="ic">Ã°ÂÂÂ</span> Bids &amp; proposals</div>
-      <div class="nav-item" onclick="showPage('accounts',this)"><span class="ic">Ã°ÂÂÂ¢</span> Accounts</div>
+      <div class="nav-item" onclick="showPage('prospects',this)"><span class="ic">📊</span> Prospects</div>
+      <div class="nav-item" onclick="showPage('bids',this)"><span class="ic">📄</span> Bids &amp; proposals</div>
+      <div class="nav-item" onclick="showPage('accounts',this)"><span class="ic">🏢</span> Accounts</div>
     </div>
     <div class="nav-section">
       <div class="nav-label">Intel</div>
-      <div class="nav-item" onclick="showPage('research',this)"><span class="ic">Ã°ÂÂÂ</span> Research notes</div>
-      <div class="nav-item" onclick="showPage('news',this)"><span class="ic">Ã°ÂÂÂ°</span> Live news</div>
+      <div class="nav-item" onclick="showPage('research',this)"><span class="ic">🔍</span> Research notes</div>
+      <div class="nav-item" onclick="showPage('news',this)"><span class="ic">📰</span> Live news</div>
     </div>
   </nav>
 
@@ -322,7 +322,7 @@ tr:hover td { background: var(--surface2); }
           <!-- Daily Actions -->
           <div class="card">
             <div class="card-header">
-              <div class="card-title">ÂÂ¡  Daily Actions</div>
+              <div class="card-title">��  Daily Actions</div>
               <button class="btn btn-sm" onclick="addDailyAction()">+ Add</button>
             </div>
             <div class="card-body" id="daily-actions"></div>
@@ -330,7 +330,7 @@ tr:hover td { background: var(--surface2); }
           <!-- Todos -->
           <div class="card">
             <div class="card-header">
-              <div class="card-title">Ã¢ÂÂ TodayÃ¢ÂÂs To-Dos</div>
+              <div class="card-title">✓ Today’s To-Dos</div>
               <button class="btn btn-sm" onclick="addTodo()">+ Add task</button>
             </div>
             <div class="card-body">
@@ -345,7 +345,7 @@ tr:hover td { background: var(--surface2); }
           <!-- Completed Activity Log -->
           <div class="card">
             <div class="card-header">
-              <div class="card-title">â Completed Activity</div>
+              <div class="card-title"> Completed Activity</div>
               <button class="btn btn-sm" style="color:var(--text3);font-size:11px;" onclick="clearCompletedLog()">Clear</button>
             </div>
             <div class="card-body" id="completed-log"></div>
@@ -353,7 +353,7 @@ tr:hover td { background: var(--surface2); }
           <!-- Market Intel Feed -->
           <div class="card">
             <div class="card-header">
-              <div class="card-title">Ã°ÂÂÂ° Market Intel Feed</div>
+              <div class="card-title">📰 Market Intel Feed</div>
               <div class="feed-tabs">
                 <button class="feed-tab active" onclick="loadFeed('dc',this)">DC</button>
                 <button class="feed-tab" onclick="loadFeed('enr',this)">ENR</button>
@@ -361,7 +361,7 @@ tr:hover td { background: var(--surface2); }
               </div>
             </div>
             <div class="card-body" id="feed-container">
-              <div style="color:var(--text3);font-size:13px;">Loading feedÃ¢ÂÂ¦</div>
+              <div style="color:var(--text3);font-size:13px;">Loading feed…</div>
             </div>
           </div>
         </div>
@@ -370,21 +370,21 @@ tr:hover td { background: var(--surface2); }
           <!-- Pipeline Snapshot -->
           <div class="card">
             <div class="card-header">
-              <div class="card-title">Ã¢ÂÂ Pipeline Snapshot</div>
+              <div class="card-title">◕ Pipeline Snapshot</div>
             </div>
             <div class="card-body" id="pipeline-snap"></div>
           </div>
           <!-- Needs Follow-Up -->
           <div class="card">
             <div class="card-header">
-              <div class="card-title">Ã°ÂÂÂ Needs Follow-Up</div>
+              <div class="card-title">🔔 Needs Follow-Up</div>
             </div>
             <div class="card-body" id="follow-up-list"></div>
           </div>
           <!-- Texas Market Radar -->
           <div class="card">
             <div class="card-header">
-              <div class="card-title">Ã°ÂÂÂ Texas Market Radar</div>
+              <div class="card-title">📏 Texas Market Radar</div>
             </div>
             <div class="card-body" id="tx-radar"></div>
           </div>
