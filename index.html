@@ -602,6 +602,7 @@ function saveData() {
   stored.todos = D.todos;
   stored.dailyActions = D.dailyActions;
   stored.completedLog = D.completedLog;
+      stored.dismissedAuto = D.dismissedAuto;
   localStorage.setItem('apache-bd-v3', JSON.stringify(stored));
 }
 // ============================================================
