@@ -346,9 +346,16 @@ tr:hover td { background: var(--surface2); }
           <div class="card">
             <div class="card-header">
               <div class="card-title"> Completed Activity</div>
-              <button class="btn btn-sm" style="color:var(--text3);font-size:11px;" onclick="clearCompletedLog()">Clear</button>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <select id="completed-account-filter" onchange="renderCompletedLog()" style="background:var(--surface2);color:var(--text2);border:1px solid var(--border2);border-radius:6px;font-size:11px;padding:3px 6px;"><option value="">All accounts</option></select>
+                <button class="btn btn-sm" style="color:var(--text3);font-size:11px;" onclick="clearCompletedLog()">Clear</button>
+              </div>
             </div>
             <div class="card-body" id="completed-log"></div>
+            <div class="add-todo" style="padding:0.5rem 0 0;">
+              <input type="text" id="completed-input" placeholder="Add completed activity..." onkeydown="if(event.key==='Enter')addCompletedEntry()">
+              <button onclick="addCompletedEntry()">Add</button>
+            </div>
           </div>
           <!-- Market Intel Feed -->
           <div class="card">
@@ -576,6 +583,19 @@ const D = {
   completedLog: _stored.completedLog || []
 };
 
+function accountForTitle(title) {
+  if(!title) return '';
+  var names = [];
+  (D.prospects||[]).forEach(function(p){ if(p.company) names.push(p.company); });
+  (D.accounts||[]).forEach(function(a){ var n=a.name||a.company; if(n) names.push(n); });
+  var t = title.toLowerCase();
+  var best = '';
+  names.forEach(function(n){
+    if(t.indexOf(n.toLowerCase()) !== -1 && n.length > best.length) best = n;
+  });
+  return best;
+}
+
 function saveData() {
   var stored = JSON.parse(localStorage.getItem('apache-bd-v3') || '{}');
   stored.prospects = D.prospects;
@@ -583,6 +603,8 @@ function saveData() {
   stored.accounts = D.accounts;
   stored.research = D.research;
   stored.todos = D.todos;
+  stored.dailyActions = D.dailyActions;
+  stored.completedLog = D.completedLog;
   localStorage.setItem('apache-bd-v3', JSON.stringify(stored));
 }
 // ============================================================
@@ -747,7 +769,7 @@ function toggleTodo(id, checked) {
   if(!t) return;
   t.done = checked;
   if(checked) {
-    var entry = {id: Date.now(), type:'todo', title: t.text, tag: t.tag, completedAt: new Date().toISOString()};
+    var entry = {id: Date.now(), type:'todo', title: t.text, tag: t.tag, account: accountForTitle(t.text), completedAt: new Date().toISOString()};
     D.completedLog.unshift(entry);
   }
   saveData();
@@ -783,7 +805,7 @@ function toggleDailyAction(id) {
   if(!a) return;
   a.done = !a.done;
   if(a.done) {
-    var entry = {id: Date.now(), type:'action', title: a.title, tag:'Daily Action', completedAt: new Date().toISOString()};
+    var entry = {id: Date.now(), type:'action', title: a.title, tag:'Daily Action', account: accountForTitle(a.title), completedAt: new Date().toISOString()};
     D.completedLog.unshift(entry);
   }
   saveData();
@@ -798,7 +820,8 @@ function deleteDailyAction(id) {
 }
 
 function markAutoActionDone(btn) {
-  var entry = {id: Date.now(), type:'action', title: btn.closest('.action-item').querySelector('.action-title').textContent, tag:'Auto Action', completedAt: new Date().toISOString()};
+  var _autoTitle = btn.closest('.action-item').querySelector('.action-title').textContent;
+  var entry = {id: Date.now(), type:'action', title: _autoTitle, tag:'Auto Action', account: accountForTitle(_autoTitle), completedAt: new Date().toISOString()};
   D.completedLog.unshift(entry);
   saveData();
   var item = btn.closest('.action-item');
@@ -818,18 +841,44 @@ function deleteTodo(id) {
 function renderCompletedLog() {
   var el = document.getElementById('completed-log');
   if(!el) return;
-  if(D.completedLog.length === 0) {
+  // Populate account filter options
+  var filterSel = document.getElementById('completed-account-filter');
+  var current = filterSel ? filterSel.value : '';
+  if(filterSel) {
+    var accts = [];
+    D.completedLog.forEach(function(e){ if(e.account && accts.indexOf(e.account)===-1) accts.push(e.account); });
+    accts.sort();
+    var opts = '<option value="">All accounts</option>';
+    accts.forEach(function(a){ opts += '<option value="'+a.replace(/"/g,'&quot;')+'"'+(a===current?' selected':'')+'>'+a+'</option>'; });
+    filterSel.innerHTML = opts;
+  }
+  var list = D.completedLog.filter(function(e){ return !current || e.account === current; });
+  if(list.length === 0) {
     el.innerHTML = '<div class="log-empty">No completed items yet</div>';
     return;
   }
-  el.innerHTML = D.completedLog.map(function(entry) {
+  el.innerHTML = list.map(function(entry) {
     var dt = new Date(entry.completedAt);
     var timeStr = dt.toLocaleDateString('en-US', {month:'short', day:'numeric'}) + ' ' + dt.toLocaleTimeString('en-US', {hour:'numeric', minute:'2-digit'});
     var typeClass = entry.type === 'todo' ? 'log-type-todo' : 'log-type-action';
-    var typeLabel = entry.type === 'todo' ? 'To-Do' : 'Action';
-    var icon = entry.type === 'todo' ? '\u2705' : '\u26a1';
-    return '<div class="log-entry"><span class="log-icon">' + icon + '</span><div class="log-text"><div class="log-title">' + entry.title + '</div><div class="log-meta"><span class="log-type ' + typeClass + '">' + typeLabel + '</span><span>' + timeStr + '</span>' + (entry.tag ? '<span style="color:var(--text3)">\u00b7 ' + entry.tag + '</span>' : '') + '</div></div></div>';
+    var typeLabel = entry.type === 'todo' ? 'To-Do' : (entry.type === 'note' ? 'Note' : 'Action');
+    var icon = entry.type === 'todo' ? '\u2705' : (entry.type === 'note' ? '\ud83d\udcdd' : '\u26a1');
+    var acctHtml = entry.account ? '<span style="color:var(--accent)">\u00b7 ' + entry.account + '</span>' : '';
+    var tagHtml = entry.tag ? '<span style="color:var(--text3)">\u00b7 ' + entry.tag + '</span>' : '';
+    return '<div class="log-entry"><span class="log-icon">' + icon + '</span><div class="log-text"><div class="log-title">' + entry.title + '</div><div class="log-meta"><span class="log-type ' + typeClass + '">' + typeLabel + '</span><span>' + timeStr + '</span>' + acctHtml + tagHtml + '</div></div></div>';
   }).join('');
+}
+
+function addCompletedEntry() {
+  var inp = document.getElementById('completed-input');
+  if(!inp) return;
+  var val = (inp.value || '').trim();
+  if(!val) return;
+  var entry = {id: Date.now(), type:'note', title: val, tag:'Note', account: accountForTitle(val), completedAt: new Date().toISOString()};
+  D.completedLog.unshift(entry);
+  saveData();
+  inp.value = '';
+  renderCompletedLog();
 }
 
 function clearCompletedLog() {
