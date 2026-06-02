@@ -345,6 +345,22 @@ tr:hover td { background: var(--surface2); }
           </div>
         </div>
       </div>
+      <!-- Completed Activity (moved under To-Dos) -->
+      <div class="card">
+            <div class="card-header">
+              <div class="card-title"> Completed Activity</div>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <select id="completed-account-filter" onchange="renderCompletedLog()" style="background:var(--surface2);color:var(--text2);border:1px solid var(--border2);border-radius:6px;font-size:11px;padding:3px 6px;"><option value="">All accounts</option></select>
+                <button class="btn btn-sm" style="color:var(--text3);font-size:11px;" onclick="clearCompletedLog()">Clear</button>
+              </div>
+            </div>
+            <div class="card-body" id="completed-log"></div>
+            <div class="add-todo" style="padding:0.5rem 0 0;">
+              <input type="text" id="completed-input" placeholder="Add completed activity..." onkeydown="if(event.key==='Enter')addCompletedEntry()">
+              <button onclick="addCompletedEntry()">Add</button>
+            </div>
+          </div>
+
       <!-- Symmetrical card grid -->
       <div class="snapshot-grid">
         <div class="card">
@@ -364,20 +380,6 @@ tr:hover td { background: var(--surface2); }
               <div class="card-title">📏 Texas Market Radar</div>
             </div>
             <div class="card-body" id="tx-radar"></div>
-          </div>
-        <div class="card">
-            <div class="card-header">
-              <div class="card-title"> Completed Activity</div>
-              <div style="display:flex;align-items:center;gap:8px;">
-                <select id="completed-account-filter" onchange="renderCompletedLog()" style="background:var(--surface2);color:var(--text2);border:1px solid var(--border2);border-radius:6px;font-size:11px;padding:3px 6px;"><option value="">All accounts</option></select>
-                <button class="btn btn-sm" style="color:var(--text3);font-size:11px;" onclick="clearCompletedLog()">Clear</button>
-              </div>
-            </div>
-            <div class="card-body" id="completed-log"></div>
-            <div class="add-todo" style="padding:0.5rem 0 0;">
-              <input type="text" id="completed-input" placeholder="Add completed activity..." onkeydown="if(event.key==='Enter')addCompletedEntry()">
-              <button onclick="addCompletedEntry()">Add</button>
-            </div>
           </div>
         <div class="card">
             <div class="card-header">
