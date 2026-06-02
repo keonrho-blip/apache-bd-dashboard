@@ -1210,59 +1210,50 @@ function renderBids() {
     'Active':'s-active','Bid Submitted':'s-bid-sub'
   };
   tbody.innerHTML = D.bids.map(function(b, idx) {
-    var dueDate = b.due ? new Date(b.due + 'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : 'TBD';
+    var dueDate = b.due ? new Date(b.due + 'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '';
     var now = new Date(); now.setHours(0,0,0,0);
     var due = b.due ? new Date(b.due + 'T00:00:00') : null;
     var diff = due ? Math.round((due-now)/(1000*60*60*24)) : null;
-    var dueStr = diff === null ? 'TBD' : diff < 0 ? dueDate + ' <span style="color:var(--red);font-size:10px">(past)</span>' : dueDate + ' <span style="color:var(--text3);font-size:10px">(' + diff + 'd)</span>';
     var sc = statusClasses[b.status] || 's-watching';
     var statusOpts = statusOptions.map(function(s){
       return '<option value="'+s+'"'+(b.status===s?' selected':'')+'>'+s+'</option>';
     }).join('');
-    return '<tr data-bid-id="'+b.id+'">' +
+    var dueDiffHtml = diff !== null ? '<div style="font-size:10px;color:'+(diff<0?'var(--red)':'var(--text3)')+';">'+(diff<0?'(past)':'('+diff+'d)')+'</div>' : '';
+    return '<tr data-idx="'+idx+'">' +
       '<td>' +
-        '<div class="td-name" contenteditable="true" onblur="updateBidField('+idx+','project',this.textContent.trim())" style="outline:none;cursor:text;" title="Click to edit">'+b.project+'</div>' +
-        '<div class="td-sub" style="cursor:text;" title="Click to edit owner">Owner: <span contenteditable="true" onblur="updateBidField('+idx+','owner',this.textContent.trim())" style="outline:none;">'+(b.owner||b.client||'')+'</span></div>' +
+        '<div class="td-name" contenteditable="true" data-field="project" data-idx="'+idx+'" onblur="updateBidField(this)" style="outline:none;cursor:text;" title="Click to edit">'+escHtml(b.project)+'</div>' +
+        '<div class="td-sub">Owner: <span contenteditable="true" data-field="owner" data-idx="'+idx+'" onblur="updateBidField(this)" style="outline:none;cursor:text;">'+escHtml(b.owner||b.client||'')+'</span></div>' +
       '</td>' +
-      '<td><span contenteditable="true" onblur="updateBidField('+idx+','gc',this.textContent.trim())" style="outline:none;cursor:text;" title="Click to edit scope">'+(b.gc||b.scope||'')+'</span></td>' +
-      '<td><span contenteditable="true" onblur="updateBidField('+idx+','value',this.textContent.trim())" style="outline:none;cursor:text;color:var(--accent);" title="Click to edit value">'+(b.value||'TBD')+'</span></td>' +
+      '<td><span contenteditable="true" data-field="gc" data-idx="'+idx+'" onblur="updateBidField(this)" style="outline:none;cursor:text;" title="Click to edit scope">'+escHtml(b.gc||b.scope||'')+'</span></td>' +
+      '<td><span contenteditable="true" data-field="value" data-idx="'+idx+'" onblur="updateBidField(this)" style="outline:none;cursor:text;color:var(--accent);" title="Click to edit value">'+escHtml(b.value||'TBD')+'</span></td>' +
       '<td>' +
-        '<input type="date" value="'+(b.due||'')+'" onchange="updateBidField('+idx+','due',this.value)" style="background:transparent;border:none;color:var(--text2);font-size:12px;cursor:pointer;padding:0;outline:none;font-family:inherit;" title="Click to change date">' +
-        (diff !== null ? '<div style="font-size:10px;color:'+(diff<0?'var(--red)':'var(--text3)')+';">'+(diff<0?'(past)':'('+diff+'d)')+'</div>' : '') +
+        '<input type="date" value="'+(b.due||'')+'" data-field="due" data-idx="'+idx+'" onchange="updateBidField(this)" style="background:transparent;border:none;color:var(--text2);font-size:12px;cursor:pointer;padding:0;outline:none;font-family:inherit;" title="Click to change date">' +
+        dueDiffHtml +
       '</td>' +
       '<td>' +
-        '<select class="status '+sc+'" onchange="updateBidField('+idx+','status',this.value)" style="border:none;cursor:pointer;padding:2px 4px;border-radius:3px;font-size:10px;font-weight:600;letter-spacing:.06em;outline:none;background:inherit;color:inherit;">'+statusOpts+'</select>' +
+        '<select class="status '+sc+'" data-field="status" data-idx="'+idx+'" onchange="updateBidField(this)" style="border:none;cursor:pointer;padding:2px 4px;border-radius:3px;font-size:10px;font-weight:600;letter-spacing:.06em;outline:none;background:inherit;color:inherit;">'+statusOpts+'</select>' +
       '</td>' +
-      '<td><span contenteditable="true" onblur="updateBidField('+idx+','notes',this.textContent.trim())" style="outline:none;cursor:text;color:var(--text2);font-size:12px;" title="Click to edit notes">'+(b.notes||'')+'</span></td>' +
-      '<td><button class="btn btn-sm" onclick="deleteBid('+idx+')" style="color:var(--red);background:rgba(235,87,87,0.1);border:1px solid rgba(235,87,87,0.25);padding:2px 8px;font-size:11px;" title="Remove bid">✕</button></td>' +
+      '<td><span contenteditable="true" data-field="notes" data-idx="'+idx+'" onblur="updateBidField(this)" style="outline:none;cursor:text;color:var(--text2);font-size:12px;" title="Click to edit notes">'+escHtml(b.notes||'')+'</span></td>' +
+      '<td><button class="btn btn-sm" onclick="deleteBid('+idx+')" style="color:var(--red);background:rgba(235,87,87,0.1);border:1px solid rgba(235,87,87,0.25);padding:2px 8px;font-size:11px;" title="Remove bid">&#x2715;</button></td>' +
     '</tr>';
   }).join('');
-  // Update status select colors after render
-  tbody.querySelectorAll('select.status').forEach(function(sel) {
-    sel.onchange = (function(i){ return function(){ updateBidField(i,'status',this.value); }; })(parseInt(sel.closest('tr').dataset.bidId ? D.bids.findIndex(function(b){ return b.id == sel.closest('tr').dataset.bidId; }) : 0));
-  });
 }
 
-function updateBidField(idx, field, value) {
-  if (!D.bids[idx]) return;
-  D.bids[idx][field] = value;
+function escHtml(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function updateBidField(el) {
+  var idx = parseInt(el.getAttribute('data-idx'));
+  var field = el.getAttribute('data-field');
+  if (!D.bids[idx] || !field) return;
+  var val = (el.tagName === 'INPUT' || el.tagName === 'SELECT') ? el.value : el.textContent.trim();
+  D.bids[idx][field] = val;
   if (field === 'status') {
-    // Re-render only the status select's classes
-    var rows = document.querySelectorAll('#bids-tbody tr');
-    var row = rows[idx];
-    if (row) {
-      var statusClasses = {
-        'Estimating':'s-estimating','Submitted':'s-bid-sub','Awarded':'s-awarded',
-        'Lost':'s-lost','On Hold':'s-watching','No Bid':'s-watching',
-        'Active':'s-active','Bid Submitted':'s-bid-sub'
-      };
-      var allClasses = ['s-estimating','s-bid-sub','s-awarded','s-lost','s-watching','s-active'];
-      var sel = row.querySelector('select.status');
-      if (sel) {
-        allClasses.forEach(function(c){ sel.classList.remove(c); });
-        sel.classList.add(statusClasses[value] || 's-watching');
-      }
-    }
+    var sc = {'Estimating':'s-estimating','Submitted':'s-bid-sub','Awarded':'s-awarded','Lost':'s-lost','On Hold':'s-watching','No Bid':'s-watching','Active':'s-active','Bid Submitted':'s-bid-sub'};
+    var all = ['s-estimating','s-bid-sub','s-awarded','s-lost','s-watching','s-active'];
+    all.forEach(function(c){ el.classList.remove(c); });
+    el.classList.add(sc[val] || 's-watching');
   }
   saveData();
   renderPipelineSnap && renderPipelineSnap();
@@ -1270,7 +1261,7 @@ function updateBidField(idx, field, value) {
 }
 
 function deleteBid(idx) {
-  if (!confirm('Remove "' + (D.bids[idx] && D.bids[idx].project) + '" from bids? This cannot be undone.')) return;
+  if (!confirm('Remove "' + (D.bids[idx] ? D.bids[idx].project : 'this bid') + '" from bids? This cannot be undone.')) return;
   D.bids.splice(idx, 1);
   saveData();
   renderBids();
