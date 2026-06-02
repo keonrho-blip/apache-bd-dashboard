@@ -278,6 +278,9 @@ tr:hover td { background: var(--surface2); }
 /* ---- COMPLETED LOG ---- */
 .log-entry { display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.55rem 0; border-bottom: 1px solid var(--border); }
 .log-entry:last-child { border-bottom: none; }
+.log-del-btn { background: none; border: none; cursor: pointer; color: transparent; font-size: 15px; padding: 0 0.25rem; line-height: 1; flex-shrink: 0; align-self: center; transition: color 0.15s; }
+.log-entry:hover .log-del-btn { color: var(--text3); }
+.log-del-btn:hover { color: #ef4444; }
 .log-icon { font-size: 13px; flex-shrink: 0; margin-top: 2px; }
 .log-text { flex: 1; min-width: 0; }
 .log-title { font-size: 13px; color: var(--text); line-height: 1.4; }
@@ -863,7 +866,7 @@ function renderCompletedLog() {
     var icon = entry.type === 'todo' ? '\u2705' : (entry.type === 'note' ? '\ud83d\udcdd' : '\u26a1');
     var acctHtml = entry.account ? '<span style="color:var(--accent)">\u00b7 ' + entry.account + '</span>' : '';
     var tagHtml = entry.tag ? '<span style="color:var(--text3)">\u00b7 ' + entry.tag + '</span>' : '';
-    return '<div class="log-entry"><span class="log-icon">' + icon + '</span><div class="log-text"><div class="log-title">' + entry.title + '</div><div class="log-meta"><span class="log-type ' + typeClass + '">' + typeLabel + '</span><span>' + timeStr + '</span>' + acctHtml + tagHtml + '</div></div></div>';
+    return '<div class="log-entry"><span class="log-icon">' + icon + '</span><div class="log-text"><div class="log-title">' + entry.title + '</div><div class="log-meta"><span class="log-type ' + typeClass + '">' + typeLabel + '</span><span>' + timeStr + '</span>' + acctHtml + tagHtml + '</div></div><button class="log-del-btn" title="Delete" onclick="deleteCompletedEntry(' + entry.id + ')">\u00d7</button></div>';
   }).join('');
 }
 
@@ -876,6 +879,12 @@ function addCompletedEntry() {
   D.completedLog.unshift(entry);
   saveData();
   inp.value = '';
+  renderCompletedLog();
+}
+
+function deleteCompletedEntry(id) {
+  D.completedLog = D.completedLog.filter(function(e) { return e.id !== id; });
+  saveData();
   renderCompletedLog();
 }
 
