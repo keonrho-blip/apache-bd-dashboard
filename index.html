@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Apache BD ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ TX Datacenter &amp; Semiconductor</title>
+<title>Apache BD — TX Datacenter &amp; Semiconductor</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&amp;family=DM+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -475,7 +475,7 @@ body.view-mode button[title="Remove bid"] { display: none !important; }
 </head>
 <body>
   <div class="view-banner">
-    <span class="view-banner-icon">ÃÂÃÂÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ</span>
+    <span class="view-banner-icon">👁</span>
     <span>Read-only view &mdash; snapshot as of June 19, 2026</span>
   </div>
 <div class="shell">
@@ -487,22 +487,22 @@ body.view-mode button[title="Remove bid"] { display: none !important; }
     </div>
     <div class="nav-section">
       <div class="nav-label">Morning</div>
-      <div class="nav-item active" onclick="showPage('morning',this)"><span class="ic">ÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂ¯ÃÂÃÂ¸ÃÂÃÂ</span> Morning brief</div>
+      <div class="nav-item active" onclick="showPage('morning',this)"><span class="ic">☀️</span> Morning brief</div>
     </div>
     <div class="nav-section">
       <div class="nav-label">Tracker</div>
-      <div class="nav-item" onclick="showPage('prospects',this)"><span class="ic">ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ</span> Prospects</div>
-      <div class="nav-item" onclick="showPage('bids',this)"><span class="ic">ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ</span> Bids &amp; proposals</div>
-      <div class="nav-item" onclick="showPage('accounts',this)"><span class="ic">ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ¢</span> Accounts</div>
+      <div class="nav-item" onclick="showPage('prospects',this)"><span class="ic">📊</span> Prospects</div>
+      <div class="nav-item" onclick="showPage('bids',this)"><span class="ic">📄</span> Bids &amp; proposals</div>
+      <div class="nav-item" onclick="showPage('accounts',this)"><span class="ic">🏢</span> Accounts</div>
     </div>
     <div class="nav-section">
       <div class="nav-label">Intel</div>
-      <div class="nav-item" onclick="showPage('research',this)"><span class="ic">ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ</span> Research notes</div>
-      <div class="nav-item" onclick="showPage('news',this)"><span class="ic">ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ°</span> Live news</div>
+      <div class="nav-item" onclick="showPage('research',this)"><span class="ic">🔍</span> Research notes</div>
+      <div class="nav-item" onclick="showPage('news',this)"><span class="ic">📰</span> Live news</div>
     </div>
   
-      <div class="nav-item" onclick="showPage('tx-pipeline',this)"><span class="ic">ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¯ÃÂÃÂ¸ÃÂÃÂ</span> TX DC Pipeline</div>
-    <div class="nav-item" onclick="showPage('coverage-map',this)"><span class="ic">ÃÂ°ÃÂÃÂÃÂºÃÂ¯ÃÂ¸ÃÂ</span> Coverage map</div>
+      <div class="nav-item" onclick="showPage('tx-pipeline',this)"><span class="ic">🏗️</span> TX DC Pipeline</div>
+    <div class="nav-item" onclick="showPage('coverage-map',this)"><span class="ic">🗺️</span> Coverage map</div>
     
     <div class="nav-section" data-edit style="margin-top: auto; padding-top: 1rem;">
       <button class="nav-update-btn" onclick="openSnapModal()">&#x21BB; Update shared snapshot</button>
@@ -523,7 +523,7 @@ body.view-mode button[title="Remove bid"] { display: none !important; }
       <!-- Combined Daily Actions & To-Dos (full width) -->
       <div class="card combined-card">
         <div class="card-header">
-          <div class="card-title">ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Daily Actions &amp; To-Dos</div>
+          <div class="card-title">✓ Daily Actions &amp; To-Dos</div>
         </div>
         <div class="card-body combined-body">
           <div class="combined-col">
@@ -561,25 +561,25 @@ body.view-mode button[title="Remove bid"] { display: none !important; }
       <div class="snapshot-grid">
         <div class="card">
             <div class="card-header">
-              <div class="card-title">ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Pipeline Snapshot</div>
+              <div class="card-title">◕ Pipeline Snapshot</div>
             </div>
             <div class="card-body" id="pipeline-snap"></div>
           </div>
         <div class="card">
             <div class="card-header">
-              <div class="card-title">ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ Needs Follow-Up</div>
+              <div class="card-title">🔔 Needs Follow-Up</div>
             </div>
             <div class="card-body" id="follow-up-list"></div>
           </div>
         <div class="card">
             <div class="card-header">
-              <div class="card-title">ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ Texas Market Radar</div>
+              <div class="card-title">📏 Texas Market Radar</div>
             </div>
             <div class="card-body" id="tx-radar"></div>
           </div>
         <div class="card">
             <div class="card-header">
-              <div class="card-title">ÃÂÃÂ°ÃÂÃÂÃÂÃÂÃÂÃÂ° Market Intel Feed</div>
+              <div class="card-title">📰 Market Intel Feed</div>
               <div class="feed-tabs">
                 <button class="feed-tab active" onclick="loadFeed('dc',this)">DC</button>
                 <button class="feed-tab" onclick="loadFeed('enr',this)">ENR</button>
@@ -587,7 +587,7 @@ body.view-mode button[title="Remove bid"] { display: none !important; }
               </div>
             </div>
             <div class="card-body" id="feed-container">
-              <div style="color:var(--text3);font-size:13px;">Loading feedÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¢ÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ¦</div>
+              <div style="color:var(--text3);font-size:13px;">Loading feed…</div>
             </div>
           </div>
       </div>
@@ -1543,7 +1543,7 @@ function addNote() {
 })();
 
   // TX DC Projects Pipeline data
-  var txPipelineData = [{"name":"Meta Temple DC ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Mechanical Insulation","owner":"Gray Construction","parent":"Meta Platforms","status":"Planned","stage":"Project Scope","type":"Grassroot","industry":"DC"},{"name":"Google DFW Hyperscale Expansion","owner":"TBD","parent":"Google LLC","status":"Planned","stage":"Preliminary Design","type":"Grassroot","industry":"DC"},{"name":"NTT DFW Phase 3 Campus","owner":"Austin Commercial","parent":"NTT Ltd.","status":"Planned","stage":"Preliminary Engineering","type":"Plant Expansion","industry":"DC"},{"name":"Plano Data Center Campus Expansion (Atlantic Station) Bldg 4","owner":"Skybox Datacenters","parent":"Skybox Datacenters","status":"Planned","stage":"Project Scope","type":"Plant Expansion","industry":"DC"},{"name":"Plano Data Center Campus Expansion (Atlantic Station) Bldg 2","owner":"Skybox Datacenters","parent":"Skybox Datacenters","status":"Planned","stage":"Project Scope","type":"Plant Expansion","industry":"DC"},{"name":"Plano Data Center DFW3 Expansion","owner":"DataBank Limited","parent":"DigitalBridge Group Incorporated","status":"Operational","stage":"Market Analysis","type":"Plant Expansion","industry":"DC"},{"name":"Dallas ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Allen Data Center Phase II Expansion","owner":"TierPoint LLC","parent":"TierPoint LLC","status":"Operational","stage":"Economic Evaluation","type":"Plant Expansion","industry":"DC"},{"name":"Dallas ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Allen Data Center Phase III","owner":"TierPoint LLC","parent":"TierPoint LLC","status":"Operational","stage":"Market Analysis","type":"Plant Expansion","industry":"DC"},{"name":"Garland Data Center Expansion Phase IV (Project Gold Garland/DFW39)","owner":"Digital Realty Trust Incorporated","parent":"Digital Realty Trust Incorporated","status":"Operational","stage":"Market Analysis","type":"Plant Expansion","industry":"DC"},{"name":"Seymour Grassroot Data Center Campus (Project Kati) Phase I","owner":"Soluna","parent":"Soluna Holdings, Incorporated","status":"Under Construction","stage":"Construction - Merit Shop","type":"Grassroot","industry":"DC"},{"name":"Paris Grassroot Cryptomining Data Center (Project Annie)","owner":"Soluna","parent":"Soluna Holdings, Incorporated","status":"Planned","stage":"Project Scope","type":"Grassroot","industry":"DC"},{"name":"Corpus Christi Bitcoin Mining Data Center Expansion Phase V","owner":"Peak Mining","parent":"Northern Data AG","status":"Operational","stage":"Project Scope","type":"Plant Expansion","industry":"DC"},{"name":"Corpus Christi Bitcoin Mining Data Center Expansion Phase VI","owner":"Peak Mining","parent":"Northern Data AG","status":"Operational","stage":"Project Justification","type":"Plant Expansion","industry":"DC"},{"name":"Andrews (Stingray) Grassroot Cryptomining Data Center","owner":"Cipher Mining Technologies","parent":"Cipher Mining Technologies Incorporated","status":"Planned","stage":"Preliminary Design","type":"Grassroot","industry":"DC"},{"name":"College Station (Rellis Campus) Data Center Expansion","owner":"The Texas A&M University System","parent":"The Texas A&M University System","status":"Under Construction","stage":"Project Scope","type":"Plant Expansion","industry":"DC"},{"name":"San Antonio Data Center Campus Equipment Addition TX21 Phase 3","owner":"Vantage Data Centers","parent":"DigitalBridge Group Incorporated","status":"Operational","stage":"Market Analysis","type":"Equipment Addition","industry":"DC"},{"name":"Samsung Taylor Fab Phase 2 ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Fire Protection & Coatings","owner":"Hensel Phelps","parent":"Samsung Austin Semiconductor","status":"Planned","stage":"Project Scope","type":"Plant Expansion","industry":"Semi"},{"name":"TI Sherman Fab (Ayrshire Phase 1)","owner":"Gray Construction","parent":"Texas Instruments","status":"Planned","stage":"Preliminary Engineering","type":"Grassroot","industry":"Semi"},{"name":"Samsung ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ OAC Gratings","owner":"Samsung","parent":"Samsung Austin Semiconductor","status":"Operational","stage":"Market Analysis","type":"Equipment Addition","industry":"Semi"},{"name":"Sherman VCSEL Manufacturing Plant Expansion ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ Project INP","owner":"Coherent Corporation","parent":"Coherent Corporation","status":"Operational","stage":"Preliminary Engineering","type":"Plant Expansion","industry":"Semi"},{"name":"Allen Epitaxial Wafer Manufacturing Plant Expansion","owner":"IntelliEpi","parent":"IntelliEpi","status":"Operational","stage":"Detailed Design","type":"Plant Expansion","industry":"Semi"},{"name":"New Braunfels Radar Sensors Manufacturing Plant Expansion","owner":"Aumovio","parent":"Continental AG","status":"Operational","stage":"Project Justification","type":"Plant Expansion","industry":"Semi"},{"name":"Stratford G/R EV Chargers, Solar Panels & Portable Batteries Manufacturing Plant","owner":"Aspen Woods Group Incorporated","parent":"Aspen Woods Group Incorporated","status":"Planned","stage":"Detailed Design","type":"Grassroot","industry":"Semi"}];
+  var txPipelineData = [{"name":"Meta Temple DC – Mechanical Insulation","owner":"Gray Construction","parent":"Meta Platforms","status":"Planned","stage":"Project Scope","type":"Grassroot","industry":"DC"},{"name":"Google DFW Hyperscale Expansion","owner":"TBD","parent":"Google LLC","status":"Planned","stage":"Preliminary Design","type":"Grassroot","industry":"DC"},{"name":"NTT DFW Phase 3 Campus","owner":"Austin Commercial","parent":"NTT Ltd.","status":"Planned","stage":"Preliminary Engineering","type":"Plant Expansion","industry":"DC"},{"name":"Plano Data Center Campus Expansion (Atlantic Station) Bldg 4","owner":"Skybox Datacenters","parent":"Skybox Datacenters","status":"Planned","stage":"Project Scope","type":"Plant Expansion","industry":"DC"},{"name":"Plano Data Center Campus Expansion (Atlantic Station) Bldg 2","owner":"Skybox Datacenters","parent":"Skybox Datacenters","status":"Planned","stage":"Project Scope","type":"Plant Expansion","industry":"DC"},{"name":"Plano Data Center DFW3 Expansion","owner":"DataBank Limited","parent":"DigitalBridge Group Incorporated","status":"Operational","stage":"Market Analysis","type":"Plant Expansion","industry":"DC"},{"name":"Dallas – Allen Data Center Phase II Expansion","owner":"TierPoint LLC","parent":"TierPoint LLC","status":"Operational","stage":"Economic Evaluation","type":"Plant Expansion","industry":"DC"},{"name":"Dallas – Allen Data Center Phase III","owner":"TierPoint LLC","parent":"TierPoint LLC","status":"Operational","stage":"Market Analysis","type":"Plant Expansion","industry":"DC"},{"name":"Garland Data Center Expansion Phase IV (Project Gold Garland/DFW39)","owner":"Digital Realty Trust Incorporated","parent":"Digital Realty Trust Incorporated","status":"Operational","stage":"Market Analysis","type":"Plant Expansion","industry":"DC"},{"name":"Seymour Grassroot Data Center Campus (Project Kati) Phase I","owner":"Soluna","parent":"Soluna Holdings, Incorporated","status":"Under Construction","stage":"Construction - Merit Shop","type":"Grassroot","industry":"DC"},{"name":"Paris Grassroot Cryptomining Data Center (Project Annie)","owner":"Soluna","parent":"Soluna Holdings, Incorporated","status":"Planned","stage":"Project Scope","type":"Grassroot","industry":"DC"},{"name":"Corpus Christi Bitcoin Mining Data Center Expansion Phase V","owner":"Peak Mining","parent":"Northern Data AG","status":"Operational","stage":"Project Scope","type":"Plant Expansion","industry":"DC"},{"name":"Corpus Christi Bitcoin Mining Data Center Expansion Phase VI","owner":"Peak Mining","parent":"Northern Data AG","status":"Operational","stage":"Project Justification","type":"Plant Expansion","industry":"DC"},{"name":"Andrews (Stingray) Grassroot Cryptomining Data Center","owner":"Cipher Mining Technologies","parent":"Cipher Mining Technologies Incorporated","status":"Planned","stage":"Preliminary Design","type":"Grassroot","industry":"DC"},{"name":"College Station (Rellis Campus) Data Center Expansion","owner":"The Texas A&M University System","parent":"The Texas A&M University System","status":"Under Construction","stage":"Project Scope","type":"Plant Expansion","industry":"DC"},{"name":"San Antonio Data Center Campus Equipment Addition TX21 Phase 3","owner":"Vantage Data Centers","parent":"DigitalBridge Group Incorporated","status":"Operational","stage":"Market Analysis","type":"Equipment Addition","industry":"DC"},{"name":"Samsung Taylor Fab Phase 2 – Fire Protection & Coatings","owner":"Hensel Phelps","parent":"Samsung Austin Semiconductor","status":"Planned","stage":"Project Scope","type":"Plant Expansion","industry":"Semi"},{"name":"TI Sherman Fab (Ayrshire Phase 1)","owner":"Gray Construction","parent":"Texas Instruments","status":"Planned","stage":"Preliminary Engineering","type":"Grassroot","industry":"Semi"},{"name":"Samsung – OAC Gratings","owner":"Samsung","parent":"Samsung Austin Semiconductor","status":"Operational","stage":"Market Analysis","type":"Equipment Addition","industry":"Semi"},{"name":"Sherman VCSEL Manufacturing Plant Expansion – Project INP","owner":"Coherent Corporation","parent":"Coherent Corporation","status":"Operational","stage":"Preliminary Engineering","type":"Plant Expansion","industry":"Semi"},{"name":"Allen Epitaxial Wafer Manufacturing Plant Expansion","owner":"IntelliEpi","parent":"IntelliEpi","status":"Operational","stage":"Detailed Design","type":"Plant Expansion","industry":"Semi"},{"name":"New Braunfels Radar Sensors Manufacturing Plant Expansion","owner":"Aumovio","parent":"Continental AG","status":"Operational","stage":"Project Justification","type":"Plant Expansion","industry":"Semi"},{"name":"Stratford G/R EV Chargers, Solar Panels & Portable Batteries Manufacturing Plant","owner":"Aspen Woods Group Incorporated","parent":"Aspen Woods Group Incorporated","status":"Planned","stage":"Detailed Design","type":"Grassroot","industry":"Semi"}];
 
   function renderPipeline(filter) {
     var filtered = filter === 'all' ? txPipelineData :
@@ -1614,7 +1614,7 @@ function doUpdateSnapshot() {
 
   var btn = document.getElementById('snap-confirm-btn');
   btn.disabled = true;
-  btn.textContent = 'FetchingÃÂÃÂ¢ÃÂÃÂÃÂÃÂ¦';
+  btn.textContent = 'Fetching…';
   document.getElementById('snap-status').textContent = '';
 
   var REPO = 'keonrho-blip/apache-bd-dashboard';
@@ -1652,7 +1652,7 @@ function doUpdateSnapshot() {
       var today = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
       newContent = newContent.replace(/snapshot as of [^<"]+/, 'snapshot as of ' + today);
 
-      btn.textContent = 'PushingÃÂÃÂ¢ÃÂÃÂÃÂÃÂ¦';
+      btn.textContent = 'Pushing…';
       var encoded = btoa(unescape(encodeURIComponent(newContent)));
       return fetch(API, {
         method: 'PUT',
@@ -1673,7 +1673,7 @@ function doUpdateSnapshot() {
       if (result.commit) {
         document.getElementById('snap-status').style.color = 'var(--green)';
         document.getElementById('snap-status').textContent = '\u2713 Done! Live at ?view=1 in ~60 seconds.';
-        btn.textContent = 'Done ÃÂÃÂ¢ÃÂÃÂÃÂÃÂ';
+        btn.textContent = 'Done ✓';
       } else {
         throw new Error(result.message || 'Push failed');
       }
@@ -1691,56 +1691,56 @@ function doUpdateSnapshot() {
 /* ========== COVERAGE MAP ========== */
 const COVERAGE_DATA = [
   {
-    project: "Samsung Taylor  -  operations / Phase 1",
+    project: "Samsung Taylor - operations / Phase 1",
     owner: "Samsung", gc: "SECAI (direct contract)",
     status: "positioned", tag: "",
     note: "Maintain warmth; mine for Phase 2 subcontractor-release schedule."
   },
   {
-    project: "Vantage Frontier  -  Abilene",
-    owner: "Vantage", gc: "Kiewit  -  already on-site (Allform), $11M bid out",
+    project: "Vantage Frontier - Abilene",
+    owner: "Vantage", gc: "Kiewit - already on-site (Allform), $11M bid out",
     status: "positioned", tag: "",
     note: "Convert the bid; expand scope across the 10-building campus."
   },
   {
-    project: "Samsung Taylor  -  Phase 2 expansion",
+    project: "Samsung Taylor - Phase 2 expansion",
     owner: "Samsung", gc: "likely Hensel Phelps (on Taylor site) / SECAI",
     status: "progress", tag: "critical",
-    note: "Two threads at once  -  Mark Clarke (HP) + direct Samsung re-engage."
+    note: "Two threads at once - Mark Clarke (HP) + direct Samsung re-engage."
   },
   {
-    project: "TI Sherman  -  fabs SM2-SM4",
-    owner: "Texas Instruments", gc: "Austin Commercial  -  $40B, 4-fab campus",
+    project: "TI Sherman - fabs SM2-SM4",
+    owner: "Texas Instruments", gc: "Austin Commercial - $40B, 4-fab campus",
     status: "blind", tag: "new",
-    note: "No relationship  -  open Austin Commercial; clean semi scope fit."
+    note: "No relationship - open Austin Commercial; clean semi scope fit."
   },
   {
-    project: "Stargate I  -  Abilene",
-    owner: "OpenAI / Oracle / SoftBank", gc: "Crusoe  -  same town as Frontier",
+    project: "Stargate I - Abilene",
+    owner: "OpenAI / Oracle / SoftBank", gc: "Crusoe - same town as Frontier",
     status: "blind", tag: "adjacency",
-    note: "You already have crews in Abilene  -  use it to open Crusoe."
+    note: "You already have crews in Abilene - use it to open Crusoe."
   },
   {
     project: "DFW hyperscale cluster",
     owner: "Multiple hyperscalers", gc: "Holder (#1 DC GC nationally), others",
     status: "blind", tag: "",
-    note: "Long game  -  Holder is the gatekeeper to repeat hyperscale work."
+    note: "Long game - Holder is the gatekeeper to repeat hyperscale work."
   },
   {
-    project: "Fermi HyperGrid  -  Amarillo",
-    owner: "Fermi America", gc: "GC / EPC: TBD  -  $300B, 18M sq ft planned",
+    project: "Fermi HyperGrid - Amarillo",
+    owner: "Fermi America", gc: "GC / EPC: TBD - $300B, 18M sq ft planned",
     status: "monitor", tag: "",
-    note: "Early-stage  -  identify the GC/EPC before it's locked."
+    note: "Early-stage - identify the GC/EPC before it\'s locked."
   },
   {
-    project: "Data City  -  Laredo",
-    owner: "Energy Abundance Dev Corp", gc: "GC: TBD  -  5 GW, phase 1 in 2026",
+    project: "Data City - Laredo",
+    owner: "Energy Abundance Dev Corp", gc: "GC: TBD - 5 GW, phase 1 in 2026",
     status: "monitor", tag: "",
     note: "Watch for GC selection; far from your current footprint."
   },
   {
     project: "Stream San Antonio III",
-    owner: "Stream Data Centers", gc: "GC: TBD  -  200 MW, under construction",
+    owner: "Stream Data Centers", gc: "GC: TBD - 200 MW, under construction",
     status: "monitor", tag: "",
     note: "Confirm GC; assess whether scope and timing justify a push."
   }
@@ -1748,17 +1748,17 @@ const COVERAGE_DATA = [
 
 const CM_STATUS = {
   positioned: { label: "Positioned", order: 0 },
-  progress:   { label: "In progress", order: 1 },
-  blind:      { label: "Blind spot",  order: 2 },
-  monitor:    { label: "Monitor",     order: 3 }
+  progress: { label: "In progress", order: 1 },
+  blind: { label: "Blind spot", order: 2 },
+  monitor: { label: "Monitor", order: 3 }
 };
 
 const CM_FILTERS = [
-  { key: "all",        label: "All" },
+  { key: "all", label: "All" },
   { key: "positioned", label: "Positioned" },
-  { key: "progress",   label: "In progress" },
-  { key: "blind",      label: "Actionable blind spot" },
-  { key: "monitor",    label: "Monitor" }
+  { key: "progress", label: "In progress" },
+  { key: "blind", label: "Actionable blind spot" },
+  { key: "monitor", label: "Monitor" }
 ];
 
 function cmEsc(s) {
@@ -1766,24 +1766,24 @@ function cmEsc(s) {
 }
 
 function cmRenderMetrics() {
-  const n = COVERAGE_DATA.length;
-  const pos = COVERAGE_DATA.filter(d => d.status === 'positioned').length;
-  const pro = COVERAGE_DATA.filter(d => d.status === 'progress').length;
-  const bli = COVERAGE_DATA.filter(d => d.status === 'blind').length;
-  const cards = [
+  var n = COVERAGE_DATA.length;
+  var pos = COVERAGE_DATA.filter(d => d.status === 'positioned').length;
+  var pro = COVERAGE_DATA.filter(d => d.status === 'progress').length;
+  var bli = COVERAGE_DATA.filter(d => d.status === 'blind').length;
+  var cards = [
     { l: 'Pursuits mapped', v: n, c: '' },
     { l: 'Positioned', v: pos, c: 'cm-v-pos' },
     { l: 'Path in progress', v: pro, c: 'cm-v-pro' },
     { l: 'Blind spots', v: bli, c: 'cm-v-bli' }
   ];
-  const el = document.getElementById('cm-metrics');
+  var el = document.getElementById('cm-metrics');
   if (el) el.innerHTML = cards.map(c =>
     '<div class="cm-metric"><div class="l">' + c.l + '</div><div class="v ' + c.c + '">' + c.v + '</div></div>'
   ).join('');
 }
 
 function cmRenderFilters() {
-  const wrap = document.getElementById('cm-filters');
+  var wrap = document.getElementById('cm-filters');
   if (!wrap) return;
   wrap.innerHTML = CM_FILTERS.map((f, i) =>
     '<button data-f="' + f.key + '"' + (i === 0 ? ' class="active"' : '') + '>' + f.label + '</button>'
@@ -1798,23 +1798,92 @@ function cmRenderFilters() {
 }
 
 function cmRenderRows() {
-  const sorted = COVERAGE_DATA.slice().sort(function(a, b) {
+  var sorted = COVERAGE_DATA.slice().sort(function(a, b) {
     return CM_STATUS[a.status].order - CM_STATUS[b.status].order;
   });
-  const el = document.getElementById('cm-rows');
+  var el = document.getElementById('cm-rows');
   if (!el) return;
   el.innerHTML = sorted.map(function(d) {
-    const s = CM_STATUS[d.status];
-    const tag = d.tag ? '<span class="cm-tag cm-tag-' + d.tag + '">' + cmEsc(d.tag) + '</span>' : '';
-    return '<div class="cm-row" data-status="' + d.status + '">' +
+    var realIdx = COVERAGE_DATA.indexOf(d);
+    var s = CM_STATUS[d.status];
+    var tag = d.tag ? '<span class="cm-tag cm-tag-' + d.tag + '">' + cmEsc(d.tag) + '</span>' : '';
+    return '<div class="cm-row" data-idx="' + realIdx + '" data-status="' + d.status + '">' +
       '<div class="cm-row-head">' +
         '<div class="cm-proj">' + cmEsc(d.project) + tag + '</div>' +
-        '<span class="cm-pill cm-pill-' + d.status + '">' + s.label + '</span>' +
+        '<div style="display:flex;align-items:center;gap:6px;">' +
+          '<span class="cm-pill cm-pill-' + d.status + '">' + s.label + '</span>' +
+          (VIEW_MODE ? '' :
+            '<button class="cm-edit-btn" onclick="cmStartEdit(' + realIdx + ')" title="Edit" style="background:none;border:1px solid var(--border2);color:var(--text3);border-radius:4px;padding:2px 8px;cursor:pointer;font-size:11px;font-family:inherit;">✎</button>' +
+            '<button onclick="cmDeleteRow(' + realIdx + ')" title="Delete" style="background:none;border:1px solid rgba(235,87,87,0.3);color:var(--red);border-radius:4px;padding:2px 8px;cursor:pointer;font-size:11px;font-family:inherit;">×</button>'
+          ) +
+        '</div>' +
       '</div>' +
-      '<div class="cm-meta">Owner: ' + cmEsc(d.owner) + ' &middot; GC: ' + cmEsc(d.gc) + '</div>' +
+      '<div class="cm-meta">Owner: ' + cmEsc(d.owner) + ' · GC: ' + cmEsc(d.gc) + '</div>' +
       '<div class="cm-note"><span class="arw">&rarr;</span><span>' + cmEsc(d.note) + '</span></div>' +
     '</div>';
   }).join('');
+}
+
+function cmStartEdit(idx) {
+  var d = COVERAGE_DATA[idx];
+  if (!d) return;
+  var row = document.querySelector('.cm-row[data-idx="' + idx + '"]');
+  if (!row) return;
+  var statusOptions = ['positioned','progress','blind','monitor'].map(function(sv) {
+    return '<option value="' + sv + '"' + (d.status === sv ? ' selected' : '') + '>' + CM_STATUS[sv].label + '</option>';
+  }).join('');
+  var tagOptions = ['','critical','new','adjacency'].map(function(tv) {
+    return '<option value="' + tv + '"' + (d.tag === tv ? ' selected' : '') + '>' + (tv || '— none') + '</option>';
+  }).join('');
+  row.innerHTML =
+    '<div style="display:flex;flex-direction:column;gap:8px;">' +
+      '<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">' +
+        '<input class="cm-edit-project" value="' + cmEsc(d.project) + '" placeholder="Project name" style="flex:1;min-width:180px;background:var(--surface2);border:1px solid var(--border2);border-radius:5px;padding:5px 8px;color:var(--text);font-size:13px;font-family:inherit;">' +
+        '<select class="cm-edit-status" style="background:var(--surface2);border:1px solid var(--border2);border-radius:5px;padding:5px 8px;color:var(--text);font-size:12px;font-family:inherit;">' + statusOptions + '</select>' +
+        '<select class="cm-edit-tag" style="background:var(--surface2);border:1px solid var(--border2);border-radius:5px;padding:5px 8px;color:var(--text);font-size:12px;font-family:inherit;">' + tagOptions + '</select>' +
+      '</div>' +
+      '<input class="cm-edit-owner" value="' + cmEsc(d.owner) + '" placeholder="Owner" style="background:var(--surface2);border:1px solid var(--border2);border-radius:5px;padding:5px 8px;color:var(--text);font-size:12px;font-family:inherit;">' +
+      '<input class="cm-edit-gc" value="' + cmEsc(d.gc) + '" placeholder="GC / procurement info" style="background:var(--surface2);border:1px solid var(--border2);border-radius:5px;padding:5px 8px;color:var(--text);font-size:12px;font-family:inherit;">' +
+      '<textarea class="cm-edit-note" placeholder="Action note..." rows="2" style="background:var(--surface2);border:1px solid var(--border2);border-radius:5px;padding:5px 8px;color:var(--text);font-size:13px;font-family:inherit;resize:vertical;">' + cmEsc(d.note) + '</textarea>' +
+      '<div style="display:flex;gap:8px;">' +
+        '<button onclick="cmSaveEdit(' + idx + ')" style="background:var(--accent);border:none;color:#000;border-radius:5px;padding:6px 14px;cursor:pointer;font-size:12px;font-weight:600;font-family:inherit;">Save</button>' +
+        '<button onclick="cmRenderRows()" style="background:var(--surface2);border:1px solid var(--border);color:var(--text2);border-radius:5px;padding:6px 14px;cursor:pointer;font-size:12px;font-family:inherit;">Cancel</button>' +
+      '</div>' +
+    '</div>';
+}
+
+function cmSaveEdit(idx) {
+  var row = document.querySelector('.cm-row[data-idx="' + idx + '"]');
+  if (!row) return;
+  COVERAGE_DATA[idx].project = row.querySelector('.cm-edit-project').value.trim();
+  COVERAGE_DATA[idx].status = row.querySelector('.cm-edit-status').value;
+  COVERAGE_DATA[idx].tag = row.querySelector('.cm-edit-tag').value;
+  COVERAGE_DATA[idx].owner = row.querySelector('.cm-edit-owner').value.trim();
+  COVERAGE_DATA[idx].gc = row.querySelector('.cm-edit-gc').value.trim();
+  COVERAGE_DATA[idx].note = row.querySelector('.cm-edit-note').value.trim();
+  cmRenderMetrics();
+  cmRenderRows();
+  var activeFilter = document.querySelector('#cm-filters button.active');
+  cmApplyFilter(activeFilter ? activeFilter.getAttribute('data-f') : 'all');
+}
+
+function cmDeleteRow(idx) {
+  if (!confirm('Remove "' + COVERAGE_DATA[idx].project + '"?')) return;
+  COVERAGE_DATA.splice(idx, 1);
+  cmRenderMetrics();
+  cmRenderRows();
+}
+
+function cmAddRow() {
+  COVERAGE_DATA.push({
+    project: "New pursuit",
+    owner: "", gc: "",
+    status: "monitor", tag: "",
+    note: ""
+  });
+  cmRenderMetrics();
+  cmRenderRows();
+  setTimeout(function() { cmStartEdit(COVERAGE_DATA.length - 1); }, 50);
 }
 
 function cmApplyFilter(f) {
@@ -1824,8 +1893,8 @@ function cmApplyFilter(f) {
 }
 
 function cmRenderFoot() {
-  const el = document.getElementById('cm-foot');
-  if (el) el.textContent = 'Snapshot of GC assignments: June 2026  -  re-verify before outreach. Edit pursuits in the COVERAGE_DATA array.';
+  var el = document.getElementById('cm-foot');
+  if (el) el.textContent = 'Snapshot of GC assignments: June 2026 - re-verify before outreach. Use the edit buttons to update pursuits inline.';
 }
 
 function cmInit() {
