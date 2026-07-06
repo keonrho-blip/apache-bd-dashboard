@@ -590,7 +590,7 @@ body.view-mode button[title="Remove bid"] { display: none !important; }
           </div>
         <div class="card">
             <div class="card-header">
-              <div class="card-title">ð Needs Follow-Up</div>
+              <div class="card-title">ð Outreach Queue</div>
             </div>
             <div class="card-body" id="follow-up-list"></div>
           </div>
@@ -628,7 +628,7 @@ body.view-mode button[title="Remove bid"] { display: none !important; }
         <table>
           <thead><tr>
             <th>Company</th><th>Type</th><th>Contact</th><th>Status</th>
-            <th>Last Touch</th><th>Follow-Up</th><th>Notes</th><th>Actions</th>
+            <th>Last Touch</th><th>Next Action</th><th>Notes</th><th>Actions</th>
           </tr></thead>
           <tbody id="prospects-tbody"></tbody>
         </table>
@@ -644,7 +644,7 @@ body.view-mode button[title="Remove bid"] { display: none !important; }
       <div class="table-wrap">
         <table>
           <thead><tr>
-            <th>Project</th><th>Owner / GC</th><th>Value</th><th>Due Date</th><th>Status</th><th>Notes</th><th style="width:48px"></th>
+            <th>Project</th><th>Scope</th><th>Value</th><th>Due Date</th><th>Status</th><th>Notes</th><th style="width:48px"></th>
           </tr></thead>
           <tbody id="bids-tbody"></tbody>
         </table>
@@ -660,7 +660,7 @@ body.view-mode button[title="Remove bid"] { display: none !important; }
       <div class="table-wrap">
         <table>
           <thead><tr>
-            <th>Company</th><th>Type</th><th>Region</th><th>Key Contact</th><th>Active Projects</th><th>Relationship</th>
+            <th>Company</th><th>Type</th><th>Key Contact</th><th>Threads</th><th>Value / Scope</th><th>Status</th><th>Notes</th>
           </tr></thead>
           <tbody id="accounts-tbody"></tbody>
         </table>
@@ -679,7 +679,7 @@ body.view-mode button[title="Remove bid"] { display: none !important; }
     <!-- LIVE NEWS PAGE -->
     <div id="page-news" class="page">
       <div class="section-header">
-        <div class="section-title">Live News Feed</div>
+        <div class="section-title">Intel Shortcuts <span style="font-size:12px;color:var(--text3);font-weight:400;">— curated search links; live intel arrives via the daily morning brief</span></div>
         <div class="feed-tabs">
           <button class="feed-tab active" onclick="loadFullFeed('dc',this)">DC</button>
           <button class="feed-tab" onclick="loadFullFeed('enr',this)">ENR</button>
@@ -764,8 +764,11 @@ body.view-mode button[title="Remove bid"] { display: none !important; }
     </div>
     <div class="modal-body">
       <div class="type-toggle">
-        <button class="type-btn active" id="cold-btn" onclick="switchTemplate('cold')">Cold Outreach</button>
-        <button class="type-btn" id="follow-btn" onclick="switchTemplate('follow')">Follow-Up</button>
+        <button class="type-btn active" id="tpl-btn-cold" onclick="switchTemplate('cold')">Cold Intro</button>
+        <button class="type-btn" id="tpl-btn-follow" onclick="switchTemplate('follow')">Bump</button>
+        <button class="type-btn" id="tpl-btn-meeting" onclick="switchTemplate('meeting')">Meeting Recap</button>
+        <button class="type-btn" id="tpl-btn-bid" onclick="switchTemplate('bid')">Bid Follow-Up</button>
+        <button class="type-btn" id="tpl-btn-quarterly" onclick="switchTemplate('quarterly')">Quarterly</button>
       </div>
       <div class="email-meta">
         <span class="email-meta-label">To:</span>
@@ -773,6 +776,7 @@ body.view-mode button[title="Remove bid"] { display: none !important; }
         <span class="email-meta-label">Company:</span>
         <span class="email-meta-value" id="modal-company"></span>
       </div>
+      <div id="modal-contacts" style="display:none;margin:.5rem 0;font-size:12px;color:var(--text3);"></div>
       <div class="email-subject" id="modal-subject"></div>
       <div class="email-body-area" id="modal-body-text"></div>
       <div id="sent-status" style="margin-top:.75rem;display:none;"></div>
@@ -815,9 +819,7 @@ if (VIEW_MODE) {
       if(val) { try { existing[key] = JSON.parse(val); } catch(e) {} }
       localStorage.removeItem(k);
     });
-      stored.dailyActions = D.dailyActions;
-  stored.completedLog = D.completedLog;
-  localStorage.setItem('apache-bd-v3', JSON.stringify(existing));
+    localStorage.setItem('apache-bd-v3', JSON.stringify(existing));
   }
 })();
 
@@ -825,62 +827,57 @@ var _stored = VIEW_MODE ? SNAPSHOT_DATA : JSON.parse(localStorage.getItem('apach
 
 const D = {
   pipelineNotes: _stored.pipelineNotes || {},
-  prospects: _stored.prospects || [
-    {id:1, company:'JE Dunn Construction', type:'GC', contact:'Brad Simmons', email:'brad.simmons@jedunn.com', status:'Meeting Scheduled', lastTouch:'2026-05-20', followUpDays:7, notes:'Active on Meta Temple datacenter (Temple TX). South Central division HQ in Dallas.'},
-    {id:2, company:'Hensel Phelps', type:'GC', contact:'Chris Avery', email:'chris.avery@henselphelps.com', status:'Qualified', lastTouch:'2026-05-15', followUpDays:14, notes:'Likely GC on Samsung Taylor Ph.2. Very active in TX semi fabs.'},
-    {id:3, company:'Turner Construction', type:'GC', contact:'Mike Odom', email:'m.odom@turnerconstruction.com', status:'Outreach Sent', lastTouch:'2026-05-10', followUpDays:7, notes:'National DC practice. DFW office covers TX hyperscale projects.'},
-    {id:4, company:'Gray Construction', type:'GC', contact:'Kyle Bren', email:'k.bren@gray.tv', status:'Proposal Sent', lastTouch:'2026-05-18', followUpDays:5, notes:'Building TI Sherman Ayrshire Ph.2. Semiconductor specialist.'},
-    {id:5, company:'Austin Commercial', type:'GC', contact:'Jeff Larson', email:'jlarson@austincommercial.com', status:'New', lastTouch:'', followUpDays:7, notes:'Dallas-based. Strong TX industrial and datacenter track record.'},
-    {id:6, company:'Skanska USA', type:'GC', contact:'Rachel Morales', email:'rachel.morales@skanska.com', status:'New', lastTouch:'', followUpDays:14, notes:'Major national presence. Pursuing TX hyperscale DC work aggressively.'},
-    {id:7, company:'Linbeck Group', type:'GC', contact:'Tom Hilliard', email:'t.hilliard@linbeck.com', status:'Meeting Scheduled', lastTouch:'2026-05-22', followUpDays:7, notes:'Houston HQ. Strong semi fab history in TX.'},
-    {id:8, company:'Whiting-Turner', type:'GC', contact:'Dave Patel', email:'d.patel@whiting-turner.com', status:'Outreach Sent', lastTouch:'2026-05-12', followUpDays:7, notes:'Active bidder on Google DFW expansion. Known for quality DC work.'},
-    {id:9, company:'Samsung Austin Semiconductor', type:'Owner', contact:'James Yu', email:'james.yu@samsung.com', status:'Qualified', lastTouch:'2026-05-08', followUpDays:30, notes:'Ongoing Taylor TX fab campus. Ph.2 bid opening expected Q3 2026.'},
-    {id:10, company:'Meta (Datacenter Dev)', type:'Owner', contact:'Ana Reyes', email:'ana.reyes@meta.com', status:'Outreach Sent', lastTouch:'2026-05-05', followUpDays:14, notes:'Temple TX hyperscale campus. $800M+ capex. Active through JE Dunn.'}
-  ],
-  bids: _stored.bids || [
-    {id:1, project:'Samsung Taylor Ph.2 (Fab Expansion)', owner:'Samsung Austin Semi', gc:'Hensel Phelps', value:'$875M', due:'2026-07-15', status:'Estimating', notes:'Electrical distribution, MV switchgear, bus duct. Critical path item.'},
-    {id:2, project:'Meta Temple Datacenter (Phase 1)', owner:'Meta', gc:'JE Dunn', value:'$800M', due:'2026-06-30', status:'Estimating', notes:'UPS systems, generator tie-in, critical power. 240MW campus.'},
-    {id:3, project:'TI Sherman (Ayrshire Ph.2)', owner:'Texas Instruments', gc:'Gray Construction', value:'$300M', due:'2026-06-01', status:'Active', notes:'Semi fab MV distribution. Apache has existing relationship with Gray.'},
-    {id:4, project:'Project Frontier (Abilene DC)', owner:'Unknown Hyperscaler', gc:'Kiewit', value:'$1.4B', due:'2026-08-20', status:'Bid Submitted', notes:'Kiewit pre-qual submitted. 72-hr follow-up needed on contact.'},
-    {id:5, project:'Google DFW Expansion', owner:'Google', gc:'Multiple-TBD', value:'Unknown', due:'2026-09-15', status:'Watching', notes:'Watching permit filings. GC selection expected Q3. Track Whiting-Turner.'},
-    {id:6, project:'NTT DFW (Phase 3)', owner:'NTT Data Centers', gc:'Austin Commercial', value:'$220M', due:'2026-07-01', status:'Estimating', notes:'Existing vendor list. Need to qualify. Austin Commercial is GC.'}
-  ],
-  accounts: _stored.accounts || [
-    {id:1, company:'JE Dunn Construction', type:'GC Partner', region:'Dallas / Temple TX', contact:'Brad Simmons', projects:'Meta Temple DC', rel:'Active'},
-    {id:2, company:'Hensel Phelps', type:'GC Partner', region:'Austin TX', contact:'Chris Avery', projects:'Samsung Taylor Ph.2', rel:'Active'},
-    {id:3, company:'Gray Construction', type:'GC Partner', region:'Statewide TX', contact:'Kyle Bren', projects:'TI Sherman', rel:'Active'},
-    {id:4, company:'Kiewit Building Group', type:'GC Partner', region:'TX / National', contact:'Scott Tran', projects:'Project Frontier', rel:'Pre-qual'},
-    {id:5, company:'Turner Construction', type:'GC Partner', region:'DFW', contact:'Mike Odom', projects:'Google DFW (watching)', rel:'Outreach'},
-    {id:6, company:'Samsung Austin Semiconductor', type:'Owner/Dev', region:'Taylor TX', contact:'James Yu', projects:'Taylor Fab Ph.2', rel:'Qualified'},
-    {id:7, company:'Meta Platforms (DC)', type:'Owner/Dev', region:'Temple TX', contact:'Ana Reyes', projects:'Temple DC Ph.1', rel:'Outreach'},
-    {id:8, company:'NTT Data Centers', type:'Owner/Dev', region:'DFW', contact:'Pam Choi', projects:'DFW Ph.3', rel:'New'},
-    {id:9, company:'Google (Data Centers)', type:'Owner/Dev', region:'DFW', contact:'N/A', projects:'DFW Expansion', rel:'Watching'},
-    {id:10, company:'Texas Instruments', type:'Owner/Dev', region:'Sherman TX', contact:'Derek Mills', projects:'Ayrshire Ph.2', rel:'Active'}
-  ],
-  research: _stored.research || [
-    {id:1, tag:'Market', type:'Market news', text:'Google Alerts set up for: datacenter Texas, Samsung Taylor TX, semiconductor fab Texas, hyperscale Texas. Alerts hitting inbox daily.', date:'2026-05-22'},
-    {id:2, tag:'JE Dunn', type:'Company intel', text:'JE Dunn ranked #7 nationally in datacenter construction (ENR). South Central division active in Austin. Meta Temple is an active $800M campus project in Temple TX.', date:'2026-05-20'},
-    {id:3, tag:'Hensel Phelps', type:'Company intel', text:'Hensel Phelps has managed Samsung projects since 1997 Austin campus. Likely GC for Samsung Taylor Ph.2. Key contact is Chris Avery (Austin office).', date:'2026-05-18'},
-    {id:4, tag:'Gray Const.', type:'Company intel', text:'Gray Construction specializes in industrial, semiconductor, and DC builds. Building TI Sherman Ayrshire Ph.2. Known for self-perform concrete and steel.', date:'2026-05-15'},
-    {id:5, tag:'TX Market', type:'Market analysis', text:'Texas leads US in planned datacenter capacity additions 2025-2027. Key markets: Austin Metro, DFW, Temple, Sherman, Abilene. Semiconductor fabs concentrated in Austin and Sherman corridors.', date:'2026-05-12'},
-    {id:6, tag:'Samsung', type:'Project intel', text:'Samsung Taylor campus is a $17B+ multi-phase investment. Phase 1 complete (TSMC competitor). Phase 2 construction expected to break ground Q4 2026. Apache should pre-qualify with HP now.', date:'2026-05-10'},
-    {id:7, tag:'Hyperscale', type:'Market analysis', text:'Meta, Google, and Microsoft all have active TX datacenter expansions. NTT DFW Ph.3 is a strong near-term target. Kiewit is the leading GC for Project Frontier in Abilene.', date:'2026-05-08'},
-    {id:8, tag:'Pre-qual', type:'Action item', text:'Need to pre-qualify with: Skanska USA Building (hyperscale DC division), Austin Commercial (NTT DFW), Whiting-Turner (Google DFW). Priority action this week.', date:'2026-05-05'}
-  ],
-  todos: _stored.todos || [
-    {id:1, text:'Follow up with Brad Simmons (JE Dunn) on Meta Temple bid', tag:'BD', done:false},
-    {id:2, text:'Pull Samsung Taylor Ph.2 permit filings from Taylor city portal', tag:'Intel', done:false},
-    {id:3, text:'Pre-qualify with Skanska USA Building (hyperscale DC division)', tag:'BD', done:false},
-    {id:4, text:'Research NTT DFW Phase 3 GC selection timeline', tag:'Intel', done:false},
-    {id:5, text:'Draft cold outreach to Austin Commercial (Jeff Larson)', tag:'Outreach', done:false},
-    {id:6, text:'Check ENR TX top contractors list for new semi fab targets', tag:'Intel', done:false},
-    {id:7, text:'Update bid values on Project Frontier and Google DFW', tag:'BD', done:false}
-  ]
-,
+  prospects: _stored.prospects || [],
+  bids: _stored.bids || [],
+  accounts: _stored.accounts || [],
+  research: _stored.research || [],
+  todos: _stored.todos || [],
   dailyActions: _stored.dailyActions || [],
-      dismissedAuto: _stored.dismissedAuto || [],
-  completedLog: _stored.completedLog || []
+  dismissedAuto: _stored.dismissedAuto || [],
+  completedLog: _stored.completedLog || [],
+  apolloContacts: _stored.apolloContacts || {}
 };
+
+// ---- DATE HELPERS ----
+function todayStr() { return new Date().toISOString().substring(0,10); }
+function addDays(dateStr, n) {
+  var d = dateStr ? new Date(dateStr + 'T00:00:00') : new Date();
+  d.setDate(d.getDate() + n);
+  return d.toISOString().substring(0,10);
+}
+
+// ---- SCHEMA NORMALIZATION ----
+// Unifies the older data shapes (type/industry, owner-gc/client-scope,
+// company/name) and guarantees every prospect carries a Next Action.
+(function normalizeData() {
+  (D.prospects||[]).forEach(function(p) {
+    if(!p.type && p.industry) p.type = p.industry;
+    if(!p.followUpDays) p.followUpDays = 7;
+    if(!p.nextAction) {
+      if(!p.lastTouch) { p.nextAction = 'Send intro email'; p.nextActionDate = todayStr(); }
+      else { p.nextAction = 'Follow up'; p.nextActionDate = addDays(p.lastTouch, p.followUpDays); }
+    }
+    if(!p.nextActionDate) p.nextActionDate = todayStr();
+  });
+  (D.bids||[]).forEach(function(b) {
+    if(!b.client) b.client = b.owner || '';
+    if(!b.scope) b.scope = (b.gc && b.gc !== b.client) ? b.gc : '';
+    delete b.owner; delete b.gc;
+  });
+  (D.accounts||[]).forEach(function(a) {
+    if(!a.name) a.name = a.company || '';
+    if(!a.status) a.status = a.rel || 'Active';
+    if(!a.value) a.value = a.projects || '';
+    if(!a.health) a.health = '';
+    if(!a.notes) a.notes = '';
+  });
+  // Dismissed auto-actions now expire: convert legacy strings to {title, at}.
+  D.dismissedAuto = (D.dismissedAuto||[]).map(function(x) {
+    return typeof x === 'string' ? {title: x, at: new Date().toISOString()} : x;
+  });
+  // Purge done-flag leftovers from the old todo behavior.
+  D.todos = (D.todos||[]).filter(function(t) { return !t.done; });
+})();
 
 function accountForTitle(title) {
   if(!title) return '';
@@ -907,7 +904,9 @@ function saveData() {
   stored.todos = D.todos;
   stored.dailyActions = D.dailyActions;
   stored.completedLog = D.completedLog;
-      stored.dismissedAuto = D.dismissedAuto;
+  stored.dismissedAuto = D.dismissedAuto;
+  stored.apolloContacts = D.apolloContacts;
+  stored.coverage = D.coverage;
   localStorage.setItem('apache-bd-v3', JSON.stringify(stored));
 }
 // ============================================================
@@ -1009,28 +1008,46 @@ function daysSince(dateStr) {
 }
 
 function followUpCountdown(p) {
-  if(!p.lastTouch) return {label:'Not started', cls:'fu-none'};
-  const ds = daysSince(p.lastTouch);
-  const threshold = p.followUpDays || 14;
-  const remaining = threshold - ds;
+  // Next Action model: countdown runs off the committed next-action date.
+  if(!p.nextActionDate) return {label:'No next step', cls:'fu-overdue'};
+  const now = new Date(); now.setHours(0,0,0,0);
+  const due = new Date(p.nextActionDate + 'T00:00:00');
+  const remaining = Math.round((due - now) / 86400000);
   if(remaining < 0) return {label: Math.abs(remaining) + 'd overdue', cls:'fu-overdue'};
+  if(remaining === 0) return {label: 'today', cls:'fu-soon'};
   if(remaining <= 3) return {label: 'in ' + remaining + 'd', cls:'fu-soon'};
   return {label: 'in ' + remaining + 'd', cls:'fu-ok'};
+}
+
+// Edit a prospect's next action inline (prompt-based, consistent with app UX).
+function editNextAction(id) {
+  var p = D.prospects.find(function(x) { return x.id === id; });
+  if(!p) return;
+  var action = prompt('Next action for ' + p.company + ':\n(e.g. Call re: bid list, LinkedIn touch, Send capability statement)', p.nextAction || '');
+  if(action === null) return;
+  var date = prompt('Due date (YYYY-MM-DD):', p.nextActionDate || todayStr());
+  if(date === null) return;
+  p.nextAction = action.trim() || 'Follow up';
+  p.nextActionDate = /^\d{4}-\d{2}-\d{2}$/.test(date.trim()) ? date.trim() : todayStr();
+  saveData();
+  renderProspects();
+  renderMorning();
 }
 
 function renderDailyActions() {
   var el = document.getElementById('daily-actions');
   if(!el) return;
   var autoItems = [];
+  var todayD = new Date(); todayD.setHours(0,0,0,0);
+  // Next-action driven: what's due or overdue today, per prospect.
   D.prospects.forEach(function(p) {
-    if(!p.lastTouch) {
-      autoItems.push({color:'amber', title:'No contact yet: ' + p.company, detail:'Status: ' + p.status, action:'Draft email', onClick:'openEmailModal(' + p.id + ')'});
-    } else {
-      var ds = daysSince(p.lastTouch);
-      var threshold = p.followUpDays || 14;
-      if(ds >= threshold) {
-        autoItems.push({color:'red', title:'Follow-up overdue: ' + p.company, detail:ds + ' days since last touch (threshold: ' + threshold + 'd)', action:'Draft email', onClick:'openEmailModal(' + p.id + ')'});
-      }
+    if(!p.nextActionDate) return;
+    var due = new Date(p.nextActionDate + 'T00:00:00');
+    var overdueBy = Math.round((todayD - due) / 86400000);
+    if(overdueBy > 0) {
+      autoItems.push({color:'red', title:'Overdue ' + overdueBy + 'd — ' + p.company + ': ' + (p.nextAction||'follow up'), detail:(p.contact && p.contact !== 'TBD' ? p.contact + ' · ' : '') + p.status, action:'Draft email', onClick:'openEmailModal(' + p.id + ')'});
+    } else if(overdueBy === 0) {
+      autoItems.push({color:'amber', title:'Due today — ' + p.company + ': ' + (p.nextAction||'follow up'), detail:(p.contact && p.contact !== 'TBD' ? p.contact + ' · ' : '') + p.status, action:'Draft email', onClick:'openEmailModal(' + p.id + ')'});
     }
   });
   var now = new Date();
@@ -1038,11 +1055,22 @@ function renderDailyActions() {
     if(!b.due) return;
     var daysToGo = Math.floor((new Date(b.due) - now) / 86400000);
     if(daysToGo >= 0 && daysToGo <= 30 && ['Estimating','Active'].includes(b.status)) {
-      autoItems.push({color:'blue', title:'Bid due in ' + daysToGo + 'd: ' + b.project.substring(0,35), detail:'Value: ' + b.value + ' | GC: ' + (b.gc||b.scope||''), action:'View bid', onClick:"showPage('bids',document.querySelectorAll('.nav-item')[2])"});
+      autoItems.push({color:'blue', title:'Bid due in ' + daysToGo + 'd: ' + b.project.substring(0,35), detail:'Value: ' + b.value + ' | Client: ' + (b.client||''), action:'View bid', onClick:"showPage('bids',document.querySelectorAll('.nav-item')[2])"});
+    } else if(daysToGo < 0 && ['Estimating','Active'].includes(b.status)) {
+      autoItems.push({color:'red', title:'Bid past due ' + Math.abs(daysToGo) + 'd: ' + b.project.substring(0,35), detail:'Still ' + b.status + ' — submit, or update due date/status', action:'View bid', onClick:"showPage('bids',document.querySelectorAll('.nav-item')[2])"});
+    } else if(daysToGo <= -5 && b.status === 'Submitted') {
+      autoItems.push({color:'amber', title:'Post-submission check-in: ' + b.project.substring(0,35), detail:'Submitted ' + Math.abs(daysToGo) + 'd ago — confirm receipt / ask about award timeline', action:'View bid', onClick:"showPage('bids',document.querySelectorAll('.nav-item')[2])"});
     }
   });
   var addRow = '<div class="add-action-row"><input id="new-action-input" placeholder="Add a daily action..." onkeydown="if(event.key===\x27Enter\x27)addDailyAction()"><button onclick="addDailyAction()" data-edit>+ Add</button></div>';
-  if (D.dismissedAuto && D.dismissedAuto.length) { autoItems = autoItems.filter(function(it) { return D.dismissedAuto.indexOf(it.title) === -1; }); }
+  // Dismissals expire after 7 days, so a snoozed account resurfaces.
+  if (D.dismissedAuto && D.dismissedAuto.length) {
+    var cutoff = Date.now() - 7*86400000;
+    D.dismissedAuto = D.dismissedAuto.filter(function(d) { return new Date(d.at).getTime() > cutoff; });
+    autoItems = autoItems.filter(function(it) {
+      return !D.dismissedAuto.some(function(d) { return d.title === it.title; });
+    });
+  }
   if(autoItems.length === 0 && D.dailyActions.length === 0) {
     el.innerHTML = '<div style="color:var(--text3);font-size:13px;padding:.5rem 0">&#x2713; All caught up &mdash; no urgent actions today.</div>' + addRow;
     return;
@@ -1127,7 +1155,7 @@ function markAutoActionDone(btn) {
       var entry = {id: Date.now(), type: 'action', title: _autoTitle, tag: 'Auto Action', account: accountForTitle(_autoTitle), completedAt: new Date().toISOString()};
       D.completedLog.unshift(entry);
       if (!D.dismissedAuto) D.dismissedAuto = [];
-      if (D.dismissedAuto.indexOf(_autoTitle) === -1) D.dismissedAuto.push(_autoTitle);
+      if (!D.dismissedAuto.some(function(d) { return d.title === _autoTitle; })) D.dismissedAuto.push({title: _autoTitle, at: new Date().toISOString()});
       saveData();
       renderDailyActions();
       renderCompletedLog();
@@ -1201,25 +1229,27 @@ function renderPipelineSnap() {
   const statusMap = {'Estimating':'badge-estimating','Active':'badge-active','Bid Submitted':'badge-bid-submitted','Awarded':'badge-awarded','Watching':'badge-watching'};
   el.innerHTML = D.bids.slice(0,6).map(function(b) {
     const name = b.project.substring(0,32) + (b.project.length>32?'&hellip;':'');
-    return '<div class="pipeline-item"><div><div class="pi-name">' + name + '</div><div class="pi-sub">' + (b.owner||b.client||'') + ' &middot; ' + b.value + '</div></div><span class="pi-badge ' + (statusMap[b.status]||'badge-watching') + '">' + b.status + '</span></div>';
+    return '<div class="pipeline-item"><div><div class="pi-name">' + name + '</div><div class="pi-sub">' + (b.client||'') + ' &middot; ' + b.value + '</div></div><span class="pi-badge ' + (statusMap[b.status]||'badge-watching') + '">' + b.status + '</span></div>';
   }).join('');
 }
 
 function renderFollowUpList() {
   const el = document.getElementById('follow-up-list');
   if(!el) return;
+  // Outreach queue: next actions due within 3 days (or overdue), soonest first.
+  const horizon = addDays(todayStr(), 3);
   const needsFollowUp = D.prospects.filter(function(p) {
-    if(!p.lastTouch) return true;
-    const ds = daysSince(p.lastTouch);
-    return ds >= (p.followUpDays || 14) - 3;
+    return p.nextActionDate && p.nextActionDate <= horizon;
+  }).sort(function(a, b) {
+    return a.nextActionDate < b.nextActionDate ? -1 : 1;
   }).slice(0, 6);
   if(!needsFollowUp.length) {
-    el.innerHTML = '<div style="color:var(--text3);font-size:13px;">All contacts up to date!</div>';
+    el.innerHTML = '<div style="color:var(--text3);font-size:13px;">Queue clear &mdash; next actions all scheduled out.</div>';
     return;
   }
   el.innerHTML = needsFollowUp.map(function(p) {
     const fu = followUpCountdown(p);
-    return '<div class="follow-item"><div><div class="fi-name">' + p.company + '</div><div class="fi-detail">' + p.contact + ' &middot; ' + p.status + '</div></div><div class="fi-right"><span class="' + fu.cls + '">' + fu.label + '</span><button class="draft-btn" onclick="openEmailModal(' + p.id + ')">&#9993; Draft</button></div></div>';
+    return '<div class="follow-item"><div><div class="fi-name">' + p.company + '</div><div class="fi-detail">' + (p.nextAction||'Follow up') + (p.contact && p.contact !== 'TBD' ? ' &middot; ' + p.contact : '') + '</div></div><div class="fi-right"><span class="' + fu.cls + '">' + fu.label + '</span><button class="draft-btn" onclick="openEmailModal(' + p.id + ')">&#9993; Draft</button></div></div>';
   }).join('');
 }
 
@@ -1229,7 +1259,7 @@ function renderRadar() {
   const statusMap = {'Estimating':'badge-estimating','Active':'badge-active','Bid Submitted':'badge-bid-submitted','Awarded':'badge-awarded','Watching':'badge-watching'};
   el.innerHTML = D.bids.map(function(b) {
     const name = b.project.substring(0,28) + (b.project.length>28?'&hellip;':'');
-    return '<div class="radar-item"><div><div class="ri-name">' + name + '</div><div class="ri-sub">' + (b.owner||b.client||'') + ' &middot; ' + b.value + ' &middot; GC: ' + (b.gc||b.scope||'') + '</div></div><span class="pi-badge ' + (statusMap[b.status]||'badge-watching') + '">' + b.status + '</span></div>';
+    return '<div class="radar-item"><div><div class="ri-name">' + name + '</div><div class="ri-sub">' + (b.client||'') + ' &middot; ' + b.value + (b.scope ? ' &middot; ' + b.scope : '') + '</div></div><span class="pi-badge ' + (statusMap[b.status]||'badge-watching') + '">' + b.status + '</span></div>';
   }).join('');
 }
 // ============================================================
@@ -1294,7 +1324,7 @@ function loadFeed(key, tabEl) {
       '<div class="news-body">' +
         '<div class="news-headline"><a href="' + item.url + '" target="_blank">' + item.title + '</a></div>' +
         '<div class="news-summary">' + item.summary.substring(0,120) + '&hellip;</div>' +
-        '<div class="news-meta"><span class="news-source">' + item.source + '</span><span class="news-time">' + item.time + '</span>' +
+        '<div class="news-meta"><span class="news-source">' + item.source + ' search</span>' +
         (item.tx ? '<span class="news-tx-badge">TX</span><button class="news-add-btn" data-key="' + dataKey + '" onclick="addNewsLeadById(this)">+ Add as lead</button>' : '') +
         '</div></div></div>';
   }).join('');
@@ -1329,7 +1359,7 @@ function loadFullFeed(key, tabEl) {
       '<div class="npi-body"><div class="npi-head"><div class="npi-title"><a href="' + item.url + '" target="_blank">' + item.title + '</a></div>' +
       (item.tx ? '<button class="news-add-btn" data-key="' + dataKey + '" onclick="addNewsLeadById(this)">+ Add as lead</button>' : '') +
       '</div><div class="npi-summary">' + item.summary + '</div>' +
-      '<div class="npi-meta"><span class="news-source">' + item.source + '</span><span class="news-time">' + item.time + '</span>' +
+      '<div class="npi-meta"><span class="news-source">' + item.source + ' search</span>' +
       (item.tx ? '<span class="news-tx-badge">TX Relevant</span>' : '') +
       '</div></div></div>';
   }).join('');
@@ -1339,10 +1369,74 @@ function loadFullFeed(key, tabEl) {
 // ============================================================
 var _currentProspectId = null;
 var _currentTemplate = 'cold';
+var _currentContact = null; // {name, email} chosen from Apollo chips
+
+var SIGNATURE = '\n\nBest regards,\nKeon Rho\nBusiness Development | Apache Industrial\nkrho@apacheip.com';
+var TRADES = 'industrial coatings, mechanical insulation, scaffolding & access, and fireproofing/firestopping';
+
+// Scope-keyed proof points — lead with the story that matches their world.
+function proofPointFor(p) {
+  var t = ((p.type||p.industry||'')+'').toLowerCase();
+  if(t.indexOf('semi') !== -1) {
+    return 'We are already performing on the Samsung Taylor campus — Apache holds direct contracts with SECAI covering coatings, mechanical insulation, and firestopping, with crews on-site weekly since Phase 1.';
+  }
+  return 'Our crews are on-site today at Project Frontier in Abilene under Kiewit, and we have an $11M coatings & insulation package submitted on Building 1 of that campus.';
+}
+
+// Active bid with this company, if any (for the bid follow-up template).
+function activeBidFor(company) {
+  var c = (company||'').toLowerCase();
+  return D.bids.find(function(b) {
+    return b.client && (c.indexOf(b.client.toLowerCase()) !== -1 || b.client.toLowerCase().indexOf(c.split(' ')[0].toLowerCase()) !== -1) && ['Estimating','Submitted','Active','Bid Submitted'].includes(b.status);
+  });
+}
+
+function emailGreetName(p) {
+  if(_currentContact && _currentContact.name) return _currentContact.name.split(' ')[0];
+  if(p.contact && p.contact !== 'TBD' && p.contact !== 'N/A' && p.contact !== 'On-site PM') return p.contact.split(' ')[0];
+  return 'there';
+}
+
+var EMAIL_TEMPLATES = {
+  cold: {label:'Cold Intro', next:'Bump if no reply', bump:4, build:function(p) {
+    return {
+      subject: 'Apache Industrial — ' + (( (p.type||p.industry||'').toLowerCase().indexOf('semi') !== -1) ? 'fab' : 'datacenter') + ' coatings, insulation & access for ' + p.company + ' in TX',
+      body: 'Hi ' + emailGreetName(p) + ',\n\nKeon Rho with Apache Industrial. We are a specialty contractor covering ' + TRADES + ' on hyperscale datacenter and semiconductor projects across Texas.\n\n' + proofPointFor(p) + '\n\nI would like to get Apache onto ' + p.company + '’s bid list for upcoming TX packages in our trades. Could I send over our capability statement and TX references — or better, grab 15 minutes this week?' + SIGNATURE
+    };
+  }},
+  follow: {label:'Bump', next:'Call if no reply', bump:5, build:function(p) {
+    var ds = p.lastTouch ? daysSince(p.lastTouch) : null;
+    return {
+      subject: 'Re: Apache Industrial — ' + p.company + ' TX projects',
+      body: 'Hi ' + emailGreetName(p) + ',\n\nFloating my note' + (ds ? ' from ' + ds + ' days ago' : '') + ' back to the top of your inbox. Quick version: Apache self-performs ' + TRADES + ' and is active today on Samsung Taylor (direct with SECAI) and Project Frontier in Abilene (under Kiewit).\n\nIf a different person on your precon team owns sub prequalification, a quick intro would be appreciated — happy to take it from there.' + SIGNATURE
+    };
+  }},
+  meeting: {label:'Meeting Recap', next:'Follow through on recap items', bump:5, build:function(p) {
+    return {
+      subject: 'Thanks for the time — Apache Industrial next steps',
+      body: 'Hi ' + emailGreetName(p) + ',\n\nThank you for the meeting — I appreciated the walkthrough of where ' + p.company + ' is headed in Texas.\n\nRecapping what I took away:\n• [Their priority / project discussed]\n• [Scope window / timing they mentioned]\n• [What they asked Apache to provide]\n\nOn our side, I will [action + date]. ' + proofPointFor(p) + '\n\nAnything I misstated, tell me — otherwise I will be back to you by [date].' + SIGNATURE
+    };
+  }},
+  bid: {label:'Bid Follow-Up', next:'Check award timeline', bump:7, build:function(p) {
+    var b = activeBidFor(p.company);
+    var projLine = b ? b.project + (b.scope ? ' (' + b.scope + ')' : '') : '[project / package]';
+    return {
+      subject: 'Apache Industrial — ' + (b ? b.project : p.company) + ' bid follow-up',
+      body: 'Hi ' + emailGreetName(p) + ',\n\nFollowing up on our proposal for ' + projLine + '. Two quick things:\n\n1. Confirming the bid landed with the right team and nothing is missing on our end.\n2. Any feel for the award timeline, and whether a scope review call would be useful?\n\nIf pricing or scope needs adjusting to fit the buyout, we would rather sharpen it now than lose on a misunderstanding.' + SIGNATURE
+    };
+  }},
+  quarterly: {label:'Quarterly', next:'Quarterly check-in', bump:90, build:function(p) {
+    return {
+      subject: 'Quarterly check-in — Apache Industrial',
+      body: 'Hi ' + emailGreetName(p) + ',\n\nStaying on your radar as promised. Since we last spoke, Apache has [newest win / milestone — e.g. expanded scope at Samsung Taylor, new package at Project Frontier].\n\nIf anything in ' + p.company + '’s TX pipeline is heading toward buyout in ' + TRADES + ', we would like a shot at the bid list. Anything coming up this quarter?' + SIGNATURE
+    };
+  }}
+};
 
 function openEmailModal(prospectId) {
   _currentProspectId = prospectId;
   _currentTemplate = 'cold';
+  _currentContact = null;
   var p = D.prospects.find(function(x) { return x.id === prospectId; });
   if(!p) return;
   document.getElementById('modal-title').textContent = 'Draft Email: ' + p.company;
@@ -1350,28 +1444,45 @@ function openEmailModal(prospectId) {
   document.getElementById('modal-company').textContent = p.company;
   document.getElementById('sent-status').style.display = 'none';
   document.getElementById('mark-sent-btn').style.display = 'inline-flex';
-  document.getElementById('cold-btn').classList.add('active');
-  document.getElementById('follow-btn').classList.remove('active');
+  renderModalContacts(p);
   switchTemplate('cold');
   document.getElementById('email-modal').style.display = 'flex';
+}
+
+// Apollo-sourced contact chips: click to address the email to that person.
+function renderModalContacts(p) {
+  var el = document.getElementById('modal-contacts');
+  if(!el) return;
+  var contacts = apolloFor(p.company);
+  if(!contacts.length) { el.style.display = 'none'; el.innerHTML = ''; return; }
+  el.style.display = 'block';
+  el.innerHTML = 'Known contacts: ' + contacts.map(function(c, i) {
+    return '<button onclick="pickContact(' + i + ')" style="background:var(--surface2);border:1px solid var(--border2);color:var(--text2);border-radius:12px;padding:2px 10px;margin:2px 3px;cursor:pointer;font-size:11px;font-family:inherit;" title="' + escHtml(c.title||'') + '">' + escHtml(c.name) + ' · ' + escHtml((c.title||'').replace('Preconstruction','Precon')) + '</button>';
+  }).join('');
+}
+
+function pickContact(i) {
+  var p = D.prospects.find(function(x) { return x.id === _currentProspectId; });
+  if(!p) return;
+  var contacts = apolloFor(p.company);
+  var c = contacts[i];
+  if(!c) return;
+  _currentContact = c;
+  document.getElementById('modal-to').textContent = c.name + ' <' + (c.email||'') + '>';
+  switchTemplate(_currentTemplate);
 }
 
 function switchTemplate(type) {
   _currentTemplate = type;
   var p = D.prospects.find(function(x) { return x.id === _currentProspectId; });
   if(!p) return;
-  document.getElementById('cold-btn').classList.toggle('active', type === 'cold');
-  document.getElementById('follow-btn').classList.toggle('active', type === 'follow');
-  var firstName = p.contact.split(' ')[0];
-  if(type === 'cold') {
-    document.getElementById('modal-subject').textContent = 'Subject: Apache Industrial - Electrical & Power Systems for ' + p.company + ' Projects';
-    document.getElementById('modal-body-text').textContent = 'Hi ' + firstName + ',\n\nI hope this finds you well. My name is Keon Rho with Apache Industrial - we are a specialized electrical and power systems contractor with deep experience in hyperscale datacenter and semiconductor fab construction across Texas.\n\nWe have recently completed work on major TX datacenter and fab projects, and are actively bidding on Samsung Taylor, Meta Temple, and TI Sherman alongside several GC partners.\n\nI would love to find 15 minutes to introduce Apache and explore how we might support ' + p.company + ' on upcoming TX projects. Would you have time this week or next?\n\nBest regards,\nKeon Rho\nBusiness Development | Apache Industrial\nkeon.rho@apache-industrial.com';
-  } else {
-    var ds = p.lastTouch ? daysSince(p.lastTouch) : null;
-    var daysText = ds ? ds + ' days ago' : 'recently';
-    document.getElementById('modal-subject').textContent = 'Subject: Following up - Apache Industrial & ' + p.company;
-    document.getElementById('modal-body-text').textContent = 'Hi ' + firstName + ',\n\nI wanted to follow up on my previous note from ' + daysText + '. I know things get busy, so I wanted to resurface Apache Industrial as a potential partner for your upcoming TX electrical and power work.\n\nWe have strong capacity in MV switchgear, UPS integration, generator tie-in, and critical power distribution - the exact scope that comes up on hyperscale DC and semiconductor fab projects.\n\nWould a quick 15-minute call this week work? Happy to send over our capability statement and references first.\n\nThanks for your time,\nKeon Rho\nBusiness Development | Apache Industrial\nkeon.rho@apache-industrial.com';
-  }
+  ['cold','follow','meeting','bid','quarterly'].forEach(function(t) {
+    var btn = document.getElementById('tpl-btn-' + t);
+    if(btn) btn.classList.toggle('active', t === type);
+  });
+  var tpl = EMAIL_TEMPLATES[type].build(p);
+  document.getElementById('modal-subject').textContent = 'Subject: ' + tpl.subject;
+  document.getElementById('modal-body-text').textContent = tpl.body;
 }
 
 function copyEmail() {
@@ -1387,8 +1498,17 @@ function copyEmail() {
 function markSent() {
   var p = D.prospects.find(function(x) { return x.id === _currentProspectId; });
   if(!p) return;
-  p.lastTouch = new Date().toISOString().substring(0,10);
-  p.status = 'Outreach Sent';
+  p.lastTouch = todayStr();
+  if(['New','Not contacted','',undefined].indexOf(p.status) !== -1) p.status = 'Outreach sent';
+  // Promote the picked Apollo contact onto the prospect record.
+  if(_currentContact) {
+    if(!p.contact || p.contact === 'TBD') { p.contact = _currentContact.name; p.email = _currentContact.email || p.email; }
+  }
+  // Auto-commit the next step so the thread never dies in the log.
+  var tpl = EMAIL_TEMPLATES[_currentTemplate] || EMAIL_TEMPLATES.cold;
+  p.nextAction = tpl.next;
+  p.nextActionDate = addDays(todayStr(), tpl.bump);
+  D.completedLog.unshift({id: Date.now(), type:'action', title:'Sent ' + tpl.label.toLowerCase() + ' email — ' + p.company + (_currentContact ? ' (' + _currentContact.name + ')' : ''), tag:'Outreach', account: p.company, completedAt: new Date().toISOString()});
   saveData();
   var sentDiv = document.getElementById('sent-status');
   sentDiv.innerHTML = '<span class="sent-badge">\u2713 Sent ' + new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) + '</span>';
@@ -1409,7 +1529,7 @@ function closeModal() {
 function renderProspects() {
   var tbody = document.getElementById('prospects-tbody');
   if(!tbody) return;
-  var statusClasses = {'Outreach Sent':'s-outreach','Meeting Scheduled':'s-meeting','Proposal Sent':'s-proposal','Qualified':'s-qualified','New':'s-new'};
+  var statusClasses = {'Outreach Sent':'s-outreach','Outreach sent':'s-outreach','Meeting Scheduled':'s-meeting','Meeting booked':'s-meeting','Proposal Sent':'s-proposal','Qualified':'s-qualified','New':'s-new','Not contacted':'s-new'};
   tbody.innerHTML = D.prospects.map(function(p) {
     var fu = followUpCountdown(p);
     var lastTouchStr = p.lastTouch ? new Date(p.lastTouch + 'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'}) : 'Never';
@@ -1418,7 +1538,7 @@ function renderProspects() {
       '<td><div>' + p.contact + '</div><div class="td-sub">' + (p.email||'') + '</div></td>' +
       '<td><span class="status ' + (statusClasses[p.status]||'s-new') + '">' + p.status + '</span></td>' +
       '<td>' + lastTouchStr + '</td>' +
-      '<td><span class="' + fu.cls + '">' + fu.label + '</span></td>' +
+      '<td style="cursor:pointer;" onclick="editNextAction(' + p.id + ')" title="Click to edit next action"><div>' + escHtml(p.nextAction||'Follow up') + '</div><div class="td-sub"><span class="' + fu.cls + '">' + fu.label + '</span></div></td>' +
       '<td class="td-note">' + (p.notes||'').substring(0,60) + (p.notes&&p.notes.length>60?'&hellip;':'') + '</td>' +
       '<td><button class="btn btn-sm" onclick="openEmailModal(' + p.id + ')">&#9993; Draft</button></td></tr>';
   }).join('');
@@ -1429,7 +1549,7 @@ function addProspect() {
   if(!company) return;
   var contact = prompt('Contact name:') || '';
   var email = prompt('Contact email:') || '';
-  D.prospects.push({id: Date.now(), company:company, type:'GC', contact:contact, email:email, status:'New', lastTouch:'', followUpDays:14, notes:''});
+  D.prospects.push({id: Date.now(), company:company, type:'GC', contact:contact, email:email, status:'New', lastTouch:'', followUpDays:7, notes:'', nextAction:'Send intro email', nextActionDate: todayStr()});
   saveData();
   renderProspects();
 }
@@ -1459,9 +1579,9 @@ function renderBids() {
     return '<tr data-idx="'+idx+'">' +
       '<td>' +
         '<div class="td-name" contenteditable="true" data-field="project" data-idx="'+idx+'" onblur="updateBidField(this)" style="outline:none;cursor:text;" title="Click to edit">'+escHtml(b.project)+'</div>' +
-        '<div class="td-sub">Owner: <span contenteditable="true" data-field="owner" data-idx="'+idx+'" onblur="updateBidField(this)" style="outline:none;cursor:text;">'+escHtml(b.owner||b.client||'')+'</span></div>' +
+        '<div class="td-sub">Client/GC: <span contenteditable="true" data-field="client" data-idx="'+idx+'" onblur="updateBidField(this)" style="outline:none;cursor:text;">'+escHtml(b.client||'')+'</span></div>' +
       '</td>' +
-      '<td><span contenteditable="true" data-field="gc" data-idx="'+idx+'" onblur="updateBidField(this)" style="outline:none;cursor:text;" title="Click to edit scope">'+escHtml(b.gc||b.scope||'')+'</span></td>' +
+      '<td><span contenteditable="true" data-field="scope" data-idx="'+idx+'" onblur="updateBidField(this)" style="outline:none;cursor:text;" title="Click to edit scope">'+escHtml(b.scope||'')+'</span></td>' +
       '<td><span contenteditable="true" data-field="value" data-idx="'+idx+'" onblur="updateBidField(this)" style="outline:none;cursor:text;color:var(--accent);" title="Click to edit value">'+escHtml(b.value||'TBD')+'</span></td>' +
       '<td>' +
         '<input type="date" value="'+(b.due||'')+'" data-field="due" data-idx="'+idx+'" onchange="updateBidField(this)" style="background:transparent;border:none;color:var(--text2);font-size:12px;cursor:pointer;padding:0;outline:none;font-family:inherit;" title="Click to change date">' +
@@ -1509,10 +1629,10 @@ function deleteBid(idx) {
 function addBid() {
   var project = prompt('Project name:');
   if(!project) return;
-  var owner = prompt('Owner:') || '';
-  var gc = prompt('GC:') || '';
-  var value = prompt('Est. value (e.g. $200M):') || 'TBD';
-  D.bids.push({id: Date.now(), project:project, owner:owner, gc:gc, value:value, due:'', status:'Estimating', notes:''});
+  var client = prompt('Client / GC (who receives the bid):') || '';
+  var scope = prompt('Scope (e.g. Coatings, Insulation, Scaffolding, Fireproofing):') || '';
+  var value = prompt('Apache scope value (e.g. $2.5M):') || 'TBD';
+  D.bids.push({id: Date.now(), project:project, client:client, scope:scope, value:value, due:'', status:'Estimating', notes:''});
   saveData();
   renderBids();
 }
@@ -1520,19 +1640,45 @@ function addBid() {
 // ============================================================
 // ACCOUNTS TABLE
 // ============================================================
+// Apollo contacts whose key matches this company name (either direction).
+function apolloFor(company) {
+  if(!company || !D.apolloContacts) return [];
+  var c = company.toLowerCase();
+  var out = [];
+  Object.keys(D.apolloContacts).forEach(function(k) {
+    if(c.indexOf(k) !== -1 || k.indexOf(c) !== -1) out = out.concat(D.apolloContacts[k]);
+  });
+  return out;
+}
+
+// Named threads into an account: primary contact + Apollo contacts.
+function threadCount(companyName, primaryContact) {
+  var n = apolloFor(companyName).length;
+  if(primaryContact && primaryContact !== 'TBD' && primaryContact !== 'N/A' && primaryContact !== 'On-site PM') n += 1;
+  return n;
+}
+
 function renderAccounts() {
   var tbody = document.getElementById('accounts-tbody');
   if(!tbody) return;
-  var relClasses = {Active:'s-active','Pre-qual':'s-estimating',Outreach:'s-outreach',Watching:'s-watching',New:'s-new',Qualified:'s-qualified'};
+  var relClasses = {Active:'s-active','Pre-qual':'s-estimating',Outreach:'s-outreach',Watching:'s-watching',New:'s-new',Qualified:'s-qualified',Complete:'s-watching'};
   tbody.innerHTML = D.accounts.map(function(a) {
-    return '<tr><td class="td-name">' + (a.company||a.name||'') + '</td><td>' + a.type + '</td><td>' + a.region + '</td><td>' + a.contact + '</td><td>' + a.projects + '</td><td><span class="status ' + (relClasses[a.rel]||'s-new') + '">' + a.rel + '</span></td></tr>';
+    var threads = threadCount(a.name, a.contact);
+    var threadHtml = threads <= 1
+      ? '<span class="fu-overdue" title="Single-threaded: only one named contact. Add more threads.">' + threads + ' &#9888;</span>'
+      : '<span class="fu-ok">' + threads + '</span>';
+    return '<tr><td class="td-name">' + escHtml(a.name||'') + '</td><td>' + escHtml(a.type||'') + '</td><td>' + escHtml(a.contact||'') + '</td>' +
+      '<td>' + threadHtml + '</td>' +
+      '<td>' + escHtml(a.value||'') + '</td>' +
+      '<td><span class="status ' + (relClasses[a.status]||'s-new') + '">' + escHtml(a.status||'') + (a.health && a.health !== a.status ? ' &middot; ' + escHtml(a.health) : '') + '</span></td>' +
+      '<td class="td-note">' + escHtml((a.notes||'').substring(0,80)) + (a.notes && a.notes.length > 80 ? '&hellip;' : '') + '</td></tr>';
   }).join('');
 }
 
 function addAccount() {
   var company = prompt('Company name:');
   if(!company) return;
-  D.accounts.push({id: Date.now(), company:company, type:'GC Partner', region:'TX', contact:'TBD', projects:'None', rel:'New'});
+  D.accounts.push({id: Date.now(), name:company, type:'GC Subcontract', contact:'TBD', value:'', status:'New', health:'', notes:''});
   saveData();
   renderAccounts();
 }
@@ -1810,7 +1956,7 @@ function doUpdateSnapshot() {
 
 
 /* ========== COVERAGE MAP ========== */
-const COVERAGE_DATA = [
+var COVERAGE_SEED = [
   {
     project: "Samsung Taylor - operations / Phase 1",
     owner: "Samsung", gc: "SECAI (direct contract)",
@@ -1873,6 +2019,10 @@ const COVERAGE_DATA = [
     note: "Connection request out to Sr. Construction PM (found via IIR). Confirm self-perform vs. subs before positioning; lean on Samsung Taylor. ~40 min from Taylor crews."
   }
 ];
+
+// Pursuits are persisted: edits/adds/deletes survive reloads and snapshots.
+D.coverage = (_stored.coverage && _stored.coverage.length) ? _stored.coverage : COVERAGE_SEED;
+var COVERAGE_DATA = D.coverage;
 
 const CM_STATUS = {
   positioned: { label: "Positioned", order: 0 },
@@ -1989,6 +2139,7 @@ function cmSaveEdit(idx) {
   COVERAGE_DATA[idx].owner = row.querySelector('.cm-edit-owner').value.trim();
   COVERAGE_DATA[idx].gc = row.querySelector('.cm-edit-gc').value.trim();
   COVERAGE_DATA[idx].note = row.querySelector('.cm-edit-note').value.trim();
+  saveData();
   cmRenderMetrics();
   cmRenderRows();
   var activeFilter = document.querySelector('#cm-filters button.active');
@@ -1998,6 +2149,7 @@ function cmSaveEdit(idx) {
 function cmDeleteRow(idx) {
   if (!confirm('Remove "' + COVERAGE_DATA[idx].project + '"?')) return;
   COVERAGE_DATA.splice(idx, 1);
+  saveData();
   cmRenderMetrics();
   cmRenderRows();
 }
@@ -2009,6 +2161,7 @@ function cmAddRow() {
     status: "monitor", tag: "",
     note: ""
   });
+  saveData();
   cmRenderMetrics();
   cmRenderRows();
   setTimeout(function() { cmStartEdit(COVERAGE_DATA.length - 1); }, 50);
