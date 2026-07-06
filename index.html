@@ -308,6 +308,21 @@ tr:hover td { background: var(--surface2); }
 .pt-note-save { border-color: var(--accent, #d98c3f); }
 .pt-note-input { width: 100%; box-sizing: border-box; background: var(--surface2); color: var(--text); border: 1px solid var(--border, #444); border-radius: 5px; font-size: 12px; font-family: inherit; padding: 5px; resize: vertical; }
 .pt-note-actions { display: flex; gap: 6px; margin-top: 4px; }
+.pt-select { background: var(--surface2); color: var(--text); border: 1px solid var(--border); border-radius: 6px; font-size: 11px; font-family: inherit; padding: 3px 6px; cursor: pointer; max-width: 100%; }
+.pt-select:hover { border-color: var(--border2); }
+.pt-select.pt-status.planned { color: var(--amber); }
+.pt-select.pt-status.under-construction { color: var(--blue); }
+.pt-select.pt-status.operational { color: var(--green); }
+.pt-select.pt-ind.dc { color: var(--blue); }
+.pt-select.pt-ind.semi { color: var(--purple); }
+.pt-select option { background: var(--surface2); color: var(--text); }
+.pt-name[contenteditable]:hover, .pt-owner[contenteditable]:hover, .pt-parent[contenteditable]:hover { background: var(--surface2); border-radius: 4px; }
+.pt-name[contenteditable]:focus, .pt-owner[contenteditable]:focus, .pt-parent[contenteditable]:focus { background: var(--surface2); border-radius: 4px; box-shadow: 0 0 0 1px var(--accent); }
+.pt-actions-cell { text-align: center; vertical-align: middle; }
+.pt-del-btn { background: transparent; border: 1px solid var(--border); color: var(--text3); font-size: 15px; line-height: 1; width: 24px; height: 24px; border-radius: 5px; cursor: pointer; }
+.pt-del-btn:hover { background: var(--red-bg); border-color: var(--red); color: var(--red); }
+.pt-add-btn { background: var(--accent); color: #1a1a1a; border: none; font-size: 12px; font-weight: 600; padding: 5px 12px; border-radius: 6px; cursor: pointer; white-space: nowrap; }
+.pt-add-btn:hover { background: var(--accent2); }
 .pt-name { font-weight: 500; color: var(--text); }
 .pt-owner { color: var(--text2); font-size: 12px; }
 .pt-parent { color: var(--text3); font-size: 11px; margin-top: 2px; }
@@ -678,7 +693,7 @@ body.view-mode button[title="Remove bid"] { display: none !important; }
     <div id="page-tx-pipeline" class="page">
       <div class="section-header" style="margin-bottom:1.25rem;">
         <div class="section-title">TX DC Projects Pipeline</div>
-        <div class="pipeline-count" id="pipeline-count">Loading...</div>
+        <div style="display:flex;align-items:center;gap:12px;"><div class="pipeline-count" id="pipeline-count">Loading...</div><button type="button" class="pt-add-btn" onclick="addPipelineProject()">+ Add project</button></div>
       </div>
 
       <div class="pipeline-filters">
@@ -703,6 +718,7 @@ body.view-mode button[title="Remove bid"] { display: none !important; }
                   <th>Type</th>
                   <th>Industry</th>
                   <th>Notes</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody id="pipeline-tbody"></tbody>
@@ -883,6 +899,7 @@ function saveData() {
   if (VIEW_MODE) return;
   var stored = JSON.parse(localStorage.getItem('apache-bd-v3') || '{}');
   stored.pipelineNotes = D.pipelineNotes;
+  stored.pipeline = D.pipeline;
   stored.prospects = D.prospects;
   stored.bids = D.bids;
   stored.accounts = D.accounts;
@@ -1557,17 +1574,22 @@ function addNote() {
 })();
 
   // TX DC Projects Pipeline data
-  var txPipelineData = [{"name":"Meta Temple DC – Mechanical Insulation","owner":"Gray Construction","parent":"Meta Platforms","status":"Planned","stage":"Project Scope","type":"Grassroot","industry":"DC"},{"name":"Google DFW Hyperscale Expansion","owner":"TBD","parent":"Google LLC","status":"Planned","stage":"Preliminary Design","type":"Grassroot","industry":"DC"},{"name":"NTT DFW Phase 3 Campus","owner":"Austin Commercial","parent":"NTT Ltd.","status":"Planned","stage":"Preliminary Engineering","type":"Plant Expansion","industry":"DC"},{"name":"Plano Data Center Campus Expansion (Atlantic Station) Bldg 4","owner":"Skybox Datacenters","parent":"Skybox Datacenters","status":"Planned","stage":"Project Scope","type":"Plant Expansion","industry":"DC"},{"name":"Plano Data Center Campus Expansion (Atlantic Station) Bldg 2","owner":"Skybox Datacenters","parent":"Skybox Datacenters","status":"Planned","stage":"Project Scope","type":"Plant Expansion","industry":"DC"},{"name":"Plano Data Center DFW3 Expansion","owner":"DataBank Limited","parent":"DigitalBridge Group Incorporated","status":"Operational","stage":"Market Analysis","type":"Plant Expansion","industry":"DC"},{"name":"Dallas – Allen Data Center Phase II Expansion","owner":"TierPoint LLC","parent":"TierPoint LLC","status":"Operational","stage":"Economic Evaluation","type":"Plant Expansion","industry":"DC"},{"name":"Dallas – Allen Data Center Phase III","owner":"TierPoint LLC","parent":"TierPoint LLC","status":"Operational","stage":"Market Analysis","type":"Plant Expansion","industry":"DC"},{"name":"Garland Data Center Expansion Phase IV (Project Gold Garland/DFW39)","owner":"Digital Realty Trust Incorporated","parent":"Digital Realty Trust Incorporated","status":"Operational","stage":"Market Analysis","type":"Plant Expansion","industry":"DC"},{"name":"Seymour Grassroot Data Center Campus (Project Kati) Phase I","owner":"Soluna","parent":"Soluna Holdings, Incorporated","status":"Under Construction","stage":"Construction - Merit Shop","type":"Grassroot","industry":"DC"},{"name":"Paris Grassroot Cryptomining Data Center (Project Annie)","owner":"Soluna","parent":"Soluna Holdings, Incorporated","status":"Planned","stage":"Project Scope","type":"Grassroot","industry":"DC"},{"name":"Corpus Christi Bitcoin Mining Data Center Expansion Phase V","owner":"Peak Mining","parent":"Northern Data AG","status":"Operational","stage":"Project Scope","type":"Plant Expansion","industry":"DC"},{"name":"Corpus Christi Bitcoin Mining Data Center Expansion Phase VI","owner":"Peak Mining","parent":"Northern Data AG","status":"Operational","stage":"Project Justification","type":"Plant Expansion","industry":"DC"},{"name":"Andrews (Stingray) Grassroot Cryptomining Data Center","owner":"Cipher Mining Technologies","parent":"Cipher Mining Technologies Incorporated","status":"Planned","stage":"Preliminary Design","type":"Grassroot","industry":"DC"},{"name":"College Station (Rellis Campus) Data Center Expansion","owner":"The Texas A&M University System","parent":"The Texas A&M University System","status":"Under Construction","stage":"Project Scope","type":"Plant Expansion","industry":"DC"},{"name":"San Antonio Data Center Campus Equipment Addition TX21 Phase 3","owner":"Vantage Data Centers","parent":"DigitalBridge Group Incorporated","status":"Operational","stage":"Market Analysis","type":"Equipment Addition","industry":"DC"},{"name":"Samsung Taylor Fab Phase 2 – Fire Protection & Coatings","owner":"Hensel Phelps","parent":"Samsung Austin Semiconductor","status":"Planned","stage":"Project Scope","type":"Plant Expansion","industry":"Semi"},{"name":"TI Sherman Fab (Ayrshire Phase 1)","owner":"Gray Construction","parent":"Texas Instruments","status":"Planned","stage":"Preliminary Engineering","type":"Grassroot","industry":"Semi"},{"name":"Samsung – OAC Gratings","owner":"Samsung","parent":"Samsung Austin Semiconductor","status":"Operational","stage":"Market Analysis","type":"Equipment Addition","industry":"Semi"},{"name":"Sherman VCSEL Manufacturing Plant Expansion – Project INP","owner":"Coherent Corporation","parent":"Coherent Corporation","status":"Operational","stage":"Preliminary Engineering","type":"Plant Expansion","industry":"Semi"},{"name":"Allen Epitaxial Wafer Manufacturing Plant Expansion","owner":"IntelliEpi","parent":"IntelliEpi","status":"Operational","stage":"Detailed Design","type":"Plant Expansion","industry":"Semi"},{"name":"New Braunfels Radar Sensors Manufacturing Plant Expansion","owner":"Aumovio","parent":"Continental AG","status":"Operational","stage":"Project Justification","type":"Plant Expansion","industry":"Semi"},{"name":"Stratford G/R EV Chargers, Solar Panels & Portable Batteries Manufacturing Plant","owner":"Aspen Woods Group Incorporated","parent":"Aspen Woods Group Incorporated","status":"Planned","stage":"Detailed Design","type":"Grassroot","industry":"Semi"}];
+  var _txPipelineSeed = [{"name":"Meta Temple DC – Mechanical Insulation","owner":"Gray Construction","parent":"Meta Platforms","status":"Planned","stage":"Project Scope","type":"Grassroot","industry":"DC"},{"name":"Google DFW Hyperscale Expansion","owner":"TBD","parent":"Google LLC","status":"Planned","stage":"Preliminary Design","type":"Grassroot","industry":"DC"},{"name":"NTT DFW Phase 3 Campus","owner":"Austin Commercial","parent":"NTT Ltd.","status":"Planned","stage":"Preliminary Engineering","type":"Plant Expansion","industry":"DC"},{"name":"Plano Data Center Campus Expansion (Atlantic Station) Bldg 4","owner":"Skybox Datacenters","parent":"Skybox Datacenters","status":"Planned","stage":"Project Scope","type":"Plant Expansion","industry":"DC"},{"name":"Plano Data Center Campus Expansion (Atlantic Station) Bldg 2","owner":"Skybox Datacenters","parent":"Skybox Datacenters","status":"Planned","stage":"Project Scope","type":"Plant Expansion","industry":"DC"},{"name":"Plano Data Center DFW3 Expansion","owner":"DataBank Limited","parent":"DigitalBridge Group Incorporated","status":"Operational","stage":"Market Analysis","type":"Plant Expansion","industry":"DC"},{"name":"Dallas – Allen Data Center Phase II Expansion","owner":"TierPoint LLC","parent":"TierPoint LLC","status":"Operational","stage":"Economic Evaluation","type":"Plant Expansion","industry":"DC"},{"name":"Dallas – Allen Data Center Phase III","owner":"TierPoint LLC","parent":"TierPoint LLC","status":"Operational","stage":"Market Analysis","type":"Plant Expansion","industry":"DC"},{"name":"Garland Data Center Expansion Phase IV (Project Gold Garland/DFW39)","owner":"Digital Realty Trust Incorporated","parent":"Digital Realty Trust Incorporated","status":"Operational","stage":"Market Analysis","type":"Plant Expansion","industry":"DC"},{"name":"Seymour Grassroot Data Center Campus (Project Kati) Phase I","owner":"Soluna","parent":"Soluna Holdings, Incorporated","status":"Under Construction","stage":"Construction - Merit Shop","type":"Grassroot","industry":"DC"},{"name":"Paris Grassroot Cryptomining Data Center (Project Annie)","owner":"Soluna","parent":"Soluna Holdings, Incorporated","status":"Planned","stage":"Project Scope","type":"Grassroot","industry":"DC"},{"name":"Corpus Christi Bitcoin Mining Data Center Expansion Phase V","owner":"Peak Mining","parent":"Northern Data AG","status":"Operational","stage":"Project Scope","type":"Plant Expansion","industry":"DC"},{"name":"Corpus Christi Bitcoin Mining Data Center Expansion Phase VI","owner":"Peak Mining","parent":"Northern Data AG","status":"Operational","stage":"Project Justification","type":"Plant Expansion","industry":"DC"},{"name":"Andrews (Stingray) Grassroot Cryptomining Data Center","owner":"Cipher Mining Technologies","parent":"Cipher Mining Technologies Incorporated","status":"Planned","stage":"Preliminary Design","type":"Grassroot","industry":"DC"},{"name":"College Station (Rellis Campus) Data Center Expansion","owner":"The Texas A&M University System","parent":"The Texas A&M University System","status":"Under Construction","stage":"Project Scope","type":"Plant Expansion","industry":"DC"},{"name":"San Antonio Data Center Campus Equipment Addition TX21 Phase 3","owner":"Vantage Data Centers","parent":"DigitalBridge Group Incorporated","status":"Operational","stage":"Market Analysis","type":"Equipment Addition","industry":"DC"},{"name":"Samsung Taylor Fab Phase 2 – Fire Protection & Coatings","owner":"Hensel Phelps","parent":"Samsung Austin Semiconductor","status":"Planned","stage":"Project Scope","type":"Plant Expansion","industry":"Semi"},{"name":"TI Sherman Fab (Ayrshire Phase 1)","owner":"Gray Construction","parent":"Texas Instruments","status":"Planned","stage":"Preliminary Engineering","type":"Grassroot","industry":"Semi"},{"name":"Samsung – OAC Gratings","owner":"Samsung","parent":"Samsung Austin Semiconductor","status":"Operational","stage":"Market Analysis","type":"Equipment Addition","industry":"Semi"},{"name":"Sherman VCSEL Manufacturing Plant Expansion – Project INP","owner":"Coherent Corporation","parent":"Coherent Corporation","status":"Operational","stage":"Preliminary Engineering","type":"Plant Expansion","industry":"Semi"},{"name":"Allen Epitaxial Wafer Manufacturing Plant Expansion","owner":"IntelliEpi","parent":"IntelliEpi","status":"Operational","stage":"Detailed Design","type":"Plant Expansion","industry":"Semi"},{"name":"New Braunfels Radar Sensors Manufacturing Plant Expansion","owner":"Aumovio","parent":"Continental AG","status":"Operational","stage":"Project Justification","type":"Plant Expansion","industry":"Semi"},{"name":"Stratford G/R EV Chargers, Solar Panels & Portable Batteries Manufacturing Plant","owner":"Aspen Woods Group Incorporated","parent":"Aspen Woods Group Incorporated","status":"Planned","stage":"Detailed Design","type":"Grassroot","industry":"Semi"}];
+
+  // Bring pipeline projects into persisted state so BD edits/adds/deletes survive reloads & snapshots.
+  D.pipeline = (_stored.pipeline && _stored.pipeline.length) ? _stored.pipeline : _txPipelineSeed;
+  var txPipelineData = D.pipeline;
 
   function renderPipeline(filter) {
     window.__pipelineFilter = filter;
-    var filtered = filter === 'all' ? txPipelineData :
-      filter === 'dc' ? txPipelineData.filter(function(p){ return p.industry === 'DC'; }) :
-      filter === 'semi' ? txPipelineData.filter(function(p){ return p.industry === 'Semi'; }) :
-      filter === 'planned' ? txPipelineData.filter(function(p){ return p.status === 'Planned'; }) :
-      filter === 'under-construction' ? txPipelineData.filter(function(p){ return p.status === 'Under Construction'; }) :
-      filter === 'operational' ? txPipelineData.filter(function(p){ return p.status === 'Operational'; }) :
-      txPipelineData;
+    var data = D.pipeline;
+    var filtered = filter === 'all' ? data :
+      filter === 'dc' ? data.filter(function(p){ return p.industry === 'DC'; }) :
+      filter === 'semi' ? data.filter(function(p){ return p.industry === 'Semi'; }) :
+      filter === 'planned' ? data.filter(function(p){ return p.status === 'Planned'; }) :
+      filter === 'under-construction' ? data.filter(function(p){ return p.status === 'Under Construction'; }) :
+      filter === 'operational' ? data.filter(function(p){ return p.status === 'Operational'; }) :
+      data;
 
     var tbody = document.getElementById('pipeline-tbody');
     var countEl = document.getElementById('pipeline-count');
@@ -1575,19 +1597,65 @@ function addNote() {
     countEl && (countEl.textContent = filtered.length + ' projects');
 
     tbody.innerHTML = filtered.map(function(p) {
+      var idx = data.indexOf(p);
       var statusClass = p.status === 'Planned' ? 'planned' : p.status === 'Under Construction' ? 'under-construction' : 'operational';
       var indClass = p.industry === 'DC' ? 'dc' : 'semi';
-      var indLabel = p.industry === 'DC' ? 'Datacenter' : 'Semiconductor';
-      return '<tr>' +
-        '<td><div class="pt-name">' + p.name + '</div></td>' +
-        '<td><div class="pt-owner">' + p.owner + '</div><div class="pt-parent">' + p.parent + '</div></td>' +
-        '<td><span class="pt-status ' + statusClass + '">' + p.status + '</span></td>' +
-        '<td><span class="pt-stage">' + p.stage + '</span></td>' +
-        '<td><span class="pt-type">' + p.type + '</span></td>' +
-        '<td><span class="pt-ind ' + indClass + '">' + indLabel + '</span></td>' +
+      var ce = 'contenteditable="true" onblur="updatePipelineField(this)" style="outline:none;cursor:text;" title="Click to edit"';
+      return '<tr data-idx="' + idx + '">' +
+        '<td><div class="pt-name" data-field="name" data-idx="' + idx + '" ' + ce + '>' + escHtml(p.name) + '</div></td>' +
+        '<td><div class="pt-owner" data-field="owner" data-idx="' + idx + '" ' + ce + '>' + escHtml(p.owner) + '</div><div class="pt-parent" data-field="parent" data-idx="' + idx + '" ' + ce + '>' + escHtml(p.parent) + '</div></td>' +
+        '<td>' + pipelineSelect(idx, 'status', p.status, 'pt-status ' + statusClass) + '</td>' +
+        '<td>' + pipelineSelect(idx, 'stage', p.stage, 'pt-stage') + '</td>' +
+        '<td>' + pipelineSelect(idx, 'type', p.type, 'pt-type') + '</td>' +
+        '<td>' + pipelineSelect(idx, 'industry', p.industry, 'pt-ind ' + indClass) + '</td>' +
         '<td class="pt-notes-cell">' + pipelineNoteCellHtml(p.name) + '</td>' +
+        '<td class="pt-actions-cell"><button type="button" class="pt-del-btn" title="Delete project" onclick="deletePipelineProject(' + idx + ')">\u00d7</button></td>' +
         '</tr>';
     }).join('');
+  }
+
+  // ---- TX DC Pipeline: editable fields, add & delete ----
+  var PIPELINE_STATUS = ["Planned","Under Construction","Operational"];
+  var PIPELINE_STAGE = ["Project Scope","Preliminary Design","Preliminary Engineering","Market Analysis","Economic Evaluation","Construction - Merit Shop","Project Justification","Detailed Design"];
+  var PIPELINE_TYPE = ["Grassroot","Plant Expansion","Equipment Addition"];
+  var PIPELINE_IND = [["DC","Datacenter"],["Semi","Semiconductor"]];
+  function pipelineSelect(idx, field, current, cls) {
+    var opts;
+    if (field === 'industry') {
+      opts = PIPELINE_IND.map(function(o){ return '<option value="' + o[0] + '"' + (o[0] === current ? ' selected' : '') + '>' + o[1] + '</option>'; }).join('');
+    } else {
+      var list = field === 'status' ? PIPELINE_STATUS : field === 'stage' ? PIPELINE_STAGE : PIPELINE_TYPE;
+      opts = list.map(function(o){ return '<option value="' + escHtml(o) + '"' + (o === current ? ' selected' : '') + '>' + escHtml(o) + '</option>'; }).join('');
+    }
+    return '<select class="pt-select ' + cls + '" data-field="' + field + '" data-idx="' + idx + '" onchange="updatePipelineField(this)" title="Click to change">' + opts + '</select>';
+  }
+  function updatePipelineField(el) {
+    var idx = parseInt(el.getAttribute('data-idx'));
+    var field = el.getAttribute('data-field');
+    if (!D.pipeline[idx] || !field) return;
+    var val = (el.tagName === 'SELECT' || el.tagName === 'INPUT') ? el.value : el.textContent.trim();
+    if (D.pipeline[idx][field] === val) return;
+    D.pipeline[idx][field] = val;
+    saveData();
+    renderPipeline(currentPipelineFilter());
+  }
+  function addPipelineProject() {
+    D.pipeline.unshift({ name: 'New project', owner: 'TBD', parent: 'TBD', status: 'Planned', stage: 'Market Analysis', type: 'Grassroot', industry: 'DC' });
+    saveData();
+    renderPipeline('all');
+    var allBtn = document.querySelector('.pipeline-filters .pf-btn');
+    if (allBtn) { document.querySelectorAll('.pf-btn').forEach(function(b){ b.classList.remove('active'); }); allBtn.classList.add('active'); }
+    var tbody = document.getElementById('pipeline-tbody');
+    var firstName = tbody && tbody.querySelector('.pt-name');
+    if (firstName) { firstName.scrollIntoView({block:'center'}); firstName.focus(); document.execCommand && document.execCommand('selectAll', false, null); }
+  }
+  function deletePipelineProject(idx) {
+    var p = D.pipeline[idx];
+    if (!p) return;
+    if (!confirm('Delete project "' + (p.name || 'Untitled') + '"? This cannot be undone.')) return;
+    D.pipeline.splice(idx, 1);
+    saveData();
+    renderPipeline(currentPipelineFilter());
   }
 
   // ---- TX DC Pipeline: per-project notes ----
