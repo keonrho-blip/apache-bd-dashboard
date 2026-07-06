@@ -528,6 +528,7 @@ body.view-mode button[title="Remove bid"] { display: none !important; }
     <div class="nav-item" onclick="showPage('coverage-map',this)"><span class="ic">🗺️</span> Coverage map</div>
     
     <div class="nav-section" data-edit style="margin-top: auto; padding-top: 1rem;">
+      <div id="sync-indicator" onclick="syncIndicatorClick()" title="Auto-sync status. Click to sync now." style="font-size:11px;padding:4px 8px 8px;cursor:pointer;color:var(--text3);"></div>
       <button class="nav-update-btn" onclick="openSnapModal()">&#x21BB; Update shared snapshot</button>
     </div>
   </nav>
@@ -909,6 +910,7 @@ function saveData() {
   stored.appliedPatches = D.appliedPatches;
   stored.coverage = D.coverage;
   localStorage.setItem('apache-bd-v3', JSON.stringify(stored));
+  if (typeof scheduleAutoSync === 'function') scheduleAutoSync();
 }
 // ============================================================
 // NAVIGATION
@@ -1872,24 +1874,13 @@ function closeSnapModal() {
   document.getElementById('snap-modal-overlay').classList.remove('open');
 }
 
-function doUpdateSnapshot() {
-  var token = document.getElementById('snap-token-input').value.trim();
-  if (!token) { document.getElementById('snap-status').textContent = 'Please enter a token.'; return; }
-
-  var saveToken = document.getElementById('snap-save-token').checked;
-  if (saveToken) { localStorage.setItem('gh-snap-token', token); }
-  else { localStorage.removeItem('gh-snap-token'); }
-
-  var btn = document.getElementById('snap-confirm-btn');
-  btn.disabled = true;
-  btn.textContent = 'Fetching…';
-  document.getElementById('snap-status').textContent = '';
-
+// Core push: splices current localStorage data into the repo's index.html.
+function pushSnapshotCore(token, onProgress) {
   var REPO = 'keonrho-blip/apache-bd-dashboard';
   var FILE = 'index.html';
   var API  = 'https://api.github.com/repos/' + REPO + '/contents/' + FILE;
 
-  fetch(API, { headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github+json' } })
+  return fetch(API, { headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github+json' } })
     .then(function(r) { return r.json(); })
     .then(function(data) {
       if (!data.sha) throw new Error(data.message || 'Could not fetch file');
@@ -1920,7 +1911,7 @@ function doUpdateSnapshot() {
       var today = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
       newContent = newContent.replace(/snapshot as of [^<"]+/, 'snapshot as of ' + today);
 
-      btn.textContent = 'Pushing…';
+      if (onProgress) onProgress('Pushing…');
       var encoded = btoa(unescape(encodeURIComponent(newContent)));
       return fetch(API, {
         method: 'PUT',
@@ -1938,13 +1929,30 @@ function doUpdateSnapshot() {
     })
     .then(function(r) { return r.json(); })
     .then(function(result) {
-      if (result.commit) {
-        document.getElementById('snap-status').style.color = 'var(--green)';
-        document.getElementById('snap-status').textContent = '\u2713 Done! Live at ?view=1 in ~60 seconds.';
-        btn.textContent = 'Done â';
-      } else {
-        throw new Error(result.message || 'Push failed');
-      }
+      if (!result.commit) throw new Error(result.message || 'Push failed');
+      return result;
+    });
+}
+
+function doUpdateSnapshot() {
+  var token = document.getElementById('snap-token-input').value.trim();
+  if (!token) { document.getElementById('snap-status').textContent = 'Please enter a token.'; return; }
+
+  var saveToken = document.getElementById('snap-save-token').checked;
+  if (saveToken) { localStorage.setItem('gh-snap-token', token); }
+  else { localStorage.removeItem('gh-snap-token'); }
+
+  var btn = document.getElementById('snap-confirm-btn');
+  btn.disabled = true;
+  btn.textContent = 'Fetching…';
+  document.getElementById('snap-status').textContent = '';
+
+  pushSnapshotCore(token, function(msg) { btn.textContent = msg; })
+    .then(function() {
+      document.getElementById('snap-status').style.color = 'var(--green)';
+      document.getElementById('snap-status').textContent = '✓ Done! Live at ?view=1 in ~60 seconds.';
+      btn.textContent = 'Done ✓';
+      _markSynced();
     })
     .catch(function(err) {
       document.getElementById('snap-status').style.color = '#ef4444';
@@ -1952,6 +1960,80 @@ function doUpdateSnapshot() {
       btn.disabled = false;
       btn.textContent = 'Push snapshot';
     });
+}
+
+// ============================================================
+// AUTO-SYNC: pushes to GitHub ~90s after the last edit, using the
+// token remembered via "Update shared snapshot". Every saveData()
+// schedules a sync; hiding/closing the tab flushes immediately.
+// ============================================================
+var _syncTimer = null;
+var _syncInFlight = false;
+var _lastSyncedJson = null;
+
+function _syncToken() { return VIEW_MODE ? null : (localStorage.getItem('gh-snap-token') || null); }
+
+function _setSyncIndicator(state, detail) {
+  var el = document.getElementById('sync-indicator');
+  if (!el) return;
+  var map = {
+    off:     ['○ Auto-sync off — push once & remember token', 'var(--text3)'],
+    pending: ['● Edited — will sync shortly', 'var(--amber)'],
+    syncing: ['● Syncing to GitHub…', 'var(--amber)'],
+    synced:  ['● Synced ' + (detail || ''), 'var(--green)'],
+    error:   ['● Sync failed — click to retry', 'var(--red)']
+  };
+  var m = map[state] || map.off;
+  el.textContent = m[0];
+  el.style.color = m[1];
+  el.setAttribute('data-state', state);
+}
+
+function scheduleAutoSync() {
+  if (VIEW_MODE) return;
+  if (!_syncToken()) { _setSyncIndicator('off'); return; }
+  _setSyncIndicator('pending');
+  if (_syncTimer) clearTimeout(_syncTimer);
+  _syncTimer = setTimeout(autoSyncNow, 90000);
+}
+
+function autoSyncNow() {
+  if (VIEW_MODE || _syncInFlight) return;
+  var token = _syncToken();
+  if (!token) { _setSyncIndicator('off'); return; }
+  var current = localStorage.getItem('apache-bd-v3') || '{}';
+  if (current === _lastSyncedJson) { _setSyncIndicator('synced', _timeNow()); return; }
+  _syncInFlight = true;
+  _setSyncIndicator('syncing');
+  pushSnapshotCore(token)
+    .then(function() { _markSynced(); })
+    .catch(function() { _setSyncIndicator('error'); })
+    .finally(function() { _syncInFlight = false; });
+}
+
+function _markSynced() {
+  _lastSyncedJson = localStorage.getItem('apache-bd-v3') || '{}';
+  _setSyncIndicator('synced', _timeNow());
+}
+
+function _timeNow() {
+  return new Date().toLocaleTimeString('en-US', {hour:'numeric', minute:'2-digit'});
+}
+
+function syncIndicatorClick() {
+  var el = document.getElementById('sync-indicator');
+  var state = el ? el.getAttribute('data-state') : '';
+  if (state === 'off') { openSnapModal(); }
+  else { if (_syncTimer) clearTimeout(_syncTimer); autoSyncNow(); }
+}
+
+document.addEventListener('visibilitychange', function() {
+  if (document.hidden && _syncTimer) { clearTimeout(_syncTimer); autoSyncNow(); }
+});
+
+if (!VIEW_MODE) {
+  _lastSyncedJson = localStorage.getItem('apache-bd-v3') || '{}';
+  _setSyncIndicator(_syncToken() ? 'synced' : 'off', 'on load');
 }
 
 
