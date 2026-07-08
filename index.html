@@ -1048,9 +1048,9 @@ function renderDailyActions() {
     var due = new Date(p.nextActionDate + 'T00:00:00');
     var overdueBy = Math.round((todayD - due) / 86400000);
     if(overdueBy > 0) {
-      autoItems.push({color:'red', title:'Overdue ' + overdueBy + 'd \u2014 ' + p.company + ': ' + (p.nextAction||'follow up'), detail:(p.contact && p.contact !== 'TBD' ? p.contact + ' \u00B7 ' : '') + p.status, action:'Draft email', onClick:'openEmailModal(' + p.id + ')'});
+      autoItems.push({key:'p:' + p.id + ':' + p.nextActionDate, color:'red', title:'Overdue ' + overdueBy + 'd \u2014 ' + p.company + ': ' + (p.nextAction||'follow up'), detail:(p.contact && p.contact !== 'TBD' ? p.contact + ' \u00B7 ' : '') + p.status, action:'Draft email', onClick:'openEmailModal(' + p.id + ')'});
     } else if(overdueBy === 0) {
-      autoItems.push({color:'amber', title:'Due today \u2014 ' + p.company + ': ' + (p.nextAction||'follow up'), detail:(p.contact && p.contact !== 'TBD' ? p.contact + ' \u00B7 ' : '') + p.status, action:'Draft email', onClick:'openEmailModal(' + p.id + ')'});
+      autoItems.push({key:'p:' + p.id + ':' + p.nextActionDate, color:'amber', title:'Due today \u2014 ' + p.company + ': ' + (p.nextAction||'follow up'), detail:(p.contact && p.contact !== 'TBD' ? p.contact + ' \u00B7 ' : '') + p.status, action:'Draft email', onClick:'openEmailModal(' + p.id + ')'});
     }
   });
   var now = new Date();
@@ -1058,11 +1058,11 @@ function renderDailyActions() {
     if(!b.due) return;
     var daysToGo = Math.floor((new Date(b.due) - now) / 86400000);
     if(daysToGo >= 0 && daysToGo <= 30 && ['Estimating','Active'].includes(b.status)) {
-      autoItems.push({color:'blue', title:'Bid due in ' + daysToGo + 'd: ' + b.project.substring(0,35), detail:'Value: ' + b.value + ' | Client: ' + (b.client||''), action:'View bid', onClick:"showPage('bids',document.querySelectorAll('.nav-item')[2])"});
+      autoItems.push({key:'b:' + b.id + ':' + b.due + ':due', color:'blue', title:'Bid due in ' + daysToGo + 'd: ' + b.project.substring(0,35), detail:'Value: ' + b.value + ' | Client: ' + (b.client||''), action:'View bid', onClick:"showPage('bids',document.querySelectorAll('.nav-item')[2])"});
     } else if(daysToGo < 0 && ['Estimating','Active'].includes(b.status)) {
-      autoItems.push({color:'red', title:'Bid past due ' + Math.abs(daysToGo) + 'd: ' + b.project.substring(0,35), detail:'Still ' + b.status + ' \u2014 submit, or update due date/status', action:'View bid', onClick:"showPage('bids',document.querySelectorAll('.nav-item')[2])"});
+      autoItems.push({key:'b:' + b.id + ':' + b.due + ':past', color:'red', title:'Bid past due ' + Math.abs(daysToGo) + 'd: ' + b.project.substring(0,35), detail:'Still ' + b.status + ' \u2014 submit, or update due date/status', action:'View bid', onClick:"showPage('bids',document.querySelectorAll('.nav-item')[2])"});
     } else if(daysToGo <= -5 && b.status === 'Submitted') {
-      autoItems.push({color:'amber', title:'Post-submission check-in: ' + b.project.substring(0,35), detail:'Submitted ' + Math.abs(daysToGo) + 'd ago \u2014 confirm receipt / ask about award timeline', action:'View bid', onClick:"showPage('bids',document.querySelectorAll('.nav-item')[2])"});
+      autoItems.push({key:'b:' + b.id + ':' + b.due + ':post', color:'amber', title:'Post-submission check-in: ' + b.project.substring(0,35), detail:'Submitted ' + Math.abs(daysToGo) + 'd ago \u2014 confirm receipt / ask about award timeline', action:'View bid', onClick:"showPage('bids',document.querySelectorAll('.nav-item')[2])"});
     }
   });
   var addRow = '<div class="add-action-row"><input id="new-action-input" placeholder="Add a daily action..." onkeydown="if(event.key===\x27Enter\x27)addDailyAction()"><button onclick="addDailyAction()" data-edit>+ Add</button></div>';
@@ -1071,7 +1071,7 @@ function renderDailyActions() {
     var cutoff = Date.now() - 7*86400000;
     D.dismissedAuto = D.dismissedAuto.filter(function(d) { return new Date(d.at).getTime() > cutoff; });
     autoItems = autoItems.filter(function(it) {
-      return !D.dismissedAuto.some(function(d) { return d.title === it.title; });
+      return !D.dismissedAuto.some(function(d) { return (d.key && it.key && d.key === it.key) || d.title === it.title; });
     });
   }
   if(autoItems.length === 0 && D.dailyActions.length === 0) {
@@ -1080,7 +1080,7 @@ function renderDailyActions() {
   }
   var html = '';
   autoItems.forEach(function(item) {
-    html += '<div class="action-item"><div class="action-dot ' + item.color + '"></div><div class="action-text"><div class="action-title">' + item.title + '</div><div class="action-detail">' + item.detail + '</div></div><div class="action-controls"><button class="action-btn" onclick="' + item.onClick + '">' + item.action + '</button><button class="action-ctrl-btn done-btn" title="Mark done" onclick="markAutoActionDone(this)">&#x2713;</button></div></div>';
+    html += '<div class="action-item"><div class="action-dot ' + item.color + '"></div><div class="action-text"><div class="action-title">' + item.title + '</div><div class="action-detail">' + item.detail + '</div></div><div class="action-controls"><button class="action-btn" onclick="' + item.onClick + '">' + item.action + '</button><button class="action-ctrl-btn done-btn" title="Mark done" data-key="' + String(item.key||'').replace(/"/g,'&quot;') + '" onclick="markAutoActionDone(this)">&#x2713;</button></div></div>';
   });
   D.dailyActions.forEach(function(a) {
     var doneIcon = a.done ? '&#x21ba;' : '&#x2713;';
@@ -1158,7 +1158,8 @@ function markAutoActionDone(btn) {
       var entry = {id: Date.now(), type: 'action', title: _autoTitle, tag: 'Auto Action', account: accountForTitle(_autoTitle), completedAt: new Date().toISOString()};
       D.completedLog.unshift(entry);
       if (!D.dismissedAuto) D.dismissedAuto = [];
-      if (!D.dismissedAuto.some(function(d) { return d.title === _autoTitle; })) D.dismissedAuto.push({title: _autoTitle, at: new Date().toISOString()});
+      var _key = btn.getAttribute('data-key') || '';
+      if (!D.dismissedAuto.some(function(d) { return (_key && d.key === _key) || d.title === _autoTitle; })) D.dismissedAuto.push({key: _key || undefined, title: _autoTitle, at: new Date().toISOString()});
       saveData();
       renderDailyActions();
       renderCompletedLog();
@@ -2037,6 +2038,16 @@ if (!VIEW_MODE) {
 }
 
 
+
+// Cross-tab safety: if another tab saves, adopt its data instead of clobbering it later.
+window.addEventListener('storage', function(e) {
+  if (VIEW_MODE || e.key !== 'apache-bd-v3' || !e.newValue) return;
+  try {
+    var s = JSON.parse(e.newValue);
+    Object.keys(s).forEach(function(k) { if (Object.prototype.hasOwnProperty.call(D, k)) D[k] = s[k]; });
+    if (typeof renderMorning === 'function') renderMorning();
+  } catch(err) {}
+});
 
 /* ========== COVERAGE MAP ========== */
 var COVERAGE_SEED = [
